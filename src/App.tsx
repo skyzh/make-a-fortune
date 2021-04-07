@@ -5,6 +5,7 @@ import { Flex } from "@chakra-ui/react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import Navbar from "./Navbar"
 import { PostListTrend, PostListTime } from "./PostList"
+import ThreadList from "./ThreadList"
 import Login from "./Login"
 
 function App() {
@@ -36,6 +37,9 @@ function App() {
                 </Route>
                 <Route path="/trend">
                   <PostListTrend></PostListTrend>
+                </Route>
+                <Route path="/posts/:postId">
+                  <ThreadList></ThreadList>
                 </Route>
                 <Route path="/me">我的</Route>
               </Switch>

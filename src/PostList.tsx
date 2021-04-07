@@ -10,9 +10,19 @@ import {
   Flex,
   Spacer,
   Badge,
+  Spinner,
+  Center,
+  Button,
 } from "@chakra-ui/react"
+import { useHistory } from "react-router-dom"
 import { useClient, PostType, PostCategory, Thread } from "./client"
-import { HandThumbsUp, ChatSquareText, Flag, Broadcast } from "./Icons"
+import {
+  HandThumbsUp,
+  ChatSquareText,
+  Flag,
+  Broadcast,
+  ArrowRight,
+} from "./Icons"
 import * as moment from "moment"
 
 interface ThreadComponentProps {
@@ -21,6 +31,7 @@ interface ThreadComponentProps {
 }
 
 function ThreadComponent({ thread }: ThreadComponentProps) {
+  const history = useHistory()
   return (
     <Box p={5} shadow="sm" borderWidth="1px" width="100%">
       <Stack spacing="3">
@@ -40,7 +51,7 @@ function ThreadComponent({ thread }: ThreadComponentProps) {
         </Flex>
         <Heading fontSize="md">{thread.Title}</Heading>
         <Text mt={4}>{thread.Summary}</Text>
-        <HStack spacing="10" justify="space-between" px="3" color="blue.500">
+        <HStack spacing="10" justify="space-between" px="3" color="teal.500">
           <Text fontSize="sm">
             <HandThumbsUp /> {thread.Like - thread.Dislike}
           </Text>
@@ -53,6 +64,12 @@ function ThreadComponent({ thread }: ThreadComponentProps) {
           <Text fontSize="sm">
             <Broadcast /> {thread.Read}
           </Text>
+          <Button
+            variant="ghost"
+            onClick={() => history.push(`/posts/${thread.ThreadID}`)}
+          >
+            <ArrowRight />
+          </Button>
         </HStack>
       </Stack>
     </Box>
@@ -66,9 +83,23 @@ interface ThreadListComponentProps {
 function ThreadListComponent({ threadList }: ThreadListComponentProps) {
   return (
     <Stack spacing={3} width="100%" mb="3">
-      {threadList.map((thread) => (
-        <ThreadComponent key={thread.ThreadID} thread={thread} />
-      ))}
+      {threadList.length > 0 ? (
+        threadList.map((thread) => (
+          <Box key={thread.ThreadID}>
+            <ThreadComponent thread={thread} />
+          </Box>
+        ))
+      ) : (
+        <Center>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        </Center>
+      )}
     </Stack>
   )
 }

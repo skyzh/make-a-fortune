@@ -205,7 +205,7 @@ function Login() {
                 />
                 <FormHelperText>
                   您的所有消息（包括用户令牌、发送与接收的内容）都将通过 RPC
-                  服务器转发。务必确保您信任 RPC 服务器的提供者。
+                  服务器传输。务必确保您信任 RPC 服务器的提供者。
                 </FormHelperText>
               </FormControl>
               <Button mt={4} colorScheme="blue" onClick={setTokenSetting}>

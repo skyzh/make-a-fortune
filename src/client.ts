@@ -47,12 +47,24 @@ export class Client {
   async fetchPost(request: FetchPostRequest) {
     return (await this.sendRequest(
       this.serialize(
-        new SerializeObject(request.postType as string)
+        new SerializeObject(request.postType.toString())
           .parameter(request.lastSeen || "NULL")
           .parameter(request.postCategory.toString())
           .provideToken(this.token)
       )
     )) as FetchPostResponse
+  }
+
+  async fetchReply(request: FetchReplyRequest) {
+    return (await this.sendRequest(
+      this.serialize(
+        new SerializeObject("2")
+          .parameter(request.postId)
+          .parameter(request.lastSeen || "NULL")
+          .parameter(request.order)
+          .provideToken(this.token)
+      )
+    )) as FetchReplyResponse
   }
 
   async version() {
@@ -191,6 +203,39 @@ export class Thread {
 export class FetchPostResponse {
   LastSeenThreadID: string
   thread_list: Thread[]
+}
+
+export enum ReplyOrder {
+  Earliest = "0",
+  Newest = "1",
+  Host = "-1",
+  Hot = "2",
+}
+
+export class FetchReplyRequest {
+  postId: string
+  order: ReplyOrder
+  lastSeen?: string
+}
+
+export class Floor {
+  FloorId: string
+  Speakername: string
+  Replytoname: string
+  Replytofloor: number
+  Context: string
+  RTime: string
+  Like: number
+  Dislike: number
+  WhetherLike: number
+  WhetherReport: number
+}
+
+export class FetchReplyResponse {
+  LastSeenFloorId: string
+  ExistFlag: string
+  floor_list: Floor[]
+  this_thread: Thread
 }
 
 export function useClient() {

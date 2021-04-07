@@ -15,14 +15,7 @@ import {
 import { Route, NavLink } from "react-router-dom"
 import { useRPCState, useTokenState } from "./settings"
 import { Client } from "./client"
-
-function ArrowIcon() {
-  return <i className="bi bi-arrow-right-short"></i>
-}
-
-function ArrowIconSelected() {
-  return <i className="bi bi-arrow-right-circle-fill"></i>
-}
+import { ArrowRightShort, ArrowRightCircleFill } from "./Icons"
 
 const NavButton = ({ to, exact, children, ...rest }) => {
   return (
@@ -36,7 +29,7 @@ const NavButton = ({ to, exact, children, ...rest }) => {
             variant={match ? "outline" : "ghost"}
             isFullWidth={true}
             justifyContent="flex-start"
-            leftIcon={match ? <ArrowIconSelected /> : <ArrowIcon />}
+            leftIcon={match ? <ArrowRightCircleFill /> : <ArrowRightShort />}
             {...rest}
           >
             {children}

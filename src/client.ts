@@ -1,10 +1,13 @@
 import axios from "axios"
+import { useRPCState, useTokenState } from "./settings"
 
 export class Client {
   backend: string
+  token?: string
 
-  constructor(backend: string = "/") {
+  constructor(backend: string = "/", token?: string) {
     this.backend = backend
+    this.token = token
   }
 
   async sendRequest(body: any): Promise<any> {
@@ -39,6 +42,17 @@ export class Client {
           .parameter(request.device)
       )
     )) as LoginResponse
+  }
+
+  async fetchPost(request: FetchPostRequest) {
+    return (await this.sendRequest(
+      this.serialize(
+        new SerializeObject(request.postType as string)
+          .parameter(request.lastSeen || "NULL")
+          .parameter(request.postCategory.toString())
+          .provideToken(this.token)
+      )
+    )) as FetchPostResponse
   }
 
   async version() {
@@ -100,6 +114,14 @@ class SerializeObject {
 
     return this
   }
+
+  provideToken(token?: string) {
+    if (!token || token == "") {
+      throw new Error("需要登录才能进行操作")
+    }
+    this.token = token
+    return this
+  }
 }
 
 class RequestLoginCodeRequest {
@@ -121,6 +143,58 @@ class LoginResponse {
   Token: string
 }
 
-const client = new Client()
+export enum PostType {
+  Time = "1",
+  Favoured = "6",
+  My = "7",
+  Trending = "d",
+  Message = "a",
+}
 
-export default client
+export enum PostCategory {
+  All = 0,
+  Campus = 1,
+  Entertainment = 2,
+  Emotion = 3,
+  Science = 4,
+  IT = 5,
+  Social = 6,
+  Music = 7,
+  Movie = 8,
+  Art = 9,
+  Life = 10,
+}
+
+export class FetchPostRequest {
+  postType: PostType
+  postCategory: PostCategory
+  lastSeen?: string
+}
+
+export class Thread {
+  ThreadID: string
+  Block: number
+  Title: string
+  Summary: string
+  Like: number
+  Dislike: number
+  Comment: number
+  Read: number
+  LastUpdateTime: string
+  AnonymousType: string
+  PostTime: string
+  RandomSeed: number
+  WhetherTop: number
+  Tag: string
+}
+
+export class FetchPostResponse {
+  LastSeenThreadID: string
+  thread_list: Thread[]
+}
+
+export function useClient() {
+  const [rpc, _setRpc] = useRPCState()
+  const [token, _setToken] = useTokenState()
+  return new Client(rpc, token)
+}

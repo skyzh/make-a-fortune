@@ -48,7 +48,7 @@ function Navbar() {
   const toast = useToast()
   useEffect(() => {
     async function sendRequest() {
-      if (rpc != "") {
+      if (rpc !== "") {
         const client = new Client(rpc)
         setBackend(await client.version())
       }
@@ -100,7 +100,7 @@ function Navbar() {
           后端的服务条款，且同意对应匿名社区的社区规范与服务条款。
         </Text>
         <Text color="gray.500" fontSize="xs" mt="3">
-          您正在使用 {rpc == "/" ? window.location.hostname : rpc}{" "}
+          您正在使用 {rpc === "/" ? window.location.hostname : rpc}{" "}
           作为「闷声发财」的 RPC 后端。 该 RPC 后端由{" "}
           {backend?.name || "<无法获取信息>"} 提供服务。
         </Text>

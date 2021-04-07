@@ -1,12 +1,13 @@
 import React from "react"
 import { useEffect, useState } from "react"
 
-import { Stack, Box, useToast, Button, HStack } from "@chakra-ui/react"
+import { Stack, Box, useToast } from "@chakra-ui/react"
 import { useHistory } from "react-router-dom"
 import { useClient, PostType, PostCategory, Thread } from "./client"
 import { handleError } from "./utils"
 import { concat, range, uniqBy } from "lodash"
 import { ThreadComponent, ThreadSkeleton } from "./Thread"
+import Refresh from "./Refresh"
 import { InView } from "react-intersection-observer"
 import ScrollableContainer from "./Scrollable"
 import NoMore from "./NoMore"
@@ -87,7 +88,7 @@ export function PostListComponent({
           : toMerge
       )
       setLastSeen(result[lastSeenField])
-      setHasMore(toMerge.length != 0)
+      setHasMore(toMerge.length !== 0)
     }
     fetch()
       .then()
@@ -100,12 +101,20 @@ export function PostListComponent({
 
   const moreEntries = () => doFetch(lastSeen, threadList)
 
+  const refresh = () => {
+    setThreadList(null)
+    doFetch(null, null)
+  }
+
   return (
-    <ThreadListComponent
-      threadList={threadList}
-      moreEntries={moreEntries}
-      hasMore={hasMore}
-    ></ThreadListComponent>
+    <>
+      <Refresh onClick={refresh} />
+      <ThreadListComponent
+        threadList={threadList}
+        moreEntries={moreEntries}
+        hasMore={hasMore}
+      ></ThreadListComponent>
+    </>
   )
 }
 

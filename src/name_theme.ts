@@ -34,7 +34,7 @@ export function generateName(theme: string, seed: number, id: number) {
       mapping = ALICE_AND_BOB
     }
   }
-  if (mapping.length == 0) {
+  if (mapping.length === 0) {
     return "Unknown"
   }
   if (id < mapping.length) {

@@ -5,15 +5,17 @@ import {
   Stack,
   Box,
   Text,
-  HStack,
+  ButtonGroup,
+  Button,
   Flex,
   Spacer,
   Badge,
   Skeleton,
   SkeletonText,
+  HStack,
 } from "@chakra-ui/react"
 import { Floor } from "./client"
-import { ArrowRight, HandThumbsUp, ReplyFill } from "./Icons"
+import { HandThumbsUp, ArrowRight, Flag, Broadcast, ReplyFill } from "./Icons"
 import * as moment from "moment"
 import { generateName } from "./name_theme"
 
@@ -57,7 +59,7 @@ export function FloorComponent({ floor, theme, seed }: FloorComponentProps) {
             <Text fontSize="sm" mr="2" fontWeight="bold">
               {generateName(theme, seed, parseInt(floor.Speakername))}
             </Text>
-            {floor.Replytofloor != 0 && (
+            {floor.Replytofloor !== 0 && (
               <>
                 <Text fontSize="sm" mr="2" fontWeight="bold">
                   <ArrowRight />
@@ -83,6 +85,23 @@ export function FloorComponent({ floor, theme, seed }: FloorComponentProps) {
           <Text fontSize="sm">
             <HandThumbsUp /> {floor.Like - floor.Dislike}
           </Text>
+          <ButtonGroup
+            isAttached
+            colorScheme="teal"
+            size="xs"
+            variant="outline"
+          >
+            <Button mr="-px" isFullWidth>
+              赞
+            </Button>
+            <Button isFullWidth>踩</Button>
+          </ButtonGroup>
+          <Button colorScheme="teal" size="xs" variant="outline">
+            <Flag /> &nbsp; 举报
+          </Button>
+          <Button colorScheme="teal" size="xs" variant="outline">
+            <ReplyFill /> &nbsp; 回复
+          </Button>
         </Stack>
       </Box>
     </Flex>

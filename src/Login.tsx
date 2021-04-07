@@ -77,7 +77,7 @@ function Login() {
     }
     doSend()
       .then((resp) => {
-        if (resp.Token != "") {
+        if (resp.Token !== "") {
           setPersistToken(resp.Token)
           setPersistRPC(rpc)
           setToken(resp.Token)

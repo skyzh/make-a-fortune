@@ -29,9 +29,9 @@ export function FloorListComponent({
   return (
     <Stack spacing={3} width="100%" mb="3">
       {thread ? (
-        <ThreadComponent showPostTime thread={thread} />
+        <ThreadComponent showPostTime thread={thread} showControl />
       ) : (
-        <ThreadSkeleton />
+        <ThreadSkeleton showControl />
       )}
       <Divider />
       {thread && floors ? (
@@ -92,7 +92,7 @@ export function ThreadListComponent() {
           ? concat(previousFloors, result.floor_list)
           : result.floor_list
       )
-      setHasMore(result.floor_list.length != 0)
+      setHasMore(result.floor_list.length !== 0)
     }
 
     fetch()

@@ -12,6 +12,14 @@ export function ArrowLeft() {
   return <i className="bi bi-arrow-left"></i>
 }
 
+export function Check() {
+  return <i className="bi bi-check"></i>
+}
+
+export function ArrowClockwise() {
+  return <i className="bi bi-arrow-clockwise"></i>
+}
+
 export function ArrowRightCircleFill() {
   return <i className="bi bi-arrow-right-circle-fill"></i>
 }

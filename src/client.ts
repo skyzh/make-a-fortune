@@ -40,7 +40,10 @@ export class Client {
   }
 
   checkResponse(response: any) {
-    if (response.login_flag == "-1") {
+    if (response === "") {
+      throw new Error("No Response")
+    }
+    if (response.login_flag === "-1") {
       throw new BannedError(response)
     }
     return response
@@ -88,6 +91,78 @@ export class Client {
         )
       )
     ) as FetchReplyResponse | null
+  }
+
+  async likePost(request: ActionPostRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("8_3")
+            .parameter(request.postId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async cancelLikePost(request: ActionPostRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("8_4")
+            .parameter(request.postId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async dislikePost(request: ActionPostRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("9")
+            .parameter(request.postId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async cancelDislikePost(request: ActionPostRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("9_2")
+            .parameter(request.postId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async favorPost(request: ActionPostRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("5")
+            .parameter(request.postId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async defavorPost(request: ActionPostRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("5_2")
+            .parameter(request.postId)
+            .provideToken(this.token)
+        )
+      )
+    )
   }
 
   async version() {
@@ -151,7 +226,7 @@ class SerializeObject {
   }
 
   provideToken(token?: string) {
-    if (!token || token == "") {
+    if (!token || token === "") {
       throw new Error("需要登录才能进行操作")
     }
     this.token = token
@@ -221,6 +296,9 @@ export class Thread {
   RandomSeed: number
   WhetherTop: number
   Tag: string
+  WhetherFavour?: number
+  WhetherLike?: number
+  WhetherReport?: number
 }
 
 export class FetchPostResponse {
@@ -262,6 +340,10 @@ export class FetchReplyResponse {
   ExistFlag: string
   floor_list: Floor[]
   this_thread: Thread
+}
+
+export class ActionPostRequest {
+  postId: string
 }
 
 export function useClient() {

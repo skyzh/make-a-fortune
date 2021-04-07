@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 aiohttp = {extras = ["speedups"], version = "*"}
+aiohttp-cors = "*"
 
 [dev-packages]
 autopep8 = "*"

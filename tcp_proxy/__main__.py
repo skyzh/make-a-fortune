@@ -1,4 +1,5 @@
 from aiohttp import web
+import aiohttp_cors
 import asyncio
 
 
@@ -38,8 +39,18 @@ async def version(request):
     })
 
 app = web.Application()
+cors = aiohttp_cors.setup(app, defaults={
+    "*": aiohttp_cors.ResourceOptions(
+        expose_headers="*",
+        allow_headers="*",
+    ),
+})
+
 app.add_routes([web.post('/api/rpc_proxy', handle)])
 app.add_routes([web.get('/api/version', version)])
+
+for route in list(app.router.routes()):
+    cors.add(route)
 
 if __name__ == '__main__':
     web.run_app(app)

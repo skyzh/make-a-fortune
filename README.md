@@ -6,6 +6,8 @@
 ## Usage
 
 ```bash
-pipenv install && pipenv run python -m tcp_proxy # 启动 RPC Server
-yarn start                                       # 启动前端
+pipenv install                 # 初始化 RPC Server 项目依赖
+yarn install                   # 安装前端项目依赖
+pipenv run python -m tcp_proxy # 启动 RPC Server
+yarn start                     # 启动前端
 ```

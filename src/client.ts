@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios from "axios"
 
 export class Client {
-  backend: string;
+  backend: string
 
   constructor(backend: string = "/") {
     this.backend = backend
@@ -13,30 +13,32 @@ export class Client {
 
   serialize(serializeObject: SerializeObject): any {
     return {
-      "op_code": serializeObject.op,
-      "pa_1": serializeObject.p1 || "0",
-      "pa_2": serializeObject.p2 || "0",
-      "pa_3": serializeObject.p3 || "0",
-      "pa_4": serializeObject.p4 || "0",
-      "pa_5": serializeObject.p5 || "0",
-      "pa_6": serializeObject.p6 || "0",
-      "Token": serializeObject.token || ""
+      op_code: serializeObject.op,
+      pa_1: serializeObject.p1 || "0",
+      pa_2: serializeObject.p2 || "0",
+      pa_3: serializeObject.p3 || "0",
+      pa_4: serializeObject.p4 || "0",
+      pa_5: serializeObject.p5 || "0",
+      pa_6: serializeObject.p6 || "0",
+      Token: serializeObject.token || "",
     }
   }
 
   async requestLoginCode(request: RequestLoginCodeRequest) {
-    return await this.sendRequest(
+    return (await this.sendRequest(
       this.serialize(new SerializeObject("0").parameter(request.email))
-    ) as RequestLoginCodeResponse
+    )) as RequestLoginCodeResponse
   }
 
   async login(request: LoginRequest) {
-    return await this.sendRequest(
-      this.serialize(new SerializeObject("f")
-        .parameter(request.email)
-        .parameter(request.code)
-        .parameter(request.device))
-    ) as LoginResponse
+    return (await this.sendRequest(
+      this.serialize(
+        new SerializeObject("f")
+          .parameter(request.email)
+          .parameter(request.code)
+          .parameter(request.device)
+      )
+    )) as LoginResponse
   }
 
   async version() {
@@ -45,21 +47,21 @@ export class Client {
 }
 
 class RPCVersion {
-  name: string;
-  addr: string;
+  name: string
+  addr: string
 }
 
 class SerializeObject {
-  op: string;
-  token: string | null;
-  p1: string | null;
-  p2: string | null;
-  p3: string | null;
-  p4: string | null;
-  p5: string | null;
-  p6: string | null;
+  op: string
+  token: string | null
+  p1: string | null
+  p2: string | null
+  p3: string | null
+  p4: string | null
+  p5: string | null
+  p6: string | null
 
-  constructor(op : string, token?: string) {
+  constructor(op: string, token?: string) {
     this.op = op
     this.token = token
     this.p_count = 1
@@ -71,27 +73,27 @@ class SerializeObject {
     switch (this.p_count) {
       case 1: {
         this.p1 = val
-        break;
+        break
       }
       case 2: {
         this.p2 = val
-        break;
+        break
       }
       case 3: {
         this.p3 = val
-        break;
+        break
       }
       case 4: {
         this.p4 = val
-        break;
+        break
       }
       case 5: {
         this.p5 = val
-        break;
+        break
       }
       case 6: {
         this.p6 = val
-        break;
+        break
       }
     }
     this.p_count += 1
@@ -118,7 +120,6 @@ class LoginResponse {
   login_flag: number
   Token: string
 }
-
 
 const client = new Client()
 

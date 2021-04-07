@@ -1,0 +1,45 @@
+from aiohttp import web
+import asyncio
+
+
+class Client(object):
+    """Wukefenggao TCP Client
+    """
+
+    def __init__(self, addr="182.254.145.254", port=8080):
+        self.addr = addr
+        self.port = port
+
+    async def send_message(self, message):
+        reader, writer = await asyncio.open_connection(self.addr, self.port)
+        writer.write(message.encode())
+        await writer.drain()
+        data = await reader.readline()
+        return data
+
+
+client = Client()
+
+
+async def handle(request):
+    """Handle a connection
+    """
+    req = await request.text()
+    resp = await client.send_message(req)
+    print(req, resp)
+    resp = resp.decode()
+    return web.json_response(text=resp)
+
+
+async def version(request):
+    return web.json_response({
+        "name": "「无可奉告」Android 版",
+        "addr": f'tcp://{client.addr}:{client.port}',
+    })
+
+app = web.Application()
+app.add_routes([web.post('/api/rpc_proxy', handle)])
+app.add_routes([web.get('/api/version', version)])
+
+if __name__ == '__main__':
+    web.run_app(app)

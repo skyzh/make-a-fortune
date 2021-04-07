@@ -13,7 +13,7 @@ import {
   Skeleton,
   SkeletonText,
   ButtonGroup,
-  useToast,
+  useToast
 } from "@chakra-ui/react"
 import { Thread, useClient } from "./client"
 import {
@@ -23,6 +23,8 @@ import {
   Broadcast,
   ReplyFill,
   Check,
+  Star,
+  StarFill
 } from "./Icons"
 import * as moment from "moment"
 import { handleError } from "./utils"
@@ -74,50 +76,70 @@ export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
 }
 
 export function ThreadComponent({
-  thread,
-  showPostTime,
-  showControl,
-}: ThreadComponentProps) {
-  const [whetherLike, setWhetherLike] = useState(null)
+                                  thread,
+                                  showPostTime,
+                                  showControl
+                                }: ThreadComponentProps) {
+  const [whetherLike, setWhetherLike] = useState<boolean>(null)
+  const [whetherFavour, setWhetherFavour] = useState<boolean>(null)
   const whetherLikeCombined =
     whetherLike === null ? thread.WhetherLike : whetherLike
+  const whetherFavourCombined =
+    whetherFavour === null ? thread.WhetherFavour : whetherFavour
   const client = useClient()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false)
+  const [isFavourLoading, setIsFavourLoading] = useState<boolean>(false)
   const toast = useToast()
 
   const likePost = () => {
     if (whetherLikeCombined === 1) {
-      setIsLoading(true)
+      setIsLikeLoading(true)
       client
         .cancelLikePost({ postId: thread.ThreadID })
         .then(() => setWhetherLike(0))
         .catch((err) => handleError(toast, "无法取消点赞", err))
-        .finally(() => setIsLoading(false))
+        .finally(() => setIsLikeLoading(false))
     }
     if (whetherLikeCombined === 0) {
       client
         .likePost({ postId: thread.ThreadID })
         .then(() => setWhetherLike(1))
         .catch((err) => handleError(toast, "无法点赞", err))
-        .finally(() => setIsLoading(false))
+        .finally(() => setIsLikeLoading(false))
     }
   }
 
   const dislikePost = () => {
     if (whetherLikeCombined === -1) {
-      setIsLoading(true)
+      setIsLikeLoading(true)
       client
         .cancelDislikePost({ postId: thread.ThreadID })
         .then(() => setWhetherLike(0))
         .catch((err) => handleError(toast, "无法取消点踩", err))
-        .finally(() => setIsLoading(false))
+        .finally(() => setIsLikeLoading(false))
     }
     if (whetherLikeCombined === 0) {
       client
         .dislikePost({ postId: thread.ThreadID })
         .then(() => setWhetherLike(-1))
         .catch((err) => handleError(toast, "无法点踩", err))
-        .finally(() => setIsLoading(false))
+        .finally(() => setIsLikeLoading(false))
+    }
+  }
+
+  const toggleFavour = async () => {
+    setIsFavourLoading(true)
+    try {
+      if (whetherFavourCombined) {
+        await client.defavorPost({ postId: thread.ThreadID })
+      } else {
+        await client.favorPost({ postId: thread.ThreadID })
+      }
+      setWhetherFavour(!whetherFavourCombined)
+    } catch (err) {
+      handleError(toast, "无法收藏", err)
+    } finally {
+      setIsFavourLoading(false)
     }
   }
 
@@ -154,8 +176,8 @@ export function ThreadComponent({
           <Text fontSize="sm">
             <HandThumbsUp />{" "}
             {thread.Like -
-              thread.Dislike +
-              (whetherLike !== null ? whetherLike - thread.WhetherLike : 0)}
+            thread.Dislike +
+            (whetherLike !== null ? whetherLike - thread.WhetherLike : 0)}
           </Text>
           <Text fontSize="sm">
             <ChatSquareText /> {thread.Comment}
@@ -172,7 +194,7 @@ export function ThreadComponent({
                   variant={whetherLikeCombined === 1 ? "solid" : "outline"}
                   isDisabled={whetherLikeCombined === -1}
                   onClick={likePost}
-                  isLoading={isLoading}
+                  isLoading={isLikeLoading}
                 >
                   赞
                 </Button>
@@ -181,13 +203,21 @@ export function ThreadComponent({
                   variant={whetherLikeCombined === -1 ? "solid" : "outline"}
                   isDisabled={whetherLikeCombined === 1}
                   onClick={dislikePost}
-                  isLoading={isLoading}
+                  isLoading={isLikeLoading}
                 >
                   踩
                 </Button>
               </ButtonGroup>
-              <Button colorScheme="teal" size="xs" variant="outline">
-                <Check /> &nbsp; 收藏
+              <Button
+                colorScheme="teal"
+                size="xs"
+                variant={whetherFavourCombined ? "solid" : "outline"}
+                onClick={toggleFavour}
+                isLoading={isFavourLoading}
+              >
+                {whetherFavourCombined ? <StarFill /> : <Star />}
+                &nbsp;
+                {whetherFavourCombined ? "已收藏" : "收藏"}
               </Button>
               {thread.WhetherReport === 1 ? (
                 <Button colorScheme="teal" size="xs" variant="solid" isDisabled>

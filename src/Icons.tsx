@@ -43,3 +43,11 @@ export function Broadcast() {
 export function ReplyFill() {
   return <i className="bi bi-reply-fill"></i>
 }
+
+export function Star() {
+  return <i className="bi bi-star"></i>
+}
+
+export function StarFill() {
+  return <i className="bi bi-star-fill"></i>
+}

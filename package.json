@@ -1,0 +1,31 @@
+{
+  "name": "make-a-fortune",
+  "version": "1.0.0",
+  "description": "Web portal of Wukegenggao",
+  "main": "index.js",
+  "repository": "https://github.com/skyzh/make-a-fortune",
+  "author": "Alex Chi",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-react": "^7.13.13",
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^1.4.2",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "bootstrap-icons": "^1.4.1",
+    "framer-motion": "^4",
+    "parcel": "^2.0.0-beta.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "scripts": {
+    "start": "parcel serve ./src/index.html --hmr-port 1235",
+    "build": "parcel build ./src/index.html"
+  }
+}

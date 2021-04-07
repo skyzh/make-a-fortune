@@ -8,6 +8,10 @@ export function ArrowRight() {
   return <i className="bi bi-arrow-right"></i>
 }
 
+export function ArrowLeft() {
+  return <i className="bi bi-arrow-left"></i>
+}
+
 export function ArrowRightCircleFill() {
   return <i className="bi bi-arrow-right-circle-fill"></i>
 }
@@ -26,4 +30,8 @@ export function Flag() {
 
 export function Broadcast() {
   return <i className="bi bi-broadcast"></i>
+}
+
+export function ReplyFill() {
+  return <i className="bi bi-reply-fill"></i>
 }

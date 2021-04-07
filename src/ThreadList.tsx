@@ -1,53 +1,66 @@
 import React from "react"
 import { useEffect, useState } from "react"
 
-import {
-  Stack,
-  Box,
-  Heading,
-  Text,
-  HStack,
-  Flex,
-  Spacer,
-  Badge,
-  Spinner,
-  Center,
-} from "@chakra-ui/react"
-import {
-  useClient,
-  PostType,
-  PostCategory,
-  Thread,
-  ReplyOrder,
-  Floor,
-} from "./client"
-import { HandThumbsUp, ChatSquareText, Flag, Broadcast } from "./Icons"
-import * as moment from "moment"
+import { Stack, Box, useToast, Divider } from "@chakra-ui/react"
+import { useClient, Thread, ReplyOrder, Floor } from "./client"
 import { useParams } from "react-router-dom"
+import { handleError } from "./utils"
+import { ThreadComponent, ThreadSkeleton } from "./Thread"
+import { FloorComponent, FloorSkeleton } from "./Floor"
+import { range, concat } from "lodash"
+import { InView } from "react-intersection-observer"
+import ScrollableContainer from "./Scrollable"
+import GoBack from "./GoBack"
 
 interface FloorListComponentProps {
   thread?: Thread
-  floors: Floor[]
+  floors?: Floor[]
+  moreEntries: Function
+  hasMore: boolean
 }
 
 export function FloorListComponent({
   thread,
   floors,
+  moreEntries,
+  hasMore,
 }: FloorListComponentProps) {
   return (
     <Stack spacing={3} width="100%" mb="3">
-      {floors.length > 0 ? (
-        floors.map((floor) => <Box key={floor.FloorId}>{floor.Context}</Box>)
+      {thread ? (
+        <ThreadComponent showPostTime thread={thread} />
       ) : (
-        <Center>
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />
-        </Center>
+        <ThreadSkeleton />
+      )}
+      <Divider />
+      {thread && floors ? (
+        <>
+          {floors.map((floor) => (
+            <Box key={floor.FloorID}>
+              <FloorComponent
+                floor={floor}
+                theme={thread.AnonymousType}
+                seed={thread.RandomSeed}
+              />
+            </Box>
+          ))}
+          {hasMore && (
+            <InView
+              as="div"
+              onChange={(inView) => {
+                if (inView) moreEntries()
+              }}
+            >
+              <FloorSkeleton />
+            </InView>
+          )}
+        </>
+      ) : (
+        range(10).map((key) => (
+          <Box key={key}>
+            <FloorSkeleton />
+          </Box>
+        ))
       )}
     </Stack>
   )
@@ -56,21 +69,49 @@ export function FloorListComponent({
 export function ThreadListComponent() {
   const client = useClient()
   let { postId } = useParams()
-  const [floorList, setFloorList] = useState([])
   const [thread, setThread] = useState(null)
-  useEffect(() => {
+  const [lastSeen, setLastSeen] = useState(null)
+  const [floors, setFloors] = useState(null)
+  const [hasMore, setHasMore] = useState(true)
+  const toast = useToast()
+
+  function doFetch(lastSeen, previousFloors) {
     async function fetch() {
       const result = await client.fetchReply({
         postId: postId,
         order: ReplyOrder.Earliest,
+        lastSeen: lastSeen,
       })
       setThread(result.this_thread)
-      setFloorList(result.floor_list)
+      setLastSeen(result.LastSeenFloorID)
+      setFloors(
+        previousFloors
+          ? concat(previousFloors, result.floor_list)
+          : result.floor_list
+      )
+      setHasMore(result.floor_list.length != 0)
     }
-    fetch().then()
-  }, [])
 
-  return <FloorListComponent thread={thread} floors={floorList} />
+    fetch()
+      .then()
+      .catch((err) => handleError(toast, "无法获取发帖信息", err))
+  }
+
+  useEffect(() => doFetch(null, null), [postId])
+
+  const moreEntries = () => doFetch(lastSeen, floors)
+
+  return (
+    <ScrollableContainer>
+      <GoBack />
+      <FloorListComponent
+        thread={thread}
+        floors={floors}
+        moreEntries={moreEntries}
+        hasMore={hasMore}
+      />
+    </ScrollableContainer>
+  )
 }
 
 export default ThreadListComponent

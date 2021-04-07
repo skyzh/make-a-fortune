@@ -25,7 +25,8 @@ const NavButton = ({ to, exact, children, ...rest }) => {
       children={({ match }) => (
         <NavLink exact={exact} to={to}>
           <Button
-            colorScheme="blue"
+            colorScheme={match ? "blue" : "gray"}
+            color={match ? "blue.600" : "gray.500"}
             variant={match ? "outline" : "ghost"}
             isFullWidth={true}
             justifyContent="flex-start"
@@ -75,16 +76,16 @@ function Navbar() {
       <NavButton exact to="/">
         首页
       </NavButton>
-      <NavButton to="/trend">趋势</NavButton>
+      <NavButton to="/posts/trend">趋势</NavButton>
       <Divider></Divider>
       <Box px="5">
         <Text color="gray.500" fontSize="sm">
           个人
         </Text>
       </Box>
-      <NavButton to="/star">收藏</NavButton>
-      <NavButton to="/notification">通知</NavButton>
-      <NavButton to="/me">我的发帖</NavButton>
+      <NavButton to="/posts/star">收藏</NavButton>
+      <NavButton to="/posts/notification">通知</NavButton>
+      <NavButton to="/posts/me">我的发帖</NavButton>
       <Divider></Divider>
       <Box px="5">
         <Text color="gray.500" fontSize="sm">

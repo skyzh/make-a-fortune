@@ -4,7 +4,13 @@ import { Container, ChakraProvider, Box } from "@chakra-ui/react"
 import { Flex } from "@chakra-ui/react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import Navbar from "./Navbar"
-import { PostListTrend, PostListTime } from "./PostList"
+import {
+  PostListTrend,
+  PostListTime,
+  PostListMy,
+  PostListStar,
+  PostListNotification,
+} from "./PostList"
 import ThreadList from "./ThreadList"
 import Login from "./Login"
 
@@ -22,28 +28,30 @@ function App() {
               <Navbar></Navbar>
             </Box>
           </Box>
-          <Box
-            flex="1"
-            overflowY={{ base: "unset", md: "scroll" }}
-            overflowX="hidden"
-          >
-            <Container centerContent mt="3">
-              <Switch>
-                <Route path="/login">
-                  <Login></Login>
-                </Route>
-                <Route exact path="/">
-                  <PostListTime></PostListTime>
-                </Route>
-                <Route path="/trend">
-                  <PostListTrend></PostListTrend>
-                </Route>
-                <Route path="/posts/:postId">
-                  <ThreadList></ThreadList>
-                </Route>
-                <Route path="/me">我的</Route>
-              </Switch>
-            </Container>
+          <Box flex="1">
+            <Switch>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route exact path="/">
+                <PostListTime />
+              </Route>
+              <Route path="/posts/trend">
+                <PostListTrend />
+              </Route>
+              <Route path="/posts/star">
+                <PostListStar />
+              </Route>
+              <Route path="/posts/me">
+                <PostListMy />
+              </Route>
+              <Route path="/posts/notification">
+                <PostListNotification />
+              </Route>
+              <Route path="/posts/:postId">
+                <ThreadList />
+              </Route>
+            </Switch>
           </Box>
         </Flex>
       </Router>

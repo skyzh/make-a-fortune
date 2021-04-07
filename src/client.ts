@@ -1,6 +1,18 @@
 import axios from "axios"
 import { useRPCState, useTokenState } from "./settings"
 
+export class BannedError extends Error {
+  resp: any
+
+  constructor(resp: any) {
+    super("Banned")
+    this.resp = resp
+
+    // Set the prototype explicitly.
+    Object.setPrototypeOf(this, BannedError.prototype)
+  }
+}
+
 export class Client {
   backend: string
   token?: string
@@ -27,6 +39,13 @@ export class Client {
     }
   }
 
+  checkResponse(response: any) {
+    if (response.login_flag == "-1") {
+      throw new BannedError(response)
+    }
+    return response
+  }
+
   async requestLoginCode(request: RequestLoginCodeRequest) {
     return (await this.sendRequest(
       this.serialize(new SerializeObject("0").parameter(request.email))
@@ -45,26 +64,30 @@ export class Client {
   }
 
   async fetchPost(request: FetchPostRequest) {
-    return (await this.sendRequest(
-      this.serialize(
-        new SerializeObject(request.postType.toString())
-          .parameter(request.lastSeen || "NULL")
-          .parameter(request.postCategory.toString())
-          .provideToken(this.token)
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject(request.postType.toString())
+            .parameter(request.lastSeen || "NULL")
+            .parameter(request.postCategory.toString())
+            .provideToken(this.token)
+        )
       )
-    )) as FetchPostResponse
+    ) as FetchPostResponse
   }
 
   async fetchReply(request: FetchReplyRequest) {
-    return (await this.sendRequest(
-      this.serialize(
-        new SerializeObject("2")
-          .parameter(request.postId)
-          .parameter(request.lastSeen || "NULL")
-          .parameter(request.order)
-          .provideToken(this.token)
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("2")
+            .parameter(request.postId)
+            .parameter(request.lastSeen || "NULL")
+            .parameter(request.order)
+            .provideToken(this.token)
+        )
       )
-    )) as FetchReplyResponse
+    ) as FetchReplyResponse | null
   }
 
   async version() {
@@ -201,8 +224,11 @@ export class Thread {
 }
 
 export class FetchPostResponse {
-  LastSeenThreadID: string
-  thread_list: Thread[]
+  LastSeenThreadID?: string
+  LastSeenHotThreadID?: string
+  LastSeenMyThreadID?: string
+  thread_list?: Thread[]
+  message_list?: Thread[]
 }
 
 export enum ReplyOrder {
@@ -219,7 +245,7 @@ export class FetchReplyRequest {
 }
 
 export class Floor {
-  FloorId: string
+  FloorID: string
   Speakername: string
   Replytoname: string
   Replytofloor: number
@@ -232,7 +258,7 @@ export class Floor {
 }
 
 export class FetchReplyResponse {
-  LastSeenFloorId: string
+  LastSeenFloorID: string
   ExistFlag: string
   floor_list: Floor[]
   this_thread: Thread

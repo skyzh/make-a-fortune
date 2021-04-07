@@ -1,139 +1,166 @@
 import React from "react"
 import { useEffect, useState } from "react"
 
-import {
-  Stack,
-  Box,
-  Heading,
-  Text,
-  HStack,
-  Flex,
-  Spacer,
-  Badge,
-  Spinner,
-  Center,
-  Button,
-} from "@chakra-ui/react"
+import { Stack, Box, useToast, Button, HStack } from "@chakra-ui/react"
 import { useHistory } from "react-router-dom"
 import { useClient, PostType, PostCategory, Thread } from "./client"
-import {
-  HandThumbsUp,
-  ChatSquareText,
-  Flag,
-  Broadcast,
-  ArrowRight,
-} from "./Icons"
-import * as moment from "moment"
-
-interface ThreadComponentProps {
-  thread: Thread
-  key?: string
-}
-
-function ThreadComponent({ thread }: ThreadComponentProps) {
-  const history = useHistory()
-  return (
-    <Box p={5} shadow="sm" borderWidth="1px" width="100%">
-      <Stack spacing="3">
-        <Flex>
-          <Text fontSize="sm">
-            <Badge colorScheme="gray">#</Badge> {thread.ThreadID}
-          </Text>
-          <Text fontSize="sm">
-            {thread.Tag != "NULL" && (
-              <Badge ml="2" colorScheme="teal">
-                {thread.Tag}
-              </Badge>
-            )}
-          </Text>
-          <Spacer />
-          <Text fontSize="sm">{moment(thread.LastUpdateTime).calendar()}</Text>
-        </Flex>
-        <Heading fontSize="md">{thread.Title}</Heading>
-        <Text mt={4}>{thread.Summary}</Text>
-        <HStack spacing="10" justify="space-between" px="3" color="teal.500">
-          <Text fontSize="sm">
-            <HandThumbsUp /> {thread.Like - thread.Dislike}
-          </Text>
-          <Text fontSize="sm">
-            <Flag /> {thread.Block}
-          </Text>
-          <Text fontSize="sm">
-            <ChatSquareText /> {thread.Comment}
-          </Text>
-          <Text fontSize="sm">
-            <Broadcast /> {thread.Read}
-          </Text>
-          <Button
-            variant="ghost"
-            onClick={() => history.push(`/posts/${thread.ThreadID}`)}
-          >
-            <ArrowRight />
-          </Button>
-        </HStack>
-      </Stack>
-    </Box>
-  )
-}
+import { handleError } from "./utils"
+import { concat, range } from "lodash"
+import { ThreadComponent, ThreadSkeleton } from "./Thread"
+import { InView } from "react-intersection-observer"
+import ScrollableContainer from "./Scrollable"
 
 interface ThreadListComponentProps {
-  threadList: Thread[]
+  threadList?: Thread[]
+  moreEntries: Function
+  hasMore: boolean
 }
 
-function ThreadListComponent({ threadList }: ThreadListComponentProps) {
+function ThreadListComponent({
+  threadList,
+  moreEntries,
+  hasMore,
+}: ThreadListComponentProps) {
+  const history = useHistory()
   return (
     <Stack spacing={3} width="100%" mb="3">
-      {threadList.length > 0 ? (
-        threadList.map((thread) => (
-          <Box key={thread.ThreadID}>
-            <ThreadComponent thread={thread} />
+      {threadList ? (
+        <>
+          {threadList.map((thread) => (
+            <Box
+              key={thread.ThreadID}
+              onClick={() => history.push(`/posts/${thread.ThreadID}`)}
+              cursor="pointer"
+            >
+              <ThreadComponent thread={thread} />
+            </Box>
+          ))}
+          {hasMore && (
+            <InView
+              as="div"
+              onChange={(inView) => {
+                if (inView) moreEntries()
+              }}
+            >
+              <ThreadSkeleton />
+            </InView>
+          )}
+        </>
+      ) : (
+        range(10).map((key) => (
+          <Box key={key}>
+            <ThreadSkeleton />
           </Box>
         ))
-      ) : (
-        <Center>
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />
-        </Center>
       )}
     </Stack>
   )
 }
 
-export function PostListTime() {
+export function PostListComponent({
+  postCategory,
+  postType,
+  lastSeenField,
+  isMessage,
+}) {
   const client = useClient()
-  const [threadList, setThreadList] = useState([])
-  useEffect(() => {
+  const [threadList, setThreadList] = useState(null)
+  const toast = useToast()
+  const [hasMore, setHasMore] = useState(true)
+  const [lastSeen, setLastSeen] = useState(null)
+
+  function doFetch(lastSeen, previousThreads) {
     async function fetch() {
       const result = await client.fetchPost({
-        postCategory: PostCategory.All,
-        postType: PostType.Time,
+        postCategory,
+        postType,
+        lastSeen,
       })
-      setThreadList(result.thread_list)
-    }
-    fetch().then()
-  }, [])
+      const toMerge = isMessage ? result.message_list : result.thread_list
 
-  return <ThreadListComponent threadList={threadList}></ThreadListComponent>
+      setThreadList(
+        previousThreads ? concat(previousThreads, toMerge) : toMerge
+      )
+      setLastSeen(result[lastSeenField])
+      setHasMore(toMerge.length != 0)
+    }
+    fetch()
+      .then()
+      .catch((err) => handleError(toast, "无法获取帖子列表", err))
+  }
+
+  useEffect(() => {
+    doFetch(null, null)
+  }, [postCategory, postType, lastSeenField])
+
+  const moreEntries = () => doFetch(lastSeen, threadList)
+
+  return (
+    <ThreadListComponent
+      threadList={threadList}
+      moreEntries={moreEntries}
+      hasMore={hasMore}
+    ></ThreadListComponent>
+  )
+}
+
+export function PostListTime() {
+  return (
+    <ScrollableContainer>
+      <PostListComponent
+        lastSeenField="LastSeenThreadID"
+        postCategory={PostCategory.All}
+        postType={PostType.Time}
+      />
+    </ScrollableContainer>
+  )
 }
 
 export function PostListTrend() {
-  const client = useClient()
-  const [threadList, setThreadList] = useState([])
-  useEffect(() => {
-    async function fetch() {
-      const result = await client.fetchPost({
-        postCategory: PostCategory.All,
-        postType: PostType.Trending,
-      })
-      setThreadList(result.thread_list)
-    }
-    fetch().then()
-  }, [])
+  return (
+    <ScrollableContainer>
+      <PostListComponent
+        lastSeenField="LastSeenHotThreadID"
+        postCategory={PostCategory.All}
+        postType={PostType.Trending}
+      />
+    </ScrollableContainer>
+  )
+}
 
-  return <ThreadListComponent threadList={threadList}></ThreadListComponent>
+export function PostListMy() {
+  return (
+    <ScrollableContainer>
+      <PostListComponent
+        lastSeenField="LastSeenMyThreadID"
+        postCategory={PostCategory.All}
+        postType={PostType.My}
+      />
+    </ScrollableContainer>
+  )
+}
+
+export function PostListStar() {
+  return (
+    <ScrollableContainer>
+      <PostListComponent
+        lastSeenField="LastSeenFavorThreadID"
+        postCategory={PostCategory.All}
+        postType={PostType.Favoured}
+      />
+    </ScrollableContainer>
+  )
+}
+
+export function PostListNotification() {
+  return (
+    <ScrollableContainer>
+      <PostListComponent
+        lastSeenField="LastSeenMessageThreadID"
+        isMessage={true}
+        postCategory={PostCategory.All}
+        postType={PostType.Message}
+      />
+    </ScrollableContainer>
+  )
 }

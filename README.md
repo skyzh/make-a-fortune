@@ -5,7 +5,14 @@
 
 ## Usage
 
+启动 RPC Server
 ```bash
-pipenv install && pipenv run python -m tcp_proxy # 启动 RPC Server
-yarn start                                       # 启动前端
+pipenv install
+pipenv run python -m tcp_proxy
+```
+
+启动前端
+```bash
+yarn install
+yarn start
 ```

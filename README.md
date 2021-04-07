@@ -9,6 +9,7 @@
 ```bash
 pipenv install
 pipenv run python -m tcp_proxy
+```
 
 启动前端
 ```bash

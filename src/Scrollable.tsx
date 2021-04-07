@@ -8,7 +8,7 @@ function ScrollableContainer({ children }) {
       overflowX="hidden"
       height="100%"
     >
-      <Container centerContent mt="3">
+      <Container maxW="container.md" centerContent my="3">
         {children}
       </Container>
     </Box>

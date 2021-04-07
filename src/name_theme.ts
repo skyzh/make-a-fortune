@@ -40,6 +40,8 @@ export function generateName(theme: string, seed: number, id: number) {
   if (id < mapping.length) {
     return mapping[id]
   } else {
-    return `${mapping[id]}.${Math.floor(id / mapping.length) + 1}`
+    return `${mapping[id % mapping.length]}.${
+      Math.floor(id / mapping.length) + 1
+    }`
   }
 }

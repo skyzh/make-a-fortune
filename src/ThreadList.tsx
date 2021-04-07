@@ -11,6 +11,7 @@ import { range, concat } from "lodash"
 import { InView } from "react-intersection-observer"
 import ScrollableContainer from "./Scrollable"
 import GoBack from "./GoBack"
+import NoMore from "./NoMore"
 
 interface FloorListComponentProps {
   thread?: Thread
@@ -44,7 +45,7 @@ export function FloorListComponent({
               />
             </Box>
           ))}
-          {hasMore && (
+          {hasMore ? (
             <InView
               as="div"
               onChange={(inView) => {
@@ -53,6 +54,8 @@ export function FloorListComponent({
             >
               <FloorSkeleton />
             </InView>
+          ) : (
+            <NoMore />
           )}
         </>
       ) : (

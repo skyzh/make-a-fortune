@@ -5,10 +5,11 @@ import { Stack, Box, useToast, Button, HStack } from "@chakra-ui/react"
 import { useHistory } from "react-router-dom"
 import { useClient, PostType, PostCategory, Thread } from "./client"
 import { handleError } from "./utils"
-import { concat, range } from "lodash"
+import { concat, range, uniqBy } from "lodash"
 import { ThreadComponent, ThreadSkeleton } from "./Thread"
 import { InView } from "react-intersection-observer"
 import ScrollableContainer from "./Scrollable"
+import NoMore from "./NoMore"
 
 interface ThreadListComponentProps {
   threadList?: Thread[]
@@ -35,7 +36,7 @@ function ThreadListComponent({
               <ThreadComponent thread={thread} />
             </Box>
           ))}
-          {hasMore && (
+          {hasMore ? (
             <InView
               as="div"
               onChange={(inView) => {
@@ -44,6 +45,8 @@ function ThreadListComponent({
             >
               <ThreadSkeleton />
             </InView>
+          ) : (
+            <NoMore />
           )}
         </>
       ) : (
@@ -79,7 +82,9 @@ export function PostListComponent({
       const toMerge = isMessage ? result.message_list : result.thread_list
 
       setThreadList(
-        previousThreads ? concat(previousThreads, toMerge) : toMerge
+        previousThreads
+          ? uniqBy(concat(previousThreads, toMerge), "ThreadID")
+          : toMerge
       )
       setLastSeen(result[lastSeenField])
       setHasMore(toMerge.length != 0)

@@ -1,32 +1,8 @@
 import React from "react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
-import {
-  Stack,
-  Box,
-  Heading,
-  Text,
-  Button,
-  Flex,
-  Spacer,
-  Badge,
-  Skeleton,
-  SkeletonText,
-  ButtonGroup,
-  useToast,
-} from "@chakra-ui/react"
-import { Thread, useClient } from "~/src/client"
-import {
-  HandThumbsUp,
-  ChatSquareText,
-  Flag,
-  Broadcast,
-  ReplyFill,
-  Check,
-  Star,
-  StarFill,
-} from "~/src/components/utils/Icons"
-import * as moment from "moment"
+import { Text, Button, ButtonGroup, useToast } from "@chakra-ui/react"
+import { HandThumbsUp } from "~/src/components/utils/Icons"
 import { handleError } from "~/src/utils"
 
 export default function useLikeControl({

@@ -32,8 +32,12 @@ export function ChatSquareText() {
   return <i className="bi bi-chat-square-text-fill"></i>
 }
 
-export function Flag() {
+export function FlagFill() {
   return <i className="bi bi-flag-fill"></i>
+}
+
+export function Flag() {
+  return <i className="bi bi-flag"></i>
 }
 
 export function Broadcast() {

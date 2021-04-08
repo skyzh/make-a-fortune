@@ -21,10 +21,12 @@ import {
   Flag,
   Broadcast,
   ReplyFill,
+  FlagFill,
 } from "~/src/components/utils/Icons"
 import * as moment from "moment"
 import { generateName } from "~/src/name_theme"
 import useLikeControl from "~/src/components/controls/LikeControl"
+import useNetworkLocalControl from "../controls/NetworkLocalControl"
 
 interface FloorComponentProps {
   floor: Floor
@@ -72,6 +74,22 @@ export function FloorComponent({
     onDislike: () => client.dislikeReply(payload),
   })
 
+  const reportControl = useNetworkLocalControl({
+    clientState: floor.WhetherReport === 1,
+    doAction: () => client.reportReply(payload),
+    failedText: "无法举报",
+    doneComponent: (
+      <>
+        <FlagFill /> &nbsp; 已举报
+      </>
+    ),
+    initialComponent: (
+      <>
+        <Flag /> &nbsp; 举报
+      </>
+    ),
+  })
+
   return (
     <Flex width="100%">
       <Box flex="1" p={5} shadow="sm" borderWidth="1px" borderRadius="md">
@@ -108,9 +126,7 @@ export function FloorComponent({
         <Stack color="teal.500" width="80px">
           {likeTextControl}
           {likeButtonControl}
-          <Button colorScheme="teal" size="xs" variant="outline">
-            <Flag /> &nbsp; 举报
-          </Button>
+          {reportControl}
           <Button colorScheme="teal" size="xs" variant="outline">
             <ReplyFill /> &nbsp; 回复
           </Button>

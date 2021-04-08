@@ -13,6 +13,14 @@ export class BannedError extends Error {
   }
 }
 
+export class ActionError extends Error {
+  constructor(message: string) {
+    super(message)
+    // Set the prototype explicitly.
+    Object.setPrototypeOf(this, BannedError.prototype)
+  }
+}
+
 export class Client {
   backend: string
   token?: string
@@ -39,12 +47,15 @@ export class Client {
     }
   }
 
-  checkResponse(response: any) {
+  checkResponse(response: any, requiredField?: string) {
     if (response === "") {
       throw new Error("No Response")
     }
     if (response.login_flag === "-1") {
       throw new BannedError(response)
+    }
+    if (requiredField && response["requiredField"] != 1) {
+      throw new ActionError(`${requiredField} 失败`)
     }
     return response
   }
@@ -222,6 +233,31 @@ export class Client {
             .parameter(request.postId)
             .parameter(null)
             .parameter(null)
+            .parameter(request.replyId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async report(request: ActionPostRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("e")
+            .parameter(request.postId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async reportReply(request: ActionReplyRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("h")
+            .parameter(request.postId)
             .parameter(request.replyId)
             .provideToken(this.token)
         )

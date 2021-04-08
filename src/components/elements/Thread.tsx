@@ -1,5 +1,5 @@
 import React from "react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import {
   Stack,
@@ -12,8 +12,6 @@ import {
   Badge,
   Skeleton,
   SkeletonText,
-  ButtonGroup,
-  useToast,
 } from "@chakra-ui/react"
 import { Thread, useClient } from "~/src/client"
 import {
@@ -22,13 +20,13 @@ import {
   Flag,
   Broadcast,
   ReplyFill,
-  Check,
+  FlagFill,
   Star,
   StarFill,
 } from "~/src/components/utils/Icons"
 import * as moment from "moment"
-import { handleError } from "~/src/utils"
 import useLikeControl from "~/src/components/controls/LikeControl"
+import useNetworkLocalControl from "../controls/NetworkLocalControl"
 
 interface ThreadComponentProps {
   thread: Thread
@@ -64,10 +62,10 @@ export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
           </Text>
           {showControl && (
             <>
-              <Skeleton height="5" />
-              <Skeleton height="5" />
-              <Skeleton height="5" />
-              <Skeleton height="5" />
+              <Skeleton height="6" />
+              <Skeleton height="6" />
+              <Skeleton height="6" />
+              <Skeleton height="6" />
             </>
           )}
         </Stack>
@@ -81,14 +79,7 @@ export function ThreadComponent({
   showPostTime,
   showControl,
 }: ThreadComponentProps) {
-  const [whetherFavour, setWhetherFavour] = useState<boolean>(null)
-
-  const whetherFavourCombined =
-    whetherFavour === null ? thread.WhetherFavour : whetherFavour
   const client = useClient()
-
-  const [isFavourLoading, setIsFavourLoading] = useState<boolean>(false)
-  const toast = useToast()
 
   const payload = { postId: thread.ThreadID }
   const [likeTextControl, likeButtonControl] = useLikeControl({
@@ -100,21 +91,38 @@ export function ThreadComponent({
     onDislike: () => client.dislikePost(payload),
   })
 
-  const toggleFavour = async () => {
-    setIsFavourLoading(true)
-    try {
-      if (whetherFavourCombined) {
-        await client.defavorPost({ postId: thread.ThreadID })
-      } else {
-        await client.favorPost({ postId: thread.ThreadID })
-      }
-      setWhetherFavour(!whetherFavourCombined)
-    } catch (err) {
-      handleError(toast, "无法收藏", err)
-    } finally {
-      setIsFavourLoading(false)
-    }
-  }
+  const favourControl = useNetworkLocalControl({
+    clientState: thread.WhetherFavour === 1,
+    doAction: () => client.favorPost(payload),
+    cancelAction: () => client.defavorPost(payload),
+    failedText: "无法收藏",
+    doneComponent: (
+      <>
+        <StarFill /> &nbsp; 已收藏
+      </>
+    ),
+    initialComponent: (
+      <>
+        <Star /> &nbsp; 收藏
+      </>
+    ),
+  })
+
+  const reportControl = useNetworkLocalControl({
+    clientState: thread.WhetherReport === 1,
+    doAction: () => client.report(payload),
+    failedText: "无法举报",
+    doneComponent: (
+      <>
+        <FlagFill /> &nbsp; 已举报
+      </>
+    ),
+    initialComponent: (
+      <>
+        <Flag /> &nbsp; 举报
+      </>
+    ),
+  })
 
   return (
     <Flex width="100%">
@@ -156,26 +164,8 @@ export function ThreadComponent({
           {showControl && (
             <>
               {likeButtonControl}
-              <Button
-                colorScheme="teal"
-                size="xs"
-                variant={whetherFavourCombined ? "solid" : "outline"}
-                onClick={toggleFavour}
-                isLoading={isFavourLoading}
-              >
-                {whetherFavourCombined ? <StarFill /> : <Star />}
-                &nbsp;
-                {whetherFavourCombined ? "已收藏" : "收藏"}
-              </Button>
-              {thread.WhetherReport === 1 ? (
-                <Button colorScheme="teal" size="xs" variant="solid" isDisabled>
-                  <Check /> &nbsp; 已举报
-                </Button>
-              ) : (
-                <Button colorScheme="teal" size="xs" variant="outline">
-                  <Flag /> &nbsp; 举报
-                </Button>
-              )}
+              {favourControl}
+              {reportControl}
               <Button colorScheme="teal" size="xs" variant="outline">
                 <ReplyFill /> &nbsp; 回复
               </Button>

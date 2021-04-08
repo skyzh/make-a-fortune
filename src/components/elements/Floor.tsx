@@ -117,7 +117,7 @@ export function FloorComponent({
             <Text fontSize="sm">{moment(floor.RTime).calendar()}</Text>
           </Flex>
           <Box>
-          {floor.Context.split("\n").map((line, index) => (
+            {floor.Context.split("\n").map((line, index) => (
               <Text mt={0} wordBreak="break-word" key={index}>
                 {line}
               </Text>

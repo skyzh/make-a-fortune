@@ -12,6 +12,14 @@ export function ArrowLeft() {
   return <i className="bi bi-arrow-left" />
 }
 
+export function ArrowUp() {
+  return <i className="bi bi-arrow-up" />
+}
+
+export function ArrowDown() {
+  return <i className="bi bi-arrow-down" />
+}
+
 export function Check() {
   return <i className="bi bi-check" />
 }

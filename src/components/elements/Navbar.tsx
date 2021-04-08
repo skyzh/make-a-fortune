@@ -102,7 +102,7 @@ const Navbar: React.FC = ({ onClose }) => {
         </Text>
       </Box>
       <NB to="/login">{token ? "切换用户" : "登录"}</NB>
-      <Box pt="5">
+      <Box pt="5" px="2">
         <Text color="gray.500" fontSize="xs">
           「闷声发财」是一个通用的匿名社区前端。
           使用「闷声发财」访问社区内容，即意味着您同意所使用 RPC
@@ -112,6 +112,11 @@ const Navbar: React.FC = ({ onClose }) => {
           您正在使用 {rpc === "/" ? window.location.hostname : rpc}{" "}
           作为「闷声发财」的 RPC 后端。 该 RPC 后端由{" "}
           {backend?.name || "<无法获取信息>"} 提供服务。
+        </Text>
+        <Text color="blue.500" fontSize="xs" mt="3">
+          <a href="https://github.com/skyzh/make-a-fortune">
+            <ArrowRightShort /> 「闷声发财」开源代码
+          </a>
         </Text>
       </Box>
     </Stack>

@@ -1,6 +1,6 @@
 import React from "react"
 
-import { ChakraProvider, Box } from "@chakra-ui/react"
+import { ChakraProvider, Box, Button } from "@chakra-ui/react"
 import { Flex } from "@chakra-ui/react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import Navbar from "./components/elements/Navbar"
@@ -14,6 +14,8 @@ import {
 import ThreadList from "./components/lists/ThreadList"
 import Login from "./components/views/Login"
 import { theme } from "./theme"
+import Logo from "~src/components/widgets/Logo"
+import PhoneNavbar from "~src/components/elements/PhoneNavbar"
 
 function App() {
   return (
@@ -30,6 +32,14 @@ function App() {
             </Box>
           </Box>
           <Box flex="1">
+            <Box
+              display={{ base: "unset", md: "none" }}
+            >
+              <Box padding="4">
+                <PhoneNavbar />
+              </Box>
+            </Box>
+
             <Switch>
               <Route path="/login">
                 <Login />

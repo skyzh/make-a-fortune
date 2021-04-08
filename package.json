@@ -37,7 +37,7 @@
   },
   "scripts": {
     "start": "parcel serve ./src/index.html --hmr-port 1235",
-    "build": "parcel build ./src/index.html --reporter @parcel/reporter-bundle-analyzer",
+    "build": "parcel build ./src/index.html --reporter @parcel/reporter-bundle-analyzer --no-scope-hoist",
     "type-check": "tsc --noEmit --watch",
     "lint": "prettier --check src/",
     "format": "prettier --write src/"

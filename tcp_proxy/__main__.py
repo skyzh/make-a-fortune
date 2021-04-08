@@ -27,7 +27,6 @@ async def handle(request):
     """
     req = await request.text()
     resp = await client.send_message(req)
-    print(req, resp)
     resp = resp.decode()
     return web.json_response(text=resp)
 

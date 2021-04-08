@@ -2,12 +2,24 @@
   "version": 2,
   "routes": [
     {
-      "src": "/api/.*",
-      "dest": "/api/server.js"
+      "src": "(.*)\\.js$",
+      "dest": "$1.js"
     },
     {
-      "src": "^/static/(.*)",
-      "dest": "/static/$1"
+      "src": "(.*)\\.css$",
+      "dest": "$1.css"
+    },
+    {
+      "src": "(.*)\\.map$",
+      "dest": "$1.map"
+    },
+    {
+      "src": "(.*)\\.woff$",
+      "dest": "$1.woff"
+    },
+    {
+      "src": "(.*)\\.woff2$",
+      "dest": "$1.woff2"
     },
     {
       "src": ".*",

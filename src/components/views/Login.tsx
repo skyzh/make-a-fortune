@@ -35,7 +35,7 @@ import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 function Login() {
   const [email, setEmail] = useState("")
   const [persistToken, setPersistToken] = useTokenState("")
-  const [persistRPC, setPersistRPC] = useRPCState("https://fortune.skyzh.dev")
+  const [persistRPC, setPersistRPC] = useRPCState("https://fortune.skyzh.dev/")
   const [token, setToken] = useState(persistToken)
   const [otpToken, setOtpToken] = useState("")
   const [rpc, setRpc] = useState(persistRPC)

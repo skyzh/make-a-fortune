@@ -29,6 +29,7 @@ export default function useLikeControl({
         .finally(() => setIsLikeLoading(false))
     }
     if (whetherLikeCombined === 0) {
+      setIsLikeLoading(true)
       onLike()
         .then(() => setWhetherLike(1))
         .catch((err) => handleError(toast, "无法点赞", err))
@@ -45,6 +46,7 @@ export default function useLikeControl({
         .finally(() => setIsLikeLoading(false))
     }
     if (whetherLikeCombined === 0) {
+      setIsLikeLoading(true)
       onDislike()
         .then(() => setWhetherLike(-1))
         .catch((err) => handleError(toast, "无法点踩", err))

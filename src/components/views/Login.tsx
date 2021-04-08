@@ -112,7 +112,8 @@ function Login() {
   }
 
   const setTokenSetting = () => {
-    setPersistToken(token)
+    setPersistToken(token.trim())
+    setToken(token.trim())
     setPersistRPC(rpc)
     toast({
       title: "设置成功",

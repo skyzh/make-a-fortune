@@ -1,6 +1,6 @@
 import React from "react"
 
-import { Container, ChakraProvider, Box } from "@chakra-ui/react"
+import { ChakraProvider, Box } from "@chakra-ui/react"
 import { Flex } from "@chakra-ui/react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import Navbar from "./components/elements/Navbar"
@@ -13,10 +13,11 @@ import {
 } from "./components/lists/PostList"
 import ThreadList from "./components/lists/ThreadList"
 import Login from "./components/views/Login"
+import { theme } from "./theme"
 
 function App() {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Router>
         <Flex h="100vh">
           <Box

@@ -77,7 +77,7 @@ function Navbar() {
       </HStack>
 
       <NavButton exact to="/">
-        首页
+        最新
       </NavButton>
       <NavButton to="/posts/trend">趋势</NavButton>
       <Divider></Divider>

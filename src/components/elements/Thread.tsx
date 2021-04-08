@@ -11,6 +11,9 @@ import {
   Badge,
   Skeleton,
   SkeletonText,
+  Collapse,
+  useBoolean,
+  IconButton,
 } from "@chakra-ui/react"
 import { Thread, useClient } from "~/src/client"
 import {
@@ -22,6 +25,8 @@ import {
   FlagFill,
   Star,
   StarFill,
+  ArrowDown,
+  ArrowUp,
 } from "~/src/components/utils/Icons"
 import * as moment from "moment"
 import useLikeControl from "~/src/components/controls/LikeControl"
@@ -125,6 +130,14 @@ export function ThreadComponent({
     ),
   })
 
+  const [collapsed, setCollapsed] = useBoolean(true)
+
+  const content = thread.Summary.split("\n").map((line, index) => (
+    <Text mt={0} wordBreak="break-word" key={index}>
+      {line}
+    </Text>
+  ))
+
   return (
     <Flex width="100%">
       <Box flex="1" p={5} shadow="sm" borderWidth="1px" borderRadius="md">
@@ -148,13 +161,28 @@ export function ThreadComponent({
             </Text>
           </Flex>
           <Heading fontSize="md">{thread.Title}</Heading>
-          <Box>
-            {thread.Summary.split("\n").map((line, index) => (
-              <Text mt={0} wordBreak="break-word" key={index}>
-                {line}
-              </Text>
-            ))}
-          </Box>
+          {showControl ? (
+            <Box>{content}</Box>
+          ) : (
+            <Flex>
+              <Collapse startingHeight={48} in={!collapsed}>
+                {content}
+              </Collapse>
+              <Spacer />
+              <Box alignSelf="flex-end">
+                <IconButton
+                  aria-label="toggle collapsed"
+                  size="sm"
+                  variant="ghost"
+                  icon={collapsed ? <ArrowDown /> : <ArrowUp />}
+                  onClick={(e: Event) => {
+                    setCollapsed.toggle()
+                    e.stopPropagation()
+                  }}
+                />
+              </Box>
+            </Flex>
+          )}
         </Stack>
       </Box>
       <Box size="80px" p="3">

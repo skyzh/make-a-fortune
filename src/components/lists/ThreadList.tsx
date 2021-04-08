@@ -9,6 +9,8 @@ import {
   Select,
   Spacer,
   Flex,
+  RadioGroup,
+  Radio,
 } from "@chakra-ui/react"
 import { useClient, Thread, ReplyOrder, Floor } from "~/src/client"
 import { useParams } from "react-router-dom"
@@ -37,12 +39,14 @@ interface FloorListComponentProps {
 
 export function OrderBy({ value, setValue }) {
   return (
-    <Select value={value} onChange={(event) => setValue(event.target.value)}>
-      <option value="0">按时间</option>
-      <option value="1">最新</option>
-      <option value="-1">只看洞主</option>
-      <option value="2">最热</option>
-    </Select>
+    <RadioGroup defaultValue="0" value={value} onChange={setValue}>
+      <Stack spacing={4} direction="row">
+        <Radio value="0">按时间</Radio>
+        <Radio value="1">最新</Radio>
+        <Radio value="-1">只看洞主</Radio>
+        <Radio value="2">最热</Radio>
+      </Stack>
+    </RadioGroup>
   )
 }
 
@@ -68,12 +72,7 @@ export function FloorListComponent({
         <ThreadSkeleton showControl />
       )}
       <Divider />
-      <Flex>
-        <Spacer />
-        <Box size="100px" p="3">
-          {orderBy}
-        </Box>
-      </Flex>
+      <Box my="2">{orderBy}</Box>
       {thread && floors ? (
         <>
           {floors.map((floor) => (

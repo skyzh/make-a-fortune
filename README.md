@@ -4,6 +4,8 @@
 
 * 上海交通大学匿名社区 无可奉告。
 
+您可以在「闷声发财」中通过 RPC 后端访问匿名社区，避免泄露真实 IP。
+
 ## Usage
 
 启动 RPC Server
@@ -18,15 +20,19 @@ yarn install
 yarn start
 ```
 
-## Current Deployment
+## Deployment
+
+```
+您 <-> 闷声发财前端 <-> RPC 后端 <-> 匿名社区
+```
 
 ### Frontend
 
-前端目前部署在 vercel 上。您可以通过 https://make-a-fortune.vercel.app/ 访问。
+前端目前部署在 Vercel 上。您可以通过 https://make-a-fortune.vercel.app/ 访问。
 
 ### RPC Server
 
-您可以通过在本地启动 `tcp_proxy` 启动本地 RPC 后端。我们同时也提供了一些可用的后端：
+您可以在本地启动 `tcp_proxy` 来使用本地 RPC 后端。我们同时也提供了一些可用的后端：
 
 * https://fortune.skyzh.dev ，服务器坐标日本。提供无可奉告 Android 版 RPC 后端。
 * (计划中) https://vercel.fortune.skyzh.dev ，通过 Vercel Function 提供服务。

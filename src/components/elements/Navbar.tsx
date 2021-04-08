@@ -10,14 +10,14 @@ import {
   HStack,
   Button,
   Divider,
-  useToast
+  useToast,
 } from "@chakra-ui/react"
 import { Route, NavLink } from "react-router-dom"
 import { useRPCState, useTokenState } from "~/src/settings"
 import { Client } from "~/src/client"
 import {
   ArrowRightShort,
-  ArrowRightCircleFill
+  ArrowRightCircleFill,
 } from "~/src/components/utils/Icons"
 
 const NavButton: React.FC = ({ to, exact, children, ...rest }) => {
@@ -61,15 +61,14 @@ const Navbar: React.FC = ({ onClose }) => {
     }
 
     sendRequest()
-      .then(() => {
-      })
+      .then(() => {})
       .catch((err) =>
         toast({
           title: "无法获取 RPC 后端信息",
           description: `${err}`,
           status: "error",
           duration: 5000,
-          isClosable: true
+          isClosable: true,
         })
       )
   }, [rpc])

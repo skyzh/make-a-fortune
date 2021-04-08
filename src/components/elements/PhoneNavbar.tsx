@@ -53,7 +53,7 @@ const PhoneNavbar: React.FC = () => {
             <DrawerCloseButton />
             <DrawerHeader />
             <DrawerBody>
-              <Navbar />
+              <Navbar onClose={onClose} />
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>

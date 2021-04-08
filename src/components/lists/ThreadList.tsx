@@ -2,16 +2,19 @@ import React from "react"
 import { useEffect, useState } from "react"
 
 import { Stack, Box, useToast, Divider } from "@chakra-ui/react"
-import { useClient, Thread, ReplyOrder, Floor } from "./client"
+import { useClient, Thread, ReplyOrder, Floor } from "~/src/client"
 import { useParams } from "react-router-dom"
-import { handleError } from "./utils"
-import { ThreadComponent, ThreadSkeleton } from "./Thread"
-import { FloorComponent, FloorSkeleton } from "./Floor"
+import { handleError } from "~/src/utils"
+import {
+  ThreadComponent,
+  ThreadSkeleton,
+} from "~/src/components/elements/Thread"
+import { FloorComponent, FloorSkeleton } from "~/src/components/elements/Floor"
 import { range, concat } from "lodash"
 import { InView } from "react-intersection-observer"
-import ScrollableContainer from "./Scrollable"
-import GoBack from "./GoBack"
-import NoMore from "./NoMore"
+import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
+import GoBack from "~/src/components/widgets/GoBack"
+import NoMore from "~/src/components/elements/NoMore"
 
 interface FloorListComponentProps {
   thread?: Thread

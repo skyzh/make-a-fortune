@@ -3,14 +3,17 @@ import { useEffect, useState } from "react"
 
 import { Stack, Box, useToast } from "@chakra-ui/react"
 import { useHistory } from "react-router-dom"
-import { useClient, PostType, PostCategory, Thread } from "./client"
-import { handleError } from "./utils"
+import { useClient, PostType, PostCategory, Thread } from "~/src/client"
+import { handleError } from "~/src/utils"
 import { concat, range, uniqBy } from "lodash"
-import { ThreadComponent, ThreadSkeleton } from "./Thread"
-import Refresh from "./Refresh"
+import {
+  ThreadComponent,
+  ThreadSkeleton,
+} from "~/src/components/elements/Thread"
+import Refresh from "~/src/components/widgets/Refresh"
 import { InView } from "react-intersection-observer"
-import ScrollableContainer from "./Scrollable"
-import NoMore from "./NoMore"
+import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
+import NoMore from "~/src/components/elements/NoMore"
 
 interface ThreadListComponentProps {
   threadList?: Thread[]

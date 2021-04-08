@@ -1,6 +1,6 @@
 import React from "react"
 import { useState, useEffect } from "react"
-import Logo from "./Logo"
+import Logo from "../widgets/Logo"
 
 import {
   Stack,
@@ -13,9 +13,12 @@ import {
   useToast,
 } from "@chakra-ui/react"
 import { Route, NavLink } from "react-router-dom"
-import { useRPCState, useTokenState } from "./settings"
-import { Client } from "./client"
-import { ArrowRightShort, ArrowRightCircleFill } from "./Icons"
+import { useRPCState, useTokenState } from "~/src/settings"
+import { Client } from "~/src/client"
+import {
+  ArrowRightShort,
+  ArrowRightCircleFill,
+} from "~/src/components/utils/Icons"
 
 const NavButton = ({ to, exact, children, ...rest }) => {
   return (

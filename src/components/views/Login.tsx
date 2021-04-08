@@ -27,10 +27,10 @@ import {
   Textarea,
 } from "@chakra-ui/react"
 
-import { Client } from "./client"
+import { Client } from "~/src/client"
 import { v4 as uuidv4 } from "uuid"
-import { useTokenState, useRPCState } from "./settings"
-import ScrollableContainer from "./Scrollable"
+import { useTokenState, useRPCState } from "~/src/settings"
+import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 
 function Login() {
   const [email, setEmail] = useState("")

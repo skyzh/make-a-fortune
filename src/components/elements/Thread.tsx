@@ -13,9 +13,9 @@ import {
   Skeleton,
   SkeletonText,
   ButtonGroup,
-  useToast
+  useToast,
 } from "@chakra-ui/react"
-import { Thread, useClient } from "./client"
+import { Thread, useClient } from "~/src/client"
 import {
   HandThumbsUp,
   ChatSquareText,
@@ -24,10 +24,10 @@ import {
   ReplyFill,
   Check,
   Star,
-  StarFill
-} from "./Icons"
+  StarFill,
+} from "~/src/components/utils/Icons"
 import * as moment from "moment"
-import { handleError } from "./utils"
+import { handleError } from "~/src/utils"
 
 interface ThreadComponentProps {
   thread: Thread
@@ -75,23 +75,16 @@ export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
   )
 }
 
-export function ThreadComponent({
-                                  thread,
-                                  showPostTime,
-                                  showControl
-                                }: ThreadComponentProps) {
-  const [whetherLike, setWhetherLike] = useState<boolean>(null)
-  const [whetherFavour, setWhetherFavour] = useState<boolean>(null)
-  const whetherLikeCombined =
-    whetherLike === null ? thread.WhetherLike : whetherLike
-  const whetherFavourCombined =
-    whetherFavour === null ? thread.WhetherFavour : whetherFavour
+function useLikeControl(thread: Thread) {
   const client = useClient()
-  const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false)
-  const [isFavourLoading, setIsFavourLoading] = useState<boolean>(false)
   const toast = useToast()
 
-  const likePost = () => {
+  const [whetherLike, setWhetherLike] = useState<boolean>(null)
+  const whetherLikeCombined =
+    whetherLike === null ? thread.WhetherLike : whetherLike
+  const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false)
+
+  const toggleLikePost = () => {
     if (whetherLikeCombined === 1) {
       setIsLikeLoading(true)
       client
@@ -109,7 +102,7 @@ export function ThreadComponent({
     }
   }
 
-  const dislikePost = () => {
+  const toggleDislikePost = () => {
     if (whetherLikeCombined === -1) {
       setIsLikeLoading(true)
       client
@@ -126,6 +119,53 @@ export function ThreadComponent({
         .finally(() => setIsLikeLoading(false))
     }
   }
+
+  return [
+    <Text fontSize="sm">
+      <HandThumbsUp />{" "}
+      {thread.Like -
+        thread.Dislike +
+        (whetherLike !== null ? whetherLike - thread.WhetherLike : 0)}
+    </Text>,
+    <ButtonGroup isAttached colorScheme="teal" size="xs">
+      <Button
+        mr="-px"
+        isFullWidth
+        variant={whetherLikeCombined === 1 ? "solid" : "outline"}
+        isDisabled={whetherLikeCombined === -1}
+        onClick={toggleLikePost}
+        isLoading={isLikeLoading}
+      >
+        赞
+      </Button>
+      <Button
+        isFullWidth
+        variant={whetherLikeCombined === -1 ? "solid" : "outline"}
+        isDisabled={whetherLikeCombined === 1}
+        onClick={toggleDislikePost}
+        isLoading={isLikeLoading}
+      >
+        踩
+      </Button>
+    </ButtonGroup>,
+  ]
+}
+
+export function ThreadComponent({
+  thread,
+  showPostTime,
+  showControl,
+}: ThreadComponentProps) {
+  const [whetherFavour, setWhetherFavour] = useState<boolean>(null)
+
+  const whetherFavourCombined =
+    whetherFavour === null ? thread.WhetherFavour : whetherFavour
+  const client = useClient()
+
+  const [isFavourLoading, setIsFavourLoading] = useState<boolean>(false)
+  const toast = useToast()
+
+  const [likeTextControl, likeButtonControl] = useLikeControl(thread)
 
   const toggleFavour = async () => {
     setIsFavourLoading(true)
@@ -173,12 +213,7 @@ export function ThreadComponent({
       </Box>
       <Box size="80px" p="3">
         <Stack color="teal.500" width="80px">
-          <Text fontSize="sm">
-            <HandThumbsUp />{" "}
-            {thread.Like -
-            thread.Dislike +
-            (whetherLike !== null ? whetherLike - thread.WhetherLike : 0)}
-          </Text>
+          {likeTextControl}
           <Text fontSize="sm">
             <ChatSquareText /> {thread.Comment}
           </Text>
@@ -187,27 +222,7 @@ export function ThreadComponent({
           </Text>
           {showControl && (
             <>
-              <ButtonGroup isAttached colorScheme="teal" size="xs">
-                <Button
-                  mr="-px"
-                  isFullWidth
-                  variant={whetherLikeCombined === 1 ? "solid" : "outline"}
-                  isDisabled={whetherLikeCombined === -1}
-                  onClick={likePost}
-                  isLoading={isLikeLoading}
-                >
-                  赞
-                </Button>
-                <Button
-                  isFullWidth
-                  variant={whetherLikeCombined === -1 ? "solid" : "outline"}
-                  isDisabled={whetherLikeCombined === 1}
-                  onClick={dislikePost}
-                  isLoading={isLikeLoading}
-                >
-                  踩
-                </Button>
-              </ButtonGroup>
+              {likeButtonControl}
               <Button
                 colorScheme="teal"
                 size="xs"

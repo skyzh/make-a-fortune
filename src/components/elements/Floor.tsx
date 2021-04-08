@@ -14,10 +14,16 @@ import {
   SkeletonText,
   HStack,
 } from "@chakra-ui/react"
-import { Floor } from "./client"
-import { HandThumbsUp, ArrowRight, Flag, Broadcast, ReplyFill } from "./Icons"
+import { Floor } from "~/src/client"
+import {
+  HandThumbsUp,
+  ArrowRight,
+  Flag,
+  Broadcast,
+  ReplyFill,
+} from "~/src/components/utils/Icons"
 import * as moment from "moment"
-import { generateName } from "./name_theme"
+import { generateName } from "~/src/name_theme"
 
 interface FloorComponentProps {
   floor: Floor

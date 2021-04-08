@@ -1,7 +1,7 @@
 import React from "react"
 import { useHistory } from "react-router-dom"
 import { Button, HStack, Box } from "@chakra-ui/react"
-import { ArrowLeft } from "./Icons"
+import { ArrowLeft } from "~/src/components/utils/Icons"
 
 function GoBack() {
   const history = useHistory()

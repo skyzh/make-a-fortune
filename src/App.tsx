@@ -3,16 +3,16 @@ import React from "react"
 import { Container, ChakraProvider, Box } from "@chakra-ui/react"
 import { Flex } from "@chakra-ui/react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import Navbar from "./Navbar"
+import Navbar from "./components/elements/Navbar"
 import {
   PostListTrend,
   PostListTime,
   PostListMy,
   PostListStar,
   PostListNotification,
-} from "./PostList"
-import ThreadList from "./ThreadList"
-import Login from "./Login"
+} from "./components/lists/PostList"
+import ThreadList from "./components/lists/ThreadList"
+import Login from "./components/views/Login"
 
 function App() {
   return (

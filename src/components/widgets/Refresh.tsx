@@ -1,6 +1,6 @@
 import React from "react"
 import { Button, HStack, Box } from "@chakra-ui/react"
-import { ArrowClockwise } from "./Icons"
+import { ArrowClockwise } from "~/src/components/utils/Icons"
 
 function Refresh({ onClick }) {
   return (

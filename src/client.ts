@@ -168,6 +168,66 @@ export class Client {
   async version() {
     return (await axios.get(`${this.backend}api/version`)).data as RPCVersion
   }
+
+  async likeReply(request: ActionReplyRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("8")
+            .parameter(request.postId)
+            .parameter(null)
+            .parameter(null)
+            .parameter(request.replyId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async cancelLikeReply(request: ActionReplyRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("8_2")
+            .parameter(request.postId)
+            .parameter(null)
+            .parameter(null)
+            .parameter(request.replyId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async dislikeReply(request: ActionReplyRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("8_5")
+            .parameter(request.postId)
+            .parameter(null)
+            .parameter(null)
+            .parameter(request.replyId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async cancelDislikeReply(request: ActionReplyRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("8_6")
+            .parameter(request.postId)
+            .parameter(null)
+            .parameter(null)
+            .parameter(request.replyId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
 }
 
 class RPCVersion {
@@ -193,7 +253,7 @@ class SerializeObject {
 
   p_count: number
 
-  parameter(val: string) {
+  parameter(val?: string) {
     switch (this.p_count) {
       case 1: {
         this.p1 = val
@@ -344,6 +404,11 @@ export class FetchReplyResponse {
 
 export class ActionPostRequest {
   postId: string
+}
+
+export class ActionReplyRequest {
+  postId: string
+  replyId: string
 }
 
 export function useClient() {

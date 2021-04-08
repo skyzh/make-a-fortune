@@ -45,6 +45,7 @@ export function FloorListComponent({
                 floor={floor}
                 theme={thread.AnonymousType}
                 seed={thread.RandomSeed}
+                threadId={thread.ThreadID}
               />
             </Box>
           ))}

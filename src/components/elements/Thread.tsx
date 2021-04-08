@@ -28,6 +28,7 @@ import {
 } from "~/src/components/utils/Icons"
 import * as moment from "moment"
 import { handleError } from "~/src/utils"
+import useLikeControl from "~/src/components/controls/LikeControl"
 
 interface ThreadComponentProps {
   thread: Thread
@@ -75,82 +76,6 @@ export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
   )
 }
 
-function useLikeControl(thread: Thread) {
-  const client = useClient()
-  const toast = useToast()
-
-  const [whetherLike, setWhetherLike] = useState<boolean>(null)
-  const whetherLikeCombined =
-    whetherLike === null ? thread.WhetherLike : whetherLike
-  const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false)
-
-  const toggleLikePost = () => {
-    if (whetherLikeCombined === 1) {
-      setIsLikeLoading(true)
-      client
-        .cancelLikePost({ postId: thread.ThreadID })
-        .then(() => setWhetherLike(0))
-        .catch((err) => handleError(toast, "无法取消点赞", err))
-        .finally(() => setIsLikeLoading(false))
-    }
-    if (whetherLikeCombined === 0) {
-      client
-        .likePost({ postId: thread.ThreadID })
-        .then(() => setWhetherLike(1))
-        .catch((err) => handleError(toast, "无法点赞", err))
-        .finally(() => setIsLikeLoading(false))
-    }
-  }
-
-  const toggleDislikePost = () => {
-    if (whetherLikeCombined === -1) {
-      setIsLikeLoading(true)
-      client
-        .cancelDislikePost({ postId: thread.ThreadID })
-        .then(() => setWhetherLike(0))
-        .catch((err) => handleError(toast, "无法取消点踩", err))
-        .finally(() => setIsLikeLoading(false))
-    }
-    if (whetherLikeCombined === 0) {
-      client
-        .dislikePost({ postId: thread.ThreadID })
-        .then(() => setWhetherLike(-1))
-        .catch((err) => handleError(toast, "无法点踩", err))
-        .finally(() => setIsLikeLoading(false))
-    }
-  }
-
-  return [
-    <Text fontSize="sm">
-      <HandThumbsUp />{" "}
-      {thread.Like -
-        thread.Dislike +
-        (whetherLike !== null ? whetherLike - thread.WhetherLike : 0)}
-    </Text>,
-    <ButtonGroup isAttached colorScheme="teal" size="xs">
-      <Button
-        mr="-px"
-        isFullWidth
-        variant={whetherLikeCombined === 1 ? "solid" : "outline"}
-        isDisabled={whetherLikeCombined === -1}
-        onClick={toggleLikePost}
-        isLoading={isLikeLoading}
-      >
-        赞
-      </Button>
-      <Button
-        isFullWidth
-        variant={whetherLikeCombined === -1 ? "solid" : "outline"}
-        isDisabled={whetherLikeCombined === 1}
-        onClick={toggleDislikePost}
-        isLoading={isLikeLoading}
-      >
-        踩
-      </Button>
-    </ButtonGroup>,
-  ]
-}
-
 export function ThreadComponent({
   thread,
   showPostTime,
@@ -165,7 +90,15 @@ export function ThreadComponent({
   const [isFavourLoading, setIsFavourLoading] = useState<boolean>(false)
   const toast = useToast()
 
-  const [likeTextControl, likeButtonControl] = useLikeControl(thread)
+  const payload = { postId: thread.ThreadID }
+  const [likeTextControl, likeButtonControl] = useLikeControl({
+    clientWhetherLike: thread.WhetherLike,
+    clientCurrentLike: thread.Like - thread.Dislike,
+    onCancelLike: () => client.cancelLikePost(payload),
+    onLike: () => client.likePost(payload),
+    onCancelDislike: () => client.cancelDislikePost(payload),
+    onDislike: () => client.dislikePost(payload),
+  })
 
   const toggleFavour = async () => {
     setIsFavourLoading(true)

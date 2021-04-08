@@ -14,7 +14,7 @@ import {
   SkeletonText,
   HStack,
 } from "@chakra-ui/react"
-import { Floor } from "~/src/client"
+import { Floor, useClient } from "~/src/client"
 import {
   HandThumbsUp,
   ArrowRight,
@@ -24,6 +24,7 @@ import {
 } from "~/src/components/utils/Icons"
 import * as moment from "moment"
 import { generateName } from "~/src/name_theme"
+import useLikeControl from "~/src/components/controls/LikeControl"
 
 interface FloorComponentProps {
   floor: Floor
@@ -31,6 +32,7 @@ interface FloorComponentProps {
   showPostTime?: boolean
   theme: string
   seed: number
+  threadId: string
 }
 
 export function FloorSkeleton() {
@@ -53,7 +55,23 @@ export function FloorSkeleton() {
   )
 }
 
-export function FloorComponent({ floor, theme, seed }: FloorComponentProps) {
+export function FloorComponent({
+  floor,
+  theme,
+  seed,
+  threadId,
+}: FloorComponentProps) {
+  const client = useClient()
+  const payload = { postId: threadId, replyId: floor.FloorID }
+  const [likeTextControl, likeButtonControl] = useLikeControl({
+    clientWhetherLike: floor.WhetherLike,
+    clientCurrentLike: floor.Like - floor.Dislike,
+    onCancelLike: () => client.cancelLikeReply(payload),
+    onLike: () => client.likeReply(payload),
+    onCancelDislike: () => client.cancelDislikeReply(payload),
+    onDislike: () => client.dislikeReply(payload),
+  })
+
   return (
     <Flex width="100%">
       <Box flex="1" p={5} shadow="sm" borderWidth="1px" borderRadius="md">
@@ -88,20 +106,8 @@ export function FloorComponent({ floor, theme, seed }: FloorComponentProps) {
       </Box>
       <Box size="80px" p="3">
         <Stack color="teal.500" width="80px">
-          <Text fontSize="sm">
-            <HandThumbsUp /> {floor.Like - floor.Dislike}
-          </Text>
-          <ButtonGroup
-            isAttached
-            colorScheme="teal"
-            size="xs"
-            variant="outline"
-          >
-            <Button mr="-px" isFullWidth>
-              赞
-            </Button>
-            <Button isFullWidth>踩</Button>
-          </ButtonGroup>
+          {likeTextControl}
+          {likeButtonControl}
           <Button colorScheme="teal" size="xs" variant="outline">
             <Flag /> &nbsp; 举报
           </Button>

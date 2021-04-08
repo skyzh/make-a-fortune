@@ -55,3 +55,7 @@ export function Star() {
 export function StarFill() {
   return <i className="bi bi-star-fill" />
 }
+
+export function List() {
+  return <i className="bi bi-list" />
+}

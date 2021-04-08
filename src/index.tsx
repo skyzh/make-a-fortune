@@ -5,4 +5,4 @@ import "bootstrap-icons/font/bootstrap-icons.css"
 import "./index.scss"
 import "./vendor"
 
-ReactDOM.render(<App></App>, document.getElementById("root"))
+ReactDOM.render(<App />, document.getElementById("root"))

@@ -26,7 +26,7 @@ function App() {
             bg="gray.50"
           >
             <Box padding="4" width="300px">
-              <Navbar></Navbar>
+              <Navbar />
             </Box>
           </Box>
           <Box flex="1">

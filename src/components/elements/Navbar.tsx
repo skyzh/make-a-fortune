@@ -20,7 +20,7 @@ import {
   ArrowRightCircleFill,
 } from "~/src/components/utils/Icons"
 
-const NavButton = ({ to, exact, children, ...rest }) => {
+const NavButton: React.FC = ({ to, exact, children, ...rest }) => {
   return (
     <Route
       path={to}
@@ -72,7 +72,7 @@ function Navbar() {
   return (
     <Stack spacing={1}>
       <HStack mb="3">
-        <Logo></Logo>
+        <Logo />
         <Heading fontSize="lg">闷声发财</Heading>
       </HStack>
 
@@ -80,7 +80,7 @@ function Navbar() {
         最新
       </NavButton>
       <NavButton to="/posts/trend">趋势</NavButton>
-      <Divider></Divider>
+      <Divider />
       <Box px="5">
         <Text color="gray.500" fontSize="sm">
           个人
@@ -89,7 +89,7 @@ function Navbar() {
       <NavButton to="/posts/star">收藏</NavButton>
       <NavButton to="/posts/notification">通知</NavButton>
       <NavButton to="/posts/me">我的发帖</NavButton>
-      <Divider></Divider>
+      <Divider />
       <Box px="5">
         <Text color="gray.500" fontSize="sm">
           系统

@@ -10,7 +10,7 @@ function NoMore() {
         </Text>
       </Center>
       <Box size="80px" p="3">
-        <Box width="80px"></Box>
+        <Box width="80px" />
       </Box>
     </Flex>
   )

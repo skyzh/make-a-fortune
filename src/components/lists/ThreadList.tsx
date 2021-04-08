@@ -89,6 +89,8 @@ export function FloorListComponent({
             </Box>
           ))}
           {hasMore ? (
+            // TS2322 caused by react-intersection-observer
+            // @ts-ignore
             <InView
               as="div"
               onChange={(inView) => {
@@ -158,7 +160,7 @@ export function ThreadListComponent() {
       theme={thread.AnonymousType}
       seed={thread.RandomSeed}
       threadId={thread.ThreadID}
-    ></FloorComponent>
+    />
   )
 
   const updateOrderBy = (orderBy) => {
@@ -168,7 +170,7 @@ export function ThreadListComponent() {
   }
 
   const orderByComponent = (
-    <OrderBy value={orderBy} setValue={updateOrderBy}></OrderBy>
+    <OrderBy value={orderBy} setValue={updateOrderBy} />
   )
 
   const onReply = (floor) => {
@@ -220,7 +222,7 @@ export function ThreadListComponent() {
         }}
         isLoading={isReplyInProgress}
         doReply={doReply}
-      ></ReplyModal>
+      />
       <FloorListComponent
         thread={thread}
         floors={floors}

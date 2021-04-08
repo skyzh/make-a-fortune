@@ -21,6 +21,13 @@ interface ThreadListComponentProps {
   hasMore: boolean
 }
 
+interface PostListComponentProps {
+  postCategory: number,
+  postType: PostType,
+  lastSeenField?: string,
+  isMessage?: boolean,
+}
+
 function ThreadListComponent({
   threadList,
   moreEntries,
@@ -37,10 +44,12 @@ function ThreadListComponent({
               onClick={() => history.push(`/posts/${thread.ThreadID}`)}
               cursor="pointer"
             >
-              <ThreadComponent thread={thread} />
+              <ThreadComponent thread={thread} onReply={() => {}} />
             </Box>
           ))}
           {hasMore ? (
+            // TS2322 caused by react-intersection-observer
+            // @ts-ignore
             <InView
               as="div"
               onChange={(inView) => {
@@ -69,7 +78,7 @@ export function PostListComponent({
   postType,
   lastSeenField,
   isMessage,
-}) {
+}: PostListComponentProps) {
   const client = useClient()
   const [threadList, setThreadList] = useState(null)
   const toast = useToast()
@@ -116,7 +125,7 @@ export function PostListComponent({
         threadList={threadList}
         moreEntries={moreEntries}
         hasMore={hasMore}
-      ></ThreadListComponent>
+      />
     </>
   )
 }

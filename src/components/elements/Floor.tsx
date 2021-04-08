@@ -1,25 +1,21 @@
 import React from "react"
-import { useEffect, useState } from "react"
 
 import {
   Stack,
   Box,
   Text,
-  ButtonGroup,
   Button,
   Flex,
   Spacer,
   Badge,
   Skeleton,
   SkeletonText,
-  HStack,
 } from "@chakra-ui/react"
 import { Floor, useClient } from "~/src/client"
 import {
   HandThumbsUp,
   ArrowRight,
   Flag,
-  Broadcast,
   ReplyFill,
   FlagFill,
 } from "~/src/components/utils/Icons"

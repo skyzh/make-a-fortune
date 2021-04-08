@@ -32,9 +32,7 @@ function App() {
             </Box>
           </Box>
           <Box flex="1">
-            <Box
-              display={{ base: "unset", md: "none" }}
-            >
+            <Box display={{ base: "unset", md: "none" }}>
               <Box padding="4">
                 <PhoneNavbar />
               </Box>

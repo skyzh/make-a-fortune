@@ -16,14 +16,14 @@ import {
   DrawerContent,
   DrawerCloseButton,
   DrawerHeader,
-  DrawerBody
+  DrawerBody,
 } from "@chakra-ui/react"
 import { Route, NavLink } from "react-router-dom"
 import { useRPCState, useTokenState } from "~/src/settings"
 import { Client } from "~/src/client"
 import {
   ArrowRightShort,
-  ArrowRightCircleFill
+  ArrowRightCircleFill,
 } from "~/src/components/utils/Icons"
 import Navbar from "~src/components/elements/Navbar"
 
@@ -33,12 +33,7 @@ const PhoneNavbar: React.FC = () => {
 
   return (
     <Box>
-      <Button
-        ref={btnRef}
-        colorScheme="blue"
-        variant="ghost"
-        onClick={onOpen}
-      >
+      <Button ref={btnRef} colorScheme="blue" variant="ghost" onClick={onOpen}>
         <Logo />
       </Button>
 

@@ -169,9 +169,7 @@ export function ThreadListComponent() {
     doFetch(null, null, orderBy)
   }
 
-  const orderByComponent = (
-    <OrderBy value={orderBy} setValue={updateOrderBy} />
-  )
+  const orderByComponent = <OrderBy value={orderBy} setValue={updateOrderBy} />
 
   const onReply = (floor) => {
     setIsReplyingFloor(floor)

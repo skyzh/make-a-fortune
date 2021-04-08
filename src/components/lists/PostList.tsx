@@ -22,10 +22,10 @@ interface ThreadListComponentProps {
 }
 
 interface PostListComponentProps {
-  postCategory: number,
-  postType: PostType,
-  lastSeenField?: string,
-  isMessage?: boolean,
+  postCategory: number
+  postType: PostType
+  lastSeenField?: string
+  isMessage?: boolean
 }
 
 function ThreadListComponent({

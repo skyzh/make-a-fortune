@@ -116,9 +116,13 @@ export function FloorComponent({
             <Spacer />
             <Text fontSize="sm">{moment(floor.RTime).calendar()}</Text>
           </Flex>
-          <Text mt={4} wordBreak="break-word">
-            {floor.Context}
-          </Text>
+          <Box>
+          {floor.Context.split("\n").map((line, index) => (
+              <Text mt={0} wordBreak="break-word" key={index}>
+                {line}
+              </Text>
+            ))}
+          </Box>
         </Stack>
       </Box>
       {showControl && (

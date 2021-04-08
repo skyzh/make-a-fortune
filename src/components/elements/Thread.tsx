@@ -148,9 +148,13 @@ export function ThreadComponent({
             </Text>
           </Flex>
           <Heading fontSize="md">{thread.Title}</Heading>
-          <Text mt={4} wordBreak="break-word">
-            {thread.Summary}
-          </Text>
+          <Box>
+            {thread.Summary.split("\n").map((line, index) => (
+              <Text mt={0} wordBreak="break-word" key={index}>
+                {line}
+              </Text>
+            ))}
+          </Box>
         </Stack>
       </Box>
       <Box size="80px" p="3">

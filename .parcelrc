@@ -2,5 +2,17 @@
   "extends": "@parcel/config-default",
   "transformers": {
     "*.{ts,tsx}": ["@parcel/transformer-typescript-tsc"]
+  },
+  "customDistStructure": {
+    "config": {
+      ".css": "static",
+      ".js": "static",
+      "static": [
+        ".jpg",
+        ".svg",
+        ".png",
+        ".woff2"
+      ]
+    }
   }
 }

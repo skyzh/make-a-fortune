@@ -31,10 +31,11 @@ import useNetworkLocalControl from "../controls/NetworkLocalControl"
 interface FloorComponentProps {
   floor: Floor
   key?: string
-  showPostTime?: boolean
   theme: string
   seed: number
   threadId: string
+  showControl?: boolean
+  onReply?: Function
 }
 
 export function FloorSkeleton() {
@@ -62,6 +63,8 @@ export function FloorComponent({
   theme,
   seed,
   threadId,
+  showControl,
+  onReply,
 }: FloorComponentProps) {
   const client = useClient()
   const payload = { postId: threadId, replyId: floor.FloorID }
@@ -122,16 +125,23 @@ export function FloorComponent({
           </Text>
         </Stack>
       </Box>
-      <Box size="80px" p="3">
-        <Stack color="teal.500" width="80px">
-          {likeTextControl}
-          {likeButtonControl}
-          {reportControl}
-          <Button colorScheme="teal" size="xs" variant="outline">
-            <ReplyFill /> &nbsp; 回复
-          </Button>
-        </Stack>
-      </Box>
+      {showControl && (
+        <Box size="80px" p="3">
+          <Stack color="teal.500" width="80px">
+            {likeTextControl}
+            {likeButtonControl}
+            {reportControl}
+            <Button
+              colorScheme="teal"
+              size="xs"
+              variant="outline"
+              onClick={() => onReply(floor)}
+            >
+              <ReplyFill /> &nbsp; 回复
+            </Button>
+          </Stack>
+        </Box>
+      )}
     </Flex>
   )
 }

@@ -54,6 +54,9 @@ export class Client {
     if (response.login_flag === "-1") {
       throw new BannedError(response)
     }
+    if (response.login_flag === "0") {
+      throw new Error("登录 Token 已过期，请重新登录")
+    }
     if (requiredField && response["requiredField"] != 1) {
       throw new ActionError(`${requiredField} 失败`)
     }
@@ -264,6 +267,36 @@ export class Client {
       )
     )
   }
+
+  async replyReply(request: ReplyReplyRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("4_2")
+            .parameter(request.postId)
+            .parameter(null)
+            .parameter(request.content)
+            .parameter(request.replyId)
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
+
+  async replyPost(request: ReplyPostRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("4")
+            .parameter(request.postId)
+            .parameter(null)
+            .parameter(request.content)
+            .parameter("")
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
 }
 
 class RPCVersion {
@@ -445,6 +478,17 @@ export class ActionPostRequest {
 export class ActionReplyRequest {
   postId: string
   replyId: string
+}
+
+export class ReplyReplyRequest {
+  postId: string
+  replyId: string
+  content: string
+}
+
+export class ReplyPostRequest {
+  postId: string
+  content: string
 }
 
 export function useClient() {

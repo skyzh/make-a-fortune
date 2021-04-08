@@ -33,6 +33,7 @@ interface ThreadComponentProps {
   key?: string
   showPostTime?: boolean
   showControl?: boolean
+  onReply: Function
 }
 
 interface ThreadSkeletonProps {
@@ -78,6 +79,7 @@ export function ThreadComponent({
   thread,
   showPostTime,
   showControl,
+  onReply,
 }: ThreadComponentProps) {
   const client = useClient()
 
@@ -166,7 +168,12 @@ export function ThreadComponent({
               {likeButtonControl}
               {favourControl}
               {reportControl}
-              <Button colorScheme="teal" size="xs" variant="outline">
+              <Button
+                colorScheme="teal"
+                size="xs"
+                variant="outline"
+                onClick={onReply}
+              >
                 <ReplyFill /> &nbsp; 回复
               </Button>
             </>

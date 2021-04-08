@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Container } from "@chakra-ui/react"
 
-function ScrollableContainer({ children }) {
+const ScrollableContainer: React.FC = ({ children }) => {
   return (
     <Box
       overflowY={{ base: "unset", md: "scroll" }}

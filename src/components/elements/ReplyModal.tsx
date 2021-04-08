@@ -1,13 +1,11 @@
 import React from "react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import {
-  useDisclosure,
   Button,
   Modal,
   ModalOverlay,
   ModalBody,
-  ModalCloseButton,
   ModalFooter,
   ModalContent,
   ModalHeader,

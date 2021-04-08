@@ -24,8 +24,20 @@ export function ArrowRightCircleFill() {
   return <i className="bi bi-arrow-right-circle-fill" />
 }
 
-export function HandThumbsUp() {
+export function HandThumbsUpFill() {
   return <i className="bi bi-hand-thumbs-up-fill" />
+}
+
+export function HandThumbsUp() {
+  return <i className="bi bi-hand-thumbs-up" />
+}
+
+export function HandThumbsDownFill() {
+  return <i className="bi bi-hand-thumbs-down-fill" />
+}
+
+export function HandThumbsDown() {
+  return <i className="bi bi-hand-thumbs-down" />
 }
 
 export function ChatSquareText() {

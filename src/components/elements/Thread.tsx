@@ -2,6 +2,9 @@ import React from "react"
 
 import {
   Stack,
+  HStack,
+  Wrap,
+  WrapItem,
   Box,
   Heading,
   Text,
@@ -14,7 +17,7 @@ import {
 } from "@chakra-ui/react"
 import { Thread, useClient } from "~/src/client"
 import {
-  HandThumbsUp,
+  HandThumbsUpFill,
   ChatSquareText,
   Flag,
   Broadcast,
@@ -49,10 +52,10 @@ export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
           <SkeletonText spacing="3" noOfLines="4" />
         </Stack>
       </Box>
-      <Box size="80px" p="3">
+      <Box size="80px" p="3" display={{ base: "none", sm: "unset" }}>
         <Stack color="teal.500" width="80px">
           <Text fontSize="sm">
-            <HandThumbsUp />
+            <HandThumbsUpFill />
           </Text>
           <Text fontSize="sm">
             <ChatSquareText />
@@ -151,9 +154,43 @@ export function ThreadComponent({
           <Text mt={4} wordBreak="break-word">
             {thread.Summary}
           </Text>
+
+          <Box display={{ base: "block", sm: "none" }}>
+            <Stack color="teal.500">
+              <HStack justifyContent="space-between">
+                {likeTextControl}
+                <HStack>
+                  <Text fontSize="sm">
+                    <ChatSquareText /> {thread.Comment}
+                  </Text>
+                  <Text fontSize="sm">
+                    <Broadcast /> {thread.Read}
+                  </Text>
+                </HStack>
+              </HStack>
+
+              {showControl && (
+                <HStack justifyContent="space-between">
+                  {likeButtonControl}
+                  <HStack>
+                    {favourControl}
+                    {reportControl}
+                    <Button
+                      colorScheme="teal"
+                      size="xs"
+                      variant="outline"
+                      onClick={onReply}
+                    >
+                      <ReplyFill /> &nbsp; 回复
+                    </Button>
+                  </HStack>
+                </HStack>
+              )}
+            </Stack>
+          </Box>
         </Stack>
       </Box>
-      <Box size="80px" p="3">
+      <Box size="80px" p="3" display={{ base: "none", sm: "unset" }}>
         <Stack color="teal.500" width="80px">
           {likeTextControl}
           <Text fontSize="sm">

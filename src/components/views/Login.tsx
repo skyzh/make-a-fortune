@@ -231,7 +231,7 @@ function Login() {
           setTimeout(() => (window.location.href = "/"), 2000)
         } else if (result.login_flag === "0") {
           toast({
-            title: "无法登陆",
+            title: "无法登录",
             status: "error",
             duration: 5000,
             isClosable: true,

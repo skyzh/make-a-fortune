@@ -4,6 +4,10 @@ export function ArrowRightShort() {
   return <i className="bi bi-arrow-right-short" />
 }
 
+export function ArrowDownShort() {
+  return <i className="bi bi-arrow-down-short" />
+}
+
 export function ArrowRight() {
   return <i className="bi bi-arrow-right" />
 }
@@ -32,8 +36,20 @@ export function ArrowRightCircleFill() {
   return <i className="bi bi-arrow-right-circle-fill" />
 }
 
-export function HandThumbsUp() {
+export function HandThumbsUpFill() {
   return <i className="bi bi-hand-thumbs-up-fill" />
+}
+
+export function HandThumbsUp() {
+  return <i className="bi bi-hand-thumbs-up" />
+}
+
+export function HandThumbsDownFill() {
+  return <i className="bi bi-hand-thumbs-down-fill" />
+}
+
+export function HandThumbsDown() {
+  return <i className="bi bi-hand-thumbs-down" />
 }
 
 export function ChatSquareText() {
@@ -66,4 +82,8 @@ export function StarFill() {
 
 export function List() {
   return <i className="bi bi-list" />
+}
+
+export function Search() {
+  return <i className="bi bi-search"></i>
 }

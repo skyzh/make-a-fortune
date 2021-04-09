@@ -1,27 +1,27 @@
-import React from "react"
-
 import {
-  Stack,
+  Badge,
   Box,
-  Text,
   Button,
   Flex,
-  Spacer,
-  Badge,
+  HStack,
   Skeleton,
   SkeletonText,
+  Spacer,
+  Stack,
+  Text,
 } from "@chakra-ui/react"
+import * as moment from "moment"
+import React from "react"
 import { Floor, useClient } from "~/src/client"
+import useLikeControl from "~/src/components/controls/LikeControl"
 import {
-  HandThumbsUp,
   ArrowRight,
   Flag,
-  ReplyFill,
   FlagFill,
+  HandThumbsUpFill,
+  ReplyFill,
 } from "~/src/components/utils/Icons"
-import * as moment from "moment"
 import { generateName } from "~/src/name_theme"
-import useLikeControl from "~/src/components/controls/LikeControl"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
 
 interface FloorComponentProps {
@@ -43,10 +43,10 @@ export function FloorSkeleton() {
           <SkeletonText spacing="4" />
         </Stack>
       </Box>
-      <Box size="80px" p="3">
+      <Box size="80px" p="3" display={{ base: "none", sm: "unset" }}>
         <Stack color="teal.500" width="80px">
           <Text fontSize="sm">
-            <HandThumbsUp />
+            <HandThumbsUpFill />
           </Text>
         </Stack>
       </Box>
@@ -64,7 +64,11 @@ export function FloorComponent({
 }: FloorComponentProps) {
   const client = useClient()
   const payload = { postId: threadId, replyId: floor.FloorID }
-  const [likeTextControl, likeButtonControl] = useLikeControl({
+  const [
+    likeTextControl,
+    likeButtonControl,
+    likeTextButtonControl,
+  ] = useLikeControl({
     clientWhetherLike: floor.WhetherLike,
     clientCurrentLike: floor.Like - floor.Dislike,
     onCancelLike: () => client.cancelLikeReply(payload),
@@ -124,9 +128,30 @@ export function FloorComponent({
             ))}
           </Box>
         </Stack>
+
+        {showControl && (
+          <Box display={{ base: "block", sm: "none" }} paddingTop={3}>
+            <Stack color="teal.500">
+              <HStack justifyContent="space-between">
+                {likeTextButtonControl}
+                <HStack>
+                  {reportControl}
+                  <Button
+                    colorScheme="teal"
+                    size="xs"
+                    variant="outline"
+                    onClick={() => onReply(floor)}
+                  >
+                    <ReplyFill /> &nbsp; 回复
+                  </Button>
+                </HStack>
+              </HStack>
+            </Stack>
+          </Box>
+        )}
       </Box>
       {showControl && (
-        <Box size="80px" p="3">
+        <Box size="80px" p="3" display={{ base: "none", sm: "unset" }}>
           <Stack color="teal.500" width="80px">
             {likeTextControl}
             {likeButtonControl}

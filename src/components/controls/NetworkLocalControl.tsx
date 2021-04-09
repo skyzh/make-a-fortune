@@ -1,7 +1,6 @@
 import { Button } from "@chakra-ui/button"
 import { useToast } from "@chakra-ui/toast"
-import React from "react"
-import { useState } from "react"
+import React, { useState } from "react"
 import { handleError } from "~/src/utils"
 
 interface NetworkLocalControlProps {

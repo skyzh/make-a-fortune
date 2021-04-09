@@ -1,8 +1,11 @@
-import React from "react"
-import { useState } from "react"
-
-import { Text, Button, ButtonGroup, useToast } from "@chakra-ui/react"
-import { HandThumbsUp } from "~/src/components/utils/Icons"
+import { Button, ButtonGroup, Text, useToast } from "@chakra-ui/react"
+import React, { useState } from "react"
+import {
+  HandThumbsDown,
+  HandThumbsDownFill,
+  HandThumbsUp,
+  HandThumbsUpFill,
+} from "~/src/components/utils/Icons"
 import { handleError } from "~/src/utils"
 
 export default function useLikeControl({
@@ -56,7 +59,7 @@ export default function useLikeControl({
 
   return [
     <Text fontSize="sm">
-      <HandThumbsUp />{" "}
+      <HandThumbsUpFill />{" "}
       {clientCurrentLike +
         (whetherLike !== null ? whetherLike - clientWhetherLike : 0)}
     </Text>,
@@ -81,5 +84,21 @@ export default function useLikeControl({
         踩
       </Button>
     </ButtonGroup>,
+    <Text fontSize="sm">
+      <span onClick={toggleLikePost}>
+        {whetherLikeCombined === 1 ? <HandThumbsUpFill /> : <HandThumbsUp />}
+      </span>
+      &nbsp;
+      {clientCurrentLike +
+        (whetherLike !== null ? whetherLike - clientWhetherLike : 0)}
+      &nbsp;&nbsp;&nbsp;
+      <span onClick={toggleDislikePost}>
+        {whetherLikeCombined === -1 ? (
+          <HandThumbsDownFill />
+        ) : (
+          <HandThumbsDown />
+        )}
+      </span>
+    </Text>,
   ]
 }

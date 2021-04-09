@@ -441,9 +441,13 @@ export class Thread {
   RandomSeed: number
   WhetherTop: number
   Tag: string
+  // only available in `this_thread` of post details
   WhetherFavour?: number
   WhetherLike?: number
   WhetherReport?: number
+  // only available in notifications
+  Judge?: number
+  Type?: number
 }
 
 export class FetchPostResponse {

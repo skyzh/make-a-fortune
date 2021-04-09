@@ -27,6 +27,7 @@ interface ThreadListComponentProps {
   threadList?: Thread[]
   moreEntries: Function
   hasMore: boolean
+  isMessage?: boolean
 }
 
 interface PostListComponentProps {
@@ -40,6 +41,7 @@ function ThreadListComponent({
   threadList,
   moreEntries,
   hasMore,
+  isMessage,
 }: ThreadListComponentProps) {
   const history = useHistory()
   return (
@@ -52,7 +54,11 @@ function ThreadListComponent({
               onClick={() => history.push(`/posts/${thread.ThreadID}`)}
               cursor="pointer"
             >
-              <ThreadComponent thread={thread} onReply={() => {}} />
+              <ThreadComponent
+                thread={thread}
+                onReply={() => {}}
+                isMessage={isMessage}
+              />
             </Box>
           ))}
           {hasMore ? (
@@ -133,6 +139,7 @@ export function PostListComponent({
         threadList={threadList}
         moreEntries={moreEntries}
         hasMore={hasMore}
+        isMessage={isMessage}
       />
     </>
   )

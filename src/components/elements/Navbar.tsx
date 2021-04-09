@@ -54,7 +54,8 @@ const Navbar: React.FC = ({ onClose }) => {
   const toast = useToast()
   useEffect(() => {
     async function sendRequest() {
-      if (rpc !== "" && rpc !== null) {
+      if (rpc) {
+        // guard against undefined, null, empty string and any false values
         const client = new Client(rpc)
         setBackend(await client.version())
       }
@@ -75,10 +76,11 @@ const Navbar: React.FC = ({ onClose }) => {
 
   const NB: React.FC = (props) => <NavButton {...props} onClose={onClose} />
 
-  const rpcDisplayName =
-    rpc === "/"
-      ? window.location.hostname
-      : rpc.replace("https://", "").replace("/", "")
+  const rpcDisplayName = !rpc
+    ? "Null"
+    : rpc === "/"
+    ? window.location.hostname
+    : rpc.replace("https://", "").replace("/", "")
 
   return (
     <Stack spacing={1}>

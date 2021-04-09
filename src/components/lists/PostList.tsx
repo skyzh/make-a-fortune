@@ -272,7 +272,7 @@ export function PostListSearch() {
           搜索
         </Button>
       </HStack>
-      {(keyword !== "" && keyword !== null) ? (
+      {keyword !== "" && keyword !== null ? (
         <ThreadListComponent
           threadList={threadList}
           moreEntries={moreEntries}

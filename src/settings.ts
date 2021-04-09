@@ -4,7 +4,7 @@ const _useRPCState = createPersistedState("fortune-rpc")
 
 export function useRPCState() {
   const [rpc, setRpc] = _useRPCState()
-  if (rpc && !rpc.endsWith("/")) {
+  if (typeof rpc === "string" && !rpc.endsWith("/")) {
     return [rpc + "/", setRpc]
   } else {
     return [rpc, setRpc]

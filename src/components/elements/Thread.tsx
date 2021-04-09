@@ -154,7 +154,11 @@ export function ThreadComponent({
   const layoutSettings = useFortuneLayoutSettings()
 
   return (
-    <Flex width="100%">
+    <Flex
+      width="100%"
+      onMouseOver={setCollapsed.off}
+      onMouseOut={setCollapsed.on}
+    >
       <Box
         flex="1"
         p={layoutSettings.cardMargin}

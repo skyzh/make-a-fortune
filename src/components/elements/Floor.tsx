@@ -144,6 +144,7 @@ export function FloorComponent({
             </Text>
             <Text fontSize="sm" mr="2" fontWeight="bold">
               {generateName(theme, seed, parseInt(floor.Speakername))}
+              {floor.Speakername === "0" && " (洞主)"}
             </Text>
             {floor.Replytofloor !== 0 && (
               <>
@@ -155,6 +156,7 @@ export function FloorComponent({
                     # {floor.Replytofloor}
                   </Badge>
                   {generateName(theme, seed, parseInt(floor.Replytoname))}
+                  {floor.Replytoname === "0" && " (洞主)"}
                 </Text>
                 {allowExpand && !stackedFloor && (
                   <Button

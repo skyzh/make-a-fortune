@@ -217,7 +217,7 @@ export function PostListSearch() {
 
   function doFetch(lastSeen, previousThreads) {
     async function fetch() {
-      if (keyword === "") return
+      if (keyword === "" || keyword === null) return
       const result = await client.search({
         lastSeen,
         keyword,

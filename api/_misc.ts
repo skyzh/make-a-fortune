@@ -24,18 +24,16 @@ export class Client {
     this.port = port
   }
 
-  send_message = (message) => new Promise((resolve, reject) => {
+  send_message = (message) => new Promise<string>((resolve, reject) => {
     const client = net.createConnection({ host: this.host, port: this.port }, () => {
       client.write(JSON.stringify(message))
     })
 
     client.on("data", (data) => {
-      // response.status(200).json
-      resolve(JSON.parse(data.toString()))
+      resolve(data.toString())
       client.end()
     })
     client.on("error", (e) => {
-      // response.status(500).json
       reject(e)
     })
   })

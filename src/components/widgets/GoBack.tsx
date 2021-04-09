@@ -1,6 +1,6 @@
+import { Box, Button, HStack } from "@chakra-ui/react"
 import React from "react"
 import { useHistory } from "react-router-dom"
-import { Button, HStack, Box } from "@chakra-ui/react"
 import { ArrowLeft } from "~/src/components/utils/Icons"
 
 function GoBack() {

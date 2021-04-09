@@ -1,23 +1,20 @@
+import { Box, ChakraProvider, Flex } from "@chakra-ui/react"
 import React from "react"
-
-import { ChakraProvider, Box, Button } from "@chakra-ui/react"
-import { Flex } from "@chakra-ui/react"
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import PhoneNavbar from "~src/components/elements/PhoneNavbar"
 import Navbar from "./components/elements/Navbar"
 import {
-  PostListTrend,
-  PostListTime,
+  PostListCategory,
   PostListMy,
-  PostListStar,
   PostListNotification,
   PostListSearch,
-  PostListCategory,
+  PostListStar,
+  PostListTime,
+  PostListTrend,
 } from "./components/lists/PostList"
 import ThreadList from "./components/lists/ThreadList"
 import Login from "./components/views/Login"
 import { theme } from "./theme"
-import Logo from "~src/components/widgets/Logo"
-import PhoneNavbar from "~src/components/elements/PhoneNavbar"
 
 function App() {
   return (

@@ -1,33 +1,30 @@
-import React from "react"
-
 import {
-  Stack,
-  HStack,
-  Wrap,
-  WrapItem,
+  Badge,
   Box,
-  Heading,
-  Text,
   Button,
   Flex,
-  Spacer,
-  Badge,
+  Heading,
+  HStack,
   Skeleton,
   SkeletonText,
+  Spacer,
+  Stack,
+  Text,
 } from "@chakra-ui/react"
+import * as moment from "moment"
+import React from "react"
 import { Thread, useClient } from "~/src/client"
+import useLikeControl from "~/src/components/controls/LikeControl"
 import {
-  HandThumbsUpFill,
+  Broadcast,
   ChatSquareText,
   Flag,
-  Broadcast,
-  ReplyFill,
   FlagFill,
+  HandThumbsUpFill,
+  ReplyFill,
   Star,
   StarFill,
 } from "~/src/components/utils/Icons"
-import * as moment from "moment"
-import useLikeControl from "~/src/components/controls/LikeControl"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
 
 interface ThreadComponentProps {

@@ -1,5 +1,5 @@
+import { Box, Center, Flex, Text } from "@chakra-ui/react"
 import React from "react"
-import { Box, Center, Text, Flex } from "@chakra-ui/react"
 
 function NoMore() {
   return (

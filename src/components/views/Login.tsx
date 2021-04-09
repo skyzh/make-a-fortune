@@ -1,36 +1,27 @@
-import React from "react"
-import { useState } from "react"
-
 import {
-  Container,
-  ChakraProvider,
-  Stack,
   Box,
-  Heading,
-  Text,
-} from "@chakra-ui/react"
-import { Flex, Spacer, HStack, Button } from "@chakra-ui/react"
-import {
+  Button,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
   FormHelperText,
+  FormLabel,
+  Heading,
   Input,
   InputGroup,
   InputRightElement,
-  Tabs,
-  TabList,
+  Stack,
   Tab,
-  TabPanels,
+  TabList,
   TabPanel,
-  useToast,
+  TabPanels,
+  Tabs,
   Textarea,
+  useToast,
 } from "@chakra-ui/react"
-
-import { Client } from "~/src/client"
+import React, { useState } from "react"
 import { v4 as uuidv4 } from "uuid"
-import { useTokenState, useRPCState } from "~/src/settings"
+import { Client } from "~/src/client"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
+import { useRPCState, useTokenState } from "~/src/settings"
 
 function Login() {
   const [email, setEmail] = useState("")

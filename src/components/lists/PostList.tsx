@@ -1,28 +1,26 @@
-import React from "react"
-import { useEffect, useState } from "react"
-
 import {
-  Stack,
   Box,
-  useToast,
-  InputGroup,
-  InputLeftElement,
-  Input,
   Button,
   HStack,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Stack,
+  useToast,
 } from "@chakra-ui/react"
-import { useHistory, useLocation, useParams } from "react-router-dom"
-import { useClient, PostType, PostCategory, Thread } from "~/src/client"
-import { handleError } from "~/src/utils"
 import { concat, range, uniqBy } from "lodash"
+import React, { useEffect, useState } from "react"
+import { InView } from "react-intersection-observer"
+import { useHistory, useLocation, useParams } from "react-router-dom"
+import { PostCategory, PostType, Thread, useClient } from "~/src/client"
+import NoMore from "~/src/components/elements/NoMore"
 import {
   ThreadComponent,
   ThreadSkeleton,
 } from "~/src/components/elements/Thread"
-import Refresh from "~/src/components/widgets/Refresh"
-import { InView } from "react-intersection-observer"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
-import NoMore from "~/src/components/elements/NoMore"
+import Refresh from "~/src/components/widgets/Refresh"
+import { handleError } from "~/src/utils"
 import { Search } from "../utils/Icons"
 
 interface ThreadListComponentProps {

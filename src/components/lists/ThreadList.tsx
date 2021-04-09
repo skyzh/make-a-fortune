@@ -143,14 +143,14 @@ export function ThreadListComponent() {
   async function requestFloor(requestId) {
     let currentLastSeen = lastSeen
     let currentFloors = floors
-    if (!hasMore) {
-      return null
-    }
     while (true) {
       const floor = find(
         currentFloors,
         (floor: Floor) => floor.FloorID === requestId
       )
+      if (!hasMore) {
+        return null
+      }
       if (floor) {
         return floor
       } else {

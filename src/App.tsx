@@ -10,7 +10,7 @@ import {
   PostListMy,
   PostListStar,
   PostListNotification,
-  PostListSearch,
+  PostListSearch, PostListCategory
 } from "./components/lists/PostList"
 import ThreadList from "./components/lists/ThreadList"
 import Login from "./components/views/Login"
@@ -45,6 +45,9 @@ function App() {
               </Route>
               <Route exact path="/">
                 <PostListTime />
+              </Route>
+              <Route path="/category/:categoryId">
+                <PostListCategory />
               </Route>
               <Route path="/posts/trend">
                 <PostListTrend />

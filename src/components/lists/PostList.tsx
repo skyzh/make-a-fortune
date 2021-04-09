@@ -11,7 +11,7 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react"
-import { useHistory, useLocation } from "react-router-dom"
+import { useHistory, useLocation, useParams } from "react-router-dom"
 import { useClient, PostType, PostCategory, Thread } from "~/src/client"
 import { handleError } from "~/src/utils"
 import { concat, range, uniqBy } from "lodash"
@@ -159,6 +159,20 @@ export function PostListTrend() {
         lastSeenField="LastSeenHotThreadID"
         postCategory={PostCategory.All}
         postType={PostType.Trending}
+      />
+    </ScrollableContainer>
+  )
+}
+
+export function PostListCategory() {
+  let { categoryId } = useParams()
+
+  return (
+    <ScrollableContainer>
+      <PostListComponent
+        lastSeenField="LastSeenThreadID"
+        postCategory={categoryId}
+        postType={PostType.Time}
       />
     </ScrollableContainer>
   )

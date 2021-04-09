@@ -35,6 +35,9 @@ async def version(request):
     return web.json_response({
         "name": "「无可奉告」Android 版",
         "addr": f'tcp://{client.addr}:{client.port}',
+        "terms_of_service": "http://wukefenggao.cn/code",
+        "rpc_source_code": "https://github.com/skyzh/make-a-fortune/blob/master/tcp_proxy/__main__.py",
+        "rpc_terms_of_service": "https://github.com/skyzh/make-a-fortune/blob/master/LICENSE"
     })
 
 app = web.Application()

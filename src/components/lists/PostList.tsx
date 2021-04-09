@@ -51,7 +51,7 @@ function ThreadListComponent({
     <Stack spacing={layoutSettings.listSpacing} width="100%" mb="3">
       {threadList !== null ? (
         <>
-          {threadList.map((thread) => (
+          {threadList?.map((thread) => (
             <Box
               key={thread.ThreadID}
               onClick={() => history.push(`/posts/${thread.ThreadID}`)}
@@ -175,13 +175,13 @@ export function PostListTrend() {
 }
 
 export function PostListCategory() {
-  const { categoryId } = useParams()
+  const { categoryId } = useParams<{ categoryId: string }>()
 
   return (
     <ScrollableContainer key={categoryId}>
       <PostListComponent
         lastSeenField="LastSeenThreadID"
-        postCategory={categoryId}
+        postCategory={parseInt(categoryId)}
         postType={PostType.Time}
       />
     </ScrollableContainer>
@@ -268,8 +268,8 @@ export function PostListSearch() {
 
   const moreEntries = () => doFetch(lastSeen, threadList)
 
-  const doSearch = (inputKeyword) => {
-    history.replace(`/posts/search?keyword=${encodeURIComponent(inputKeyword)}`)
+  const doSearch = (inputKeyword: string | null) => {
+    history.replace(`/posts/search?keyword=${encodeURIComponent(inputKeyword ?? "")}`)
   }
 
   const finalThreadList = useThreadFilter(threadList)
@@ -283,7 +283,7 @@ export function PostListSearch() {
           </InputLeftElement>
           <Input
             placeholder="搜点什么？"
-            value={inputKeyword || ""}
+            value={inputKeyword ?? ""}
             onChange={(event) => setInputKeyword(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") doSearch(inputKeyword)

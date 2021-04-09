@@ -24,7 +24,7 @@ export default function useNetworkLocalControl({
   confirmComponent,
   confirm,
 }: NetworkLocalControlProps) {
-  const [whetherAction, setWhetherAction] = useState<boolean>(null)
+  const [whetherAction, setWhetherAction] = useState<boolean>(null!)
   const whetherActionCombined =
     whetherAction === null ? clientState : whetherAction
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false)
@@ -44,7 +44,7 @@ export default function useNetworkLocalControl({
     setIsActionLoading(true)
     try {
       if (whetherActionCombined) {
-        await cancelAction()
+        await cancelAction?.()
       } else {
         await doAction()
       }

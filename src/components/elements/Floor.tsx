@@ -10,7 +10,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react"
-import * as moment from "moment"
+import moment from "moment"
 import React, { useState } from "react"
 import { Floor, useClient } from "~/src/client"
 import useLikeControl from "~/src/components/controls/LikeControl"
@@ -38,10 +38,10 @@ interface FloorComponentProps {
   showControl?: boolean
   onReply?: Function
   allowExpand?: boolean
-  requestFloor?: Function
+  requestFloor?: (f: string) => Promise<Floor>
 }
 
-export function FloorSkeleton({ showControl }) {
+export function FloorSkeleton({ showControl }: { showControl?: boolean }) {
   const layoutSettings = useFortuneLayoutSettings()
 
   return (
@@ -128,7 +128,7 @@ export function FloorComponent({
     confirm: true,
   })
 
-  const [stackedFloor, setStackedFloor] = useState(null)
+  const [stackedFloor, setStackedFloor] = useState<Floor>(null!)
   const [isExpanding, setIsExpanding] = useState(false)
 
   const toast = useToast()
@@ -137,7 +137,7 @@ export function FloorComponent({
 
   const doExpand = () => {
     setIsExpanding(true)
-    requestFloor(floor.Replytofloor.toString())
+    requestFloor?.(floor.Replytofloor.toString())
       .then((newFloor) => {
         if (!newFloor) {
           toast({
@@ -250,7 +250,7 @@ export function FloorComponent({
                     colorScheme="teal"
                     size="xs"
                     variant="outline"
-                    onClick={() => onReply(floor)}
+                    onClick={() => onReply?.(floor)}
                   >
                     <ReplyFill /> &nbsp; 回复
                   </Button>
@@ -280,7 +280,7 @@ export function FloorComponent({
               colorScheme="teal"
               size="xs"
               variant="outline"
-              onClick={() => onReply(floor)}
+              onClick={() => onReply?.(floor)}
             >
               <ReplyFill /> &nbsp; 回复
             </Button>

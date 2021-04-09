@@ -328,9 +328,9 @@ export class Client {
   }
 }
 
-class RPCVersion {
-  name: string
-  addr: string
+export class RPCVersion {
+  name!: string
+  addr!: string
 }
 
 class SerializeObject {

@@ -116,10 +116,10 @@ export function generateName(theme: string, seed: number, id: number) {
     }
   }
   if (seed != 0) {
-    return "Unknown"
+    return `Unknown ${id}`
   }
   if (mapping.length === 0) {
-    return "Unknown"
+    return `Unknown ${id}`
   }
   if (id < mapping.length) {
     return mapping[id]

@@ -3,7 +3,6 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
@@ -34,7 +33,6 @@ const PhoneNavbar: React.FC = () => {
       >
         <DrawerOverlay>
           <DrawerContent bg={drawerBgColor}>
-            <DrawerCloseButton />
             <DrawerHeader />
             <DrawerBody>
               <Navbar onClose={onClose} />

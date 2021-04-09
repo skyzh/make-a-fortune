@@ -25,6 +25,7 @@ import {
 import { useFortuneLayoutSettings } from "~src/settings"
 import { handleError } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
+import { Content } from "./Content"
 import ThemeAvatar from "./ThemeAvatar"
 
 interface FloorComponentProps {
@@ -220,9 +221,7 @@ export function FloorComponent({
               {moment(floor.RTime).calendar()}
             </Text>
           </Flex>
-          <Text mt={4} wordBreak="break-word">
-            {floor.Context}
-          </Text>
+          <Content content={floor.Context} />
         </Stack>
 
         {showControl && (

@@ -10,6 +10,7 @@ import {
   Spacer,
   Stack,
   Text,
+  useBoolean,
 } from "@chakra-ui/react"
 import * as moment from "moment"
 import React from "react"
@@ -25,9 +26,10 @@ import {
   Star,
   StarFill,
 } from "~/src/components/utils/Icons"
-import { useFortuneLayoutSettings } from "~src/settings"
+import { LayoutStyle, useFortuneLayoutSettings } from "~src/settings"
 import { parseThreadNotification } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
+import { CollapseContent, Content } from "./Content"
 import ThemeAvatar from "./ThemeAvatar"
 
 interface ThreadComponentProps {
@@ -148,10 +150,16 @@ export function ThreadComponent({
     confirm: true,
   })
 
+  const [collapsed, setCollapsed] = useBoolean(true)
+
   const layoutSettings = useFortuneLayoutSettings()
 
   return (
-    <Flex width="100%">
+    <Flex
+      width="100%"
+      onMouseOver={setCollapsed.off}
+      onMouseOut={setCollapsed.on}
+    >
       <Box
         flex="1"
         p={layoutSettings.cardMargin}
@@ -197,7 +205,17 @@ export function ThreadComponent({
             )}
           </Flex>
           <Heading fontSize="md">{thread.Title}</Heading>
-          <Text wordBreak="break-word">{thread.Summary}</Text>
+          {showControl ? (
+            <Content content={thread.Summary} />
+          ) : (
+            <CollapseContent
+              content={thread.Summary}
+              collapsed={collapsed}
+              maxLines={
+                layoutSettings.style === LayoutStyle.compact ? "min" : "auto"
+              }
+            />
+          )}
 
           <Box display={{ base: "block", sm: "none" }}>
             <Stack color="teal.500">

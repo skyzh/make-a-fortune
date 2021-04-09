@@ -18,6 +18,7 @@ export enum LayoutStyle {
 }
 
 export class LayoutStyleSettings {
+  style: LayoutStyle
   cardMargin: number
   cardSpacing: number
   controlMargin: number
@@ -28,6 +29,7 @@ function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {
   switch (layout) {
     case LayoutStyle.comfortable: {
       return {
+        style: layout,
         cardMargin: 5,
         cardSpacing: 3,
         controlMargin: 3,
@@ -36,6 +38,7 @@ function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {
     }
     case LayoutStyle.compact: {
       return {
+        style: layout,
         cardMargin: 3,
         cardSpacing: 2,
         controlMargin: 1,

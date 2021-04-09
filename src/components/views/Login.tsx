@@ -8,12 +8,15 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Radio,
+  RadioGroup,
   Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
   Textarea,
   useToast,
 } from "@chakra-ui/react"
@@ -22,6 +25,88 @@ import { v4 as uuidv4 } from "uuid"
 import { Client } from "~/src/client"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import { useRPCState, useTokenState } from "~/src/settings"
+import { getRpcDisplayName, handleError } from "~src/utils"
+import { ArrowRightShort } from "../utils/Icons"
+
+function RpcSettings({ rpc, setRpc }) {
+  const [connectionLoading, setConnectionLoading] = useState(false)
+  const [backend, setBackend] = useState(null)
+  const toast = useToast()
+
+  const checkConnection = () => {
+    setConnectionLoading(true)
+    const client = new Client(rpc)
+    client
+      .version()
+      .then((backend) => setBackend(backend))
+      .catch((err) => handleError(toast, "无法连接到 RPC 服务器", err))
+      .finally(() => setConnectionLoading(false))
+  }
+
+  const doSetRpc = (value) => {
+    setBackend(null)
+    setRpc(value)
+  }
+
+  const rpcDisplayName = getRpcDisplayName(rpc)
+
+  return (
+    <Stack spacing="3">
+      <Heading fontSize="xl" mb="5">
+        RPC 服务器
+      </Heading>
+      <FormControl>
+        <RadioGroup onChange={doSetRpc} value={rpc}>
+          <Stack>
+            <Radio value="https://fortune.skyzh.dev/">
+              https://fortune.skyzh.dev/
+            </Radio>
+            <Radio value="/">本地开发服务器</Radio>
+          </Stack>
+        </RadioGroup>
+        <Input
+          mt={3}
+          value={rpc}
+          onChange={(event) => doSetRpc(event.target.value)}
+        />
+        <FormHelperText>
+          您的所有消息（包括用户令牌、发送与接收的内容）都将通过 RPC
+          服务器传输。务必确保您信任 RPC 服务器的提供者。
+        </FormHelperText>
+      </FormControl>
+      <Button
+        colorScheme="blue"
+        isFullWidth
+        isLoading={connectionLoading}
+        onClick={checkConnection}
+      >
+        检测连通性
+      </Button>
+      {backend && (
+        <Stack spacing={1}>
+          <Text color="gray.500">
+            {backend?.name} @ {backend?.addr}
+          </Text>
+          <Text color="blue.500">
+            <a href={backend?.terms_of_service}>
+              <ArrowRightShort /> {backend?.name || "<匿名社区>"} 用户协议
+            </a>
+          </Text>
+          <Text color="blue.500">
+            <a href={backend?.rpc_source_code}>
+              <ArrowRightShort /> {rpcDisplayName} 开源代码
+            </a>
+          </Text>
+          <Text color="blue.500">
+            <a href={backend?.rpc_terms_of_service}>
+              <ArrowRightShort /> {rpcDisplayName} 用户协议
+            </a>
+          </Text>
+        </Stack>
+      )}
+    </Stack>
+  )
+}
 
 function Login() {
   const [email, setEmail] = useState("")
@@ -118,101 +203,84 @@ function Login() {
 
   return (
     <ScrollableContainer>
-      <Box p={5} shadow="md" borderWidth="1px" width="100%">
-        <Heading fontSize="xl" mb="5">
-          登录
-        </Heading>
-        <Tabs>
-          <TabList>
-            <Tab>邮箱登录</Tab>
-            <Tab>Token 登录</Tab>
-          </TabList>
+      <Stack spacing="3">
+        <Box p={5} shadow="md" borderWidth="1px" width="100%">
+          <RpcSettings rpc={rpc} setRpc={setRpc} />
+        </Box>
+        <Box p={5} shadow="md" borderWidth="1px" width="100%">
+          <Heading fontSize="xl" mb="5">
+            登录
+          </Heading>
+          <Tabs>
+            <TabList>
+              <Tab>邮箱登录</Tab>
+              <Tab>Token 登录</Tab>
+            </TabList>
 
-          <TabPanels>
-            <TabPanel>
-              <Stack spacing="3">
-                <FormControl id="email">
-                  <FormLabel>邮箱</FormLabel>
-                  <InputGroup size="md">
+            <TabPanels>
+              <TabPanel>
+                <Stack spacing={5}>
+                  <FormControl id="email">
+                    <FormLabel>邮箱</FormLabel>
+                    <InputGroup size="md">
+                      <Input
+                        type="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                      />
+                      <InputRightElement width="6rem" mx="0.5rem">
+                        <Button
+                          size="sm"
+                          h="1.75rem"
+                          onClick={sendCode}
+                          isLoading={tokenSent}
+                        >
+                          发送验证码
+                        </Button>
+                      </InputRightElement>
+                    </InputGroup>
+                    <FormHelperText>
+                      您所使用的匿名社区可能对邮箱后缀进行限制。
+                    </FormHelperText>
+                  </FormControl>
+                  <FormControl id="otpToken">
+                    <FormLabel>验证码</FormLabel>
                     <Input
-                      type="email"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
+                      value={otpToken}
+                      onChange={(event) => setOtpToken(event.target.value)}
                     />
-                    <InputRightElement width="6rem" mx="0.5rem">
-                      <Button
-                        size="sm"
-                        h="1.75rem"
-                        onClick={sendCode}
-                        isLoading={tokenSent}
-                      >
-                        发送验证码
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
-                  <FormHelperText>
-                    您所使用的匿名社区可能对邮箱后缀进行限制。
-                  </FormHelperText>
-                </FormControl>
-                <FormControl id="otpToken">
-                  <FormLabel>验证码</FormLabel>
-                  <Input
-                    value={otpToken}
-                    onChange={(event) => setOtpToken(event.target.value)}
-                  />
-                  <FormHelperText>
-                    您可以通过邮箱查收验证码邮件。
-                  </FormHelperText>
-                </FormControl>
-                <FormControl id="proxyServer">
-                  <FormLabel>RPC 服务器</FormLabel>
-                  <Input
-                    value={rpc}
-                    onChange={(event) => setRpc(event.target.value)}
-                  />
-                  <FormHelperText>
-                    您的所有消息（包括用户令牌、发送与接收的内容）都将通过 RPC
-                    服务器传输。务必确保您信任 RPC 服务器的提供者。
-                  </FormHelperText>
-                </FormControl>
-                <Button
-                  mt={4}
-                  colorScheme="blue"
-                  isLoading={loginSent}
-                  onClick={sendLogin}
-                >
-                  登录
-                </Button>
-              </Stack>
-            </TabPanel>
-            <TabPanel>
-              <Stack spacing="3">
-                <FormControl id="token">
-                  <FormLabel>Token</FormLabel>
-                  <Textarea
-                    value={token}
-                    onChange={(event) => setToken(event.target.value)}
-                  />
-                </FormControl>
-                <FormControl id="proxyServer">
-                  <FormLabel>RPC 服务器</FormLabel>
-                  <Input
-                    value={rpc}
-                    onChange={(event) => setRpc(event.target.value)}
-                  />
-                  <FormHelperText>
-                    您的所有消息（包括用户令牌、发送与接收的内容）都将通过 RPC
-                    服务器传输。务必确保您信任 RPC 服务器的提供者。
-                  </FormHelperText>
-                </FormControl>
-                <Button mt={4} colorScheme="blue" onClick={setTokenSetting}>
-                  使用该设置
-                </Button>
-              </Stack>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Box>
+                    <FormHelperText>
+                      您可以通过邮箱查收验证码邮件。
+                    </FormHelperText>
+                  </FormControl>
+                  <Button
+                    mt={4}
+                    colorScheme="blue"
+                    isLoading={loginSent}
+                    onClick={sendLogin}
+                  >
+                    登录
+                  </Button>
+                </Stack>
+              </TabPanel>
+              <TabPanel>
+                <Stack spacing="3">
+                  <FormControl id="token">
+                    <FormLabel>Token</FormLabel>
+                    <Textarea
+                      value={token}
+                      onChange={(event) => setToken(event.target.value)}
+                    />
+                  </FormControl>
+                  <Button mt={4} colorScheme="blue" onClick={setTokenSetting}>
+                    更新 Token
+                  </Button>
+                </Stack>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Box>
+      </Stack>
     </ScrollableContainer>
   )
 }

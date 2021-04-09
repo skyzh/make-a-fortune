@@ -11,9 +11,10 @@ import React, { useEffect, useState } from "react"
 import { Client } from "~/src/client"
 import { ArrowRightShort } from "~/src/components/utils/Icons"
 import { useRPCState, useTokenState } from "~/src/settings"
-import CategoryNavigation from "~src/components/widgets/CategoryNavigation"
-import NavButton from "~src/components/widgets/NavButton"
+import { getRpcDisplayName } from "~src/utils"
+import CategoryNavigation from "../widgets/CategoryNavigation"
 import Logo from "../widgets/Logo"
+import NavButton from "../widgets/NavButton"
 
 const Navbar: React.FC = ({ onClose }) => {
   const [rpc, _setRpc] = useRPCState()
@@ -23,7 +24,6 @@ const Navbar: React.FC = ({ onClose }) => {
   useEffect(() => {
     async function sendRequest() {
       if (rpc) {
-        // guard against undefined, null, empty string and any false values
         const client = new Client(rpc)
         setBackend(await client.version())
       }
@@ -44,11 +44,7 @@ const Navbar: React.FC = ({ onClose }) => {
 
   const NB: React.FC = (props) => <NavButton {...props} onClose={onClose} />
 
-  const rpcDisplayName = !rpc
-    ? "Null"
-    : rpc === "/"
-    ? window.location.hostname
-    : rpc.replace("https://", "").replace("/", "")
+  const rpcDisplayName = getRpcDisplayName(rpc)
 
   return (
     <Stack spacing={1}>

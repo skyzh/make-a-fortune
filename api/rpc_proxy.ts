@@ -7,7 +7,7 @@ const handler = (request: VercelRequest, response: VercelResponse) => {
 
   client.send_message(body)
     .then((res) => response.status(200).send(res))
-    .catch((e) => response.status(500).send())
+    .catch((e) => response.status(500).send({}))
 }
 
 export default allowCors(handler)

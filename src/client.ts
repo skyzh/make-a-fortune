@@ -17,7 +17,7 @@ export class ActionError extends Error {
   constructor(message: string) {
     super(message)
     // Set the prototype explicitly.
-    Object.setPrototypeOf(this, BannedError.prototype)
+    Object.setPrototypeOf(this, ActionError.prototype)
   }
 }
 
@@ -62,6 +62,9 @@ export class Client {
     }
     if (requiredField && response["requiredField"] != 1) {
       throw new ActionError(`${requiredField} 失败`)
+    }
+    if (response.ExistFlag === "0") {
+      throw new ActionError(`帖子已被屏蔽`)
     }
     return response
   }

@@ -24,6 +24,7 @@
     "@chakra-ui/react": "^1.4.2",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@vercel/node": "^1.9.1",
     "axios": "^0.21.1",
     "bootstrap-icons": "^1.4.1",
     "framer-motion": "^4",

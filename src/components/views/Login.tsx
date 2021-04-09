@@ -38,7 +38,17 @@ function RpcSettings({ rpc, setRpc }) {
     const client = new Client(rpc)
     client
       .version()
-      .then((backend) => setBackend(backend))
+      .then((backend) => {
+        if (!backend.name) {
+          handleError(
+            toast,
+            "非法的 RPC 服务器",
+            new Error("服务器返回了无法解析的信息")
+          )
+          return
+        }
+        setBackend(backend)
+      })
       .catch((err) => handleError(toast, "无法连接到 RPC 服务器", err))
       .finally(() => setConnectionLoading(false))
   }

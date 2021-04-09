@@ -219,6 +219,32 @@ export function ThreadComponent({
           </Box>
         </Stack>
       </Box>
+      <Box size="80px" p="3" display={{ base: "none", sm: "unset" }}>
+        <Stack color="teal.500" width="80px">
+          {likeTextControl}
+          <Text fontSize="sm">
+            <ChatSquareText /> {thread.Comment}
+          </Text>
+          <Text fontSize="sm">
+            <Broadcast /> {thread.Read}
+          </Text>
+          {showControl && (
+            <>
+              {likeButtonControl}
+              {favourControl}
+              {reportControl}
+              <Button
+                colorScheme="teal"
+                size="xs"
+                variant="outline"
+                onClick={onReply}
+              >
+                <ReplyFill /> &nbsp; 回复
+              </Button>
+            </>
+          )}
+        </Stack>
+      </Box>
     </Flex>
   )
 }

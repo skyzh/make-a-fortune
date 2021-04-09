@@ -35,8 +35,9 @@ yarn start
 您可以在本地启动 `tcp_proxy` 来使用本地 RPC 后端。我们同时也提供了一些可用的后端：
 
 * https://fortune.skyzh.dev ，服务器坐标日本。提供无可奉告 Android 版 RPC 后端。
-* (计划中) https://vercel.fortune.skyzh.dev ，通过 Vercel Function 提供服务。
-* (计划中) https://cf-worker.fortune.skyzh.dev ，通过 Cloudflare Worker 提供服务。
+* https://make-a-fortune.vercel.app ，通过 Vercel Function 提供服务。提供无可奉告 Android 版 RPC 后端。
+* https://fortune.fly.dev ，通过 Fly.io 提供服务。提供无可奉告 Android 版 RPC 后端（Rust 实现）。
+* https://fortune.lightquantum.me:9108 ，服务器坐标上海（带宽很小）。提供无可奉告 Android 版 RPC 后端（Rust 实现）。
 
 ## License
 

@@ -94,6 +94,20 @@ function RpcSettings({ rpc, setRpc }) {
                 <Text color="gray.500">(Powered by Vercel Function)</Text>
               </HStack>
             </Radio>
+            <Radio value="https://fortune.fly.dev">
+              <HStack spacing={1}>
+                <Text>fortune.fly.dev</Text>
+                <Text color="gray.500">(Powered by Fly.io)</Text>
+              </HStack>
+            </Radio>
+            <Radio value="https://fortune.lightquantum.me:9108">
+              <HStack spacing={1}>
+                <Text>fortune.lightquantum.me:9108</Text>
+                <Text color="gray.500">
+                  (Powered by Tencent Cloud, low bandwidth)
+                </Text>
+              </HStack>
+            </Radio>
             <Radio value="http://localhost:8080">
               <HStack spacing={1}>
                 <Text>本地 RPC 服务器</Text>

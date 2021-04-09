@@ -3,6 +3,7 @@ import {
   Divider,
   Radio,
   RadioGroup,
+  Skeleton,
   Stack,
   useToast,
 } from "@chakra-ui/react"
@@ -69,7 +70,7 @@ export function FloorListComponent({
         <ThreadSkeleton showControl />
       )}
       <Divider />
-      <Box my="2">{orderBy}</Box>
+      <Box my="2">{thread ? orderBy : <Skeleton height="2rem" />}</Box>
       {thread && floors ? (
         <>
           {floors.map((floor) => (

@@ -30,6 +30,7 @@ import { LayoutStyle, useFortuneLayoutSettings } from "~src/settings"
 import { parseThreadNotification } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
 import { CollapseContent, Content } from "./Content"
+import ThemeAvatar from "./ThemeAvatar"
 
 interface ThreadComponentProps {
   thread: Thread
@@ -171,13 +172,22 @@ export function ThreadComponent({
             <Text fontSize="sm">
               <Badge colorScheme="gray"># {thread.ThreadID}</Badge>
             </Text>
-            <Text fontSize="sm">
-              {thread.Tag !== "NULL" && (
+
+            {thread.Tag !== "NULL" && (
+              <Text fontSize="sm" mr="3">
                 <Badge ml="2" colorScheme="teal">
                   {thread.Tag}
                 </Badge>
-              )}
-            </Text>
+              </Text>
+            )}
+
+            {showControl && (
+              <ThemeAvatar
+                theme={thread.AnonymousType}
+                seed={thread.RandomSeed}
+                id={0}
+              />
+            )}
             <Spacer />
             <Text fontSize="sm" color="gray.500">
               {moment(

@@ -174,7 +174,7 @@ export function ThreadComponent({
             </Text>
 
             {thread.Tag !== "NULL" && (
-              <Text fontSize="sm" mr="3">
+              <Text fontSize="sm">
                 <Badge ml="2" colorScheme="teal">
                   {thread.Tag}
                 </Badge>

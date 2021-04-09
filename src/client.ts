@@ -316,6 +316,16 @@ export class Client {
       )
     )
   }
+
+  async verifyToken(token?: string) {
+    return (await this.sendRequest(
+      this.serialize(
+        token
+          ? new SerializeObject("-1").provideToken(token)
+          : new SerializeObject("-1")
+      )
+    )) as VerifyTokenResponse
+  }
 }
 
 class RPCVersion {
@@ -517,6 +527,10 @@ export class ReplyPostRequest {
 export class SearchRequest {
   keyword: string
   lastSeen?: string
+}
+
+export class VerifyTokenResponse {
+  login_flag: string
 }
 
 export function useClient() {

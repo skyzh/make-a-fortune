@@ -28,11 +28,16 @@ export class Client {
     const client = net.createConnection({ host: this.host, port: this.port }, () => {
       client.write(JSON.stringify(message))
     })
+    let buf = ""
 
     client.on("data", (data) => {
-      resolve(data.toString())
-      client.end()
+      buf += data.toString()
     })
+
+    client.on("end", (data) => {
+      resolve(buf)
+    })
+
     client.on("error", (e) => {
       reject(e)
     })

@@ -83,3 +83,7 @@ export function Search() {
 export function X() {
   return <i className="bi bi-x"></i>
 }
+
+export function ArrowsExpand() {
+  return <i className="bi bi-arrows-expand"></i>
+}

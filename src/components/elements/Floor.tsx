@@ -9,19 +9,22 @@ import {
   Spacer,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react"
 import * as moment from "moment"
-import React from "react"
+import React, { useState } from "react"
 import { Floor, useClient } from "~/src/client"
 import useLikeControl from "~/src/components/controls/LikeControl"
 import {
   ArrowRight,
+  ArrowsExpand,
   Flag,
   FlagFill,
   HandThumbsUpFill,
   ReplyFill,
 } from "~/src/components/utils/Icons"
 import { generateName } from "~/src/name_theme"
+import { handleError } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
 
 interface FloorComponentProps {
@@ -32,6 +35,8 @@ interface FloorComponentProps {
   threadId: string
   showControl?: boolean
   onReply?: Function
+  allowExpand?: boolean
+  requestFloor?: Function
 }
 
 export function FloorSkeleton() {
@@ -61,6 +66,8 @@ export function FloorComponent({
   threadId,
   showControl,
   onReply,
+  allowExpand,
+  requestFloor,
 }: FloorComponentProps) {
   const client = useClient()
   const payload = { postId: threadId, replyId: floor.FloorID }
@@ -93,10 +100,44 @@ export function FloorComponent({
     ),
   })
 
+  const [stackedFloor, setStackedFloor] = useState(null)
+  const [isExpanding, setIsExpanding] = useState(false)
+  const toast = useToast()
+
+  const doExpand = () => {
+    setIsExpanding(true)
+    requestFloor(floor.Replytofloor.toString())
+      .then((newFloor) => {
+        if (!newFloor) {
+          toast({
+            title: `无法展开第 ${floor.Replytofloor} 楼`,
+            description: "请稍候重试",
+            isClosable: true,
+            duration: 5000,
+            status: "warning",
+          })
+          return
+        }
+        setStackedFloor(newFloor)
+      })
+      .catch((err) => handleError(toast, "无法展开回复", err))
+      .finally(() => setIsExpanding(false))
+  }
+
   return (
     <Flex width="100%">
       <Box flex="1" p={5} shadow="sm" borderWidth="1px" borderRadius="md">
         <Stack spacing="3">
+          {stackedFloor && allowExpand && (
+            <FloorComponent
+              floor={stackedFloor}
+              theme={theme}
+              seed={seed}
+              threadId={threadId}
+              allowExpand={allowExpand}
+              requestFloor={requestFloor}
+            />
+          )}
           <Flex>
             <Text fontSize="sm" mr="2">
               <Badge colorScheme="gray"># {floor.FloorID}</Badge>
@@ -115,6 +156,17 @@ export function FloorComponent({
                   </Badge>
                   {generateName(theme, seed, parseInt(floor.Replytoname))}
                 </Text>
+                {allowExpand && !stackedFloor && (
+                  <Button
+                    size="xs"
+                    variant="ghost"
+                    colorScheme="teal"
+                    isLoading={isExpanding}
+                    onClick={doExpand}
+                  >
+                    <ArrowsExpand />
+                  </Button>
+                )}
               </>
             )}
             <Spacer />

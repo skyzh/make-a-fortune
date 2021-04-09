@@ -8,53 +8,55 @@ import { useLocation } from "react-router-dom"
 const categories = [
   {
     id: PostCategory.All,
-    name: "主干道"
+    name: "主干道",
   },
   {
     id: PostCategory.Campus,
-    name: "校园"
+    name: "校园",
   },
   {
     id: PostCategory.Entertainment,
-    name: "娱乐"
+    name: "娱乐",
   },
   {
     id: PostCategory.Emotion,
-    name: "情感"
+    name: "情感",
   },
   {
     id: PostCategory.Science,
-    name: "科学"
+    name: "科学",
   },
   {
     id: PostCategory.IT,
-    name: "数码"
+    name: "数码",
   },
   {
     id: PostCategory.Social,
-    name: "社会"
+    name: "社会",
   },
   {
     id: PostCategory.Music,
-    name: "音乐"
+    name: "音乐",
   },
   {
     id: PostCategory.Movie,
-    name: "影视"
+    name: "影视",
   },
   {
     id: PostCategory.Art,
-    name: "文史哲"
+    name: "文史哲",
   },
   {
     id: PostCategory.Life,
-    name: "人生经验"
-  }
+    name: "人生经验",
+  },
 ]
 
 function CategoryNavigation({ onClose }) {
   const location = useLocation()
-  const [expand, setExpand] = useState<boolean>(location.pathname.startsWith("/category/"))
+  const [expand, setExpand] = useState<boolean>(
+    location.pathname.startsWith("/category/")
+  )
   const NB: React.FC = (props) => <NavButton {...props} onClose={onClose} />
 
   useEffect(() => {
@@ -85,9 +87,11 @@ function CategoryNavigation({ onClose }) {
           shadow="md"
           overflow="visible"
         >
-          {
-            categories.map((cat) => <NB key={cat.id} to={`/category/${cat.id}`}>{cat.name}</NB>)
-          }
+          {categories.map((cat) => (
+            <NB key={cat.id} to={`/category/${cat.id}`}>
+              {cat.name}
+            </NB>
+          ))}
         </Box>
       </Collapse>
     </>

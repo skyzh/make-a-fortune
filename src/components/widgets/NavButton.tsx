@@ -1,7 +1,10 @@
 import React from "react"
 import { Button } from "@chakra-ui/react"
 import { Route, NavLink } from "react-router-dom"
-import { ArrowRightCircleFill, ArrowRightShort } from "~/src/components/utils/Icons"
+import {
+  ArrowRightCircleFill,
+  ArrowRightShort,
+} from "~/src/components/utils/Icons"
 
 const NavButton: React.FC = ({ to, exact, children, ...rest }) => {
   return (

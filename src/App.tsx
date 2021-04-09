@@ -10,7 +10,8 @@ import {
   PostListMy,
   PostListStar,
   PostListNotification,
-  PostListSearch, PostListCategory
+  PostListSearch,
+  PostListCategory,
 } from "./components/lists/PostList"
 import ThreadList from "./components/lists/ThreadList"
 import Login from "./components/views/Login"

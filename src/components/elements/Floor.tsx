@@ -164,14 +164,19 @@ export function FloorComponent({
       >
         <Stack spacing={layoutSettings.cardSpacing}>
           {stackedFloor && allowExpand && (
-            <FloorComponent
-              floor={stackedFloor}
-              theme={theme}
-              seed={seed}
-              threadId={threadId}
-              allowExpand={allowExpand}
-              requestFloor={requestFloor}
-            />
+            <Box
+              mx={-layoutSettings.cardMargin + 1}
+              mt={-layoutSettings.cardMargin + 1}
+            >
+              <FloorComponent
+                floor={stackedFloor}
+                theme={theme}
+                seed={seed}
+                threadId={threadId}
+                allowExpand={allowExpand}
+                requestFloor={requestFloor}
+              />
+            </Box>
           )}
           <Flex>
             <Text fontSize="sm" mr="2">
@@ -207,7 +212,7 @@ export function FloorComponent({
               </>
             )}
             <Spacer />
-            <Text fontSize="sm">{moment(floor.RTime).calendar()}</Text>
+            <Text fontSize="sm" color="gray.500">{moment(floor.RTime).calendar()}</Text>
           </Flex>
           <Text mt={4} wordBreak="break-word">
             {floor.Context}

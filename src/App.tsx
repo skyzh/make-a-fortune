@@ -10,6 +10,7 @@ import {
   PostListMy,
   PostListStar,
   PostListNotification,
+  PostListSearch,
 } from "./components/lists/PostList"
 import ThreadList from "./components/lists/ThreadList"
 import Login from "./components/views/Login"
@@ -56,6 +57,9 @@ function App() {
               </Route>
               <Route path="/posts/notification">
                 <PostListNotification />
+              </Route>
+              <Route path="/posts/search">
+                <PostListSearch />
               </Route>
               <Route path="/posts/:postId">
                 <ThreadList />

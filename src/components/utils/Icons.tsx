@@ -71,3 +71,7 @@ export function StarFill() {
 export function List() {
   return <i className="bi bi-list" />
 }
+
+export function Search() {
+  return <i className="bi bi-search"></i>
+}

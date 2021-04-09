@@ -7,7 +7,7 @@ const handler = (request: VercelRequest, response: VercelResponse) => {
     "name": "「无可奉告」Android 版",
     "addr": `tcp://${client.host}:${client.port}`,
     "terms_of_service": "http://wukefenggao.cn/code",
-    "rpc_source_code": "https://github.com/skyzh/make-a-fortune/blob/master/tcp_proxy/__main__.py",
+    "rpc_source_code": "https://github.com/skyzh/make-a-fortune/blob/master/api/rpc_proxy.ts",
     "rpc_terms_of_service": "https://github.com/skyzh/make-a-fortune/blob/master/LICENSE"
   })
 }

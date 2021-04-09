@@ -7,7 +7,7 @@ export function handleError(toast, title: string, err: Error) {
     const bannedError = err as BannedError
     toast({
       title: "您已被封禁",
-      description: `由于 “${bannedError.resp.Ban_Content}” ${bannedError.resp.Ban_Reason}`,
+      description: `由于 “${bannedError.resp.Ban_Content}” ${bannedError.resp.Ban_Reason}。将于 ${bannedError.resp.ReleaseTime} 解禁。`,
       status: "error",
       duration: 5000,
       isClosable: true,

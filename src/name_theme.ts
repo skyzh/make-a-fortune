@@ -1,3 +1,5 @@
+import JSBI from "jsbi"
+
 const ALICE_AND_BOB = [
   "Alice",
   "Bob",
@@ -99,24 +101,71 @@ const TAROT = [
   "The World",
 ]
 
+// https://github.com/wu-qing-157/Anonymous/blob/3b3f087942ba6bf209cda689b65cce98ab79d61b/app/src/main/java/org/wkfg/anonymous/utils.kt#L300
+class randomN {
+  // we have to use bigint to handle the random algorithm
+  a: JSBI
+  b: JSBI = JSBI.BigInt(19260817) // +1s
+
+  constructor(seed: number) {
+    this.a = JSBI.BigInt(seed)
+  }
+
+  truncate = (t: JSBI) => {
+    return JSBI.asIntN(64, t)
+  }
+
+  next = () => {
+    let t = this.a
+    let s = this.b
+    this.a = s
+    t = this.truncate(JSBI.bitwiseXor(t, JSBI.leftShift(t, JSBI.BigInt(23))))
+    t = this.truncate(
+      JSBI.bitwiseXor(t, JSBI.signedRightShift(t, JSBI.BigInt(17)))
+    )
+    t = this.truncate(
+      JSBI.bitwiseXor(
+        JSBI.bitwiseXor(t, s),
+        JSBI.signedRightShift(s, JSBI.BigInt(26))
+      )
+    )
+    this.b = t
+
+    // 9223372036854775807 is the Long.MAX_VALUE in Kotlin
+    return JSBI.bitwiseAnd(JSBI.add(s, t), JSBI.BigInt("9223372036854775807"))
+  }
+}
+
+// https://github.com/wu-qing-157/Anonymous/blob/3b3f087942ba6bf209cda689b65cce98ab79d61b/app/src/main/java/org/wkfg/anonymous/utils.kt#L318
+function shuffle(nameList: string[], seed: number) {
+  // naive deep copy
+  const newList = [...nameList]
+  var random = new randomN(seed)
+  for (let i = 1; i < newList.length; i++) {
+    const j = JSBI.toNumber(JSBI.remainder(random.next(), JSBI.BigInt(i + 1)))
+    const t = newList[i]
+    newList[i] = newList[j]
+    newList[j] = t
+  }
+
+  return newList
+}
+
 export function generateName(theme: string, seed: number, id: number) {
   let mapping = []
   switch (theme) {
     case "abc": {
-      mapping = ALICE_AND_BOB
+      mapping = seed === 0 ? ALICE_AND_BOB : shuffle(ALICE_AND_BOB, seed)
       break
     }
     case "us_president": {
-      mapping = US_PRESIDENT
+      mapping = seed === 0 ? US_PRESIDENT : shuffle(US_PRESIDENT, seed)
       break
     }
     case "tarot": {
-      mapping = TAROT
+      mapping = seed === 0 ? TAROT : shuffle(TAROT, seed)
       break
     }
-  }
-  if (seed != 0) {
-    return `${id}.?`
   }
   if (mapping.length === 0) {
     return `${id}.?`

@@ -20,7 +20,7 @@ import {
 } from "~/src/components/elements/Thread"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import Refresh from "~/src/components/widgets/Refresh"
-import { handleError } from "~/src/utils"
+import { handleError, useThreadFilter } from "~/src/utils"
 import { Search } from "../utils/Icons"
 
 interface ThreadListComponentProps {
@@ -46,7 +46,7 @@ function ThreadListComponent({
   const history = useHistory()
   return (
     <Stack spacing={3} width="100%" mb="3">
-      {threadList ? (
+      {threadList !== null ? (
         <>
           {threadList.map((thread) => (
             <Box
@@ -132,11 +132,13 @@ export function PostListComponent({
     doFetch(null, null)
   }
 
+  const finalThreadList = useThreadFilter(threadList)
+
   return (
     <>
       <Refresh onClick={refresh} />
       <ThreadListComponent
-        threadList={threadList}
+        threadList={finalThreadList}
         moreEntries={moreEntries}
         hasMore={hasMore}
         isMessage={isMessage}
@@ -236,7 +238,7 @@ export function PostListSearch() {
 
   function doFetch(lastSeen, previousThreads) {
     async function fetch() {
-      if (keyword === "" || keyword === null) return
+      if (!keyword) return
       const result = await client.search({
         lastSeen,
         keyword,
@@ -267,6 +269,8 @@ export function PostListSearch() {
     history.replace(`/posts/search?keyword=${encodeURIComponent(inputKeyword)}`)
   }
 
+  const finalThreadList = useThreadFilter(threadList)
+
   return (
     <ScrollableContainer>
       <HStack spacing={4} width="100%" mb="3">
@@ -276,7 +280,7 @@ export function PostListSearch() {
           </InputLeftElement>
           <Input
             placeholder="搜点什么？"
-            value={inputKeyword}
+            value={inputKeyword || ""}
             onChange={(event) => setInputKeyword(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") doSearch(inputKeyword)
@@ -293,7 +297,7 @@ export function PostListSearch() {
       </HStack>
       {keyword !== "" && keyword !== null ? (
         <ThreadListComponent
-          threadList={threadList}
+          threadList={finalThreadList}
           moreEntries={moreEntries}
           hasMore={hasMore}
         />

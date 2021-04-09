@@ -79,3 +79,7 @@ export function List() {
 export function Search() {
   return <i className="bi bi-search"></i>
 }
+
+export function X() {
+  return <i className="bi bi-x"></i>
+}

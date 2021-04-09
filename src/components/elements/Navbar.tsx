@@ -54,7 +54,7 @@ const Navbar: React.FC = ({ onClose }) => {
   const toast = useToast()
   useEffect(() => {
     async function sendRequest() {
-      if (rpc !== "") {
+      if (rpc !== "" && rpc !== null) {
         const client = new Client(rpc)
         setBackend(await client.version())
       }
@@ -74,6 +74,11 @@ const Navbar: React.FC = ({ onClose }) => {
   }, [rpc])
 
   const NB: React.FC = (props) => <NavButton {...props} onClose={onClose} />
+
+  const rpcDisplayName =
+    rpc === "/"
+      ? window.location.hostname
+      : rpc.replace("https://", "").replace("/", "")
 
   return (
     <Stack spacing={1}>
@@ -103,23 +108,37 @@ const Navbar: React.FC = ({ onClose }) => {
         </Text>
       </Box>
       <NB to="/login">{token ? "切换用户" : "登录"}</NB>
-      <Box pt="5" px="2">
+      <Stack pt="5" px="2" spacing="3">
         <Text color="gray.500" fontSize="xs">
           「闷声发财」是一个通用的匿名社区前端。
           使用「闷声发财」访问社区内容，即意味着您同意所使用 RPC
           后端的服务条款，且同意对应匿名社区的社区规范与服务条款。
         </Text>
-        <Text color="gray.500" fontSize="xs" mt="3">
-          您正在使用 {rpc === "/" ? window.location.hostname : rpc}{" "}
-          作为「闷声发财」的 RPC 后端。 该 RPC 后端由{" "}
-          {backend?.name || "<无法获取信息>"} 提供服务。
+        <Text color="gray.500" fontSize="xs">
+          您正在使用 {rpcDisplayName} 作为「闷声发财」的 RPC 后端。 该 RPC
+          后端由 {backend?.name || "<无法获取信息>"} 提供服务。
         </Text>
-        <Text color="blue.500" fontSize="xs" mt="3">
+        <Text color="blue.500" fontSize="xs">
           <a href="https://github.com/skyzh/make-a-fortune">
             <ArrowRightShort /> 「闷声发财」开源代码
           </a>
         </Text>
-      </Box>
+        <Text color="blue.500" fontSize="xs">
+          <a href={backend?.terms_of_service}>
+            <ArrowRightShort /> {backend?.name || "<匿名社区>"} 用户协议
+          </a>
+        </Text>
+        <Text color="blue.500" fontSize="xs">
+          <a href={backend?.rpc_source_code}>
+            <ArrowRightShort /> {rpcDisplayName} 开源代码
+          </a>
+        </Text>
+        <Text color="blue.500" fontSize="xs">
+          <a href={backend?.rpc_terms_of_service}>
+            <ArrowRightShort /> {rpcDisplayName} 用户协议
+          </a>
+        </Text>
+      </Stack>
     </Stack>
   )
 }

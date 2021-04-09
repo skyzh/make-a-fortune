@@ -194,6 +194,12 @@ export function ThreadListComponent() {
       .then(() => {
         setIsReplyingFloor(null)
         setIsReplyingPost(false)
+        toast({
+          title: "回复成功",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        })
       })
       .catch((err) => handleError(toast, "发帖失败", err))
       .finally(() => {

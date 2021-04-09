@@ -16,8 +16,13 @@ export function handleError(toast, title: string, err: Error) {
       description: `${err}`,
       status: "error",
       duration: 5000,
-
       isClosable: true,
     })
   }
+}
+
+export function getRpcDisplayName(rpc) {
+  return rpc === "/"
+    ? window.location.hostname
+    : rpc?.replace("https://", "")?.replace("/", "")
 }

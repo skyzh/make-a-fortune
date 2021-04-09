@@ -20,23 +20,42 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <Router>
-        <Flex h="100vh">
+        <Box
+          display={{ base: "unset", md: "none" }}
+          position={{ base: "fixed", md: "unset" }}
+          top="0"
+          background="white"
+          shadow="sm"
+          width="100%"
+          zIndex="1000"
+        >
+          <Box padding="4">
+            <PhoneNavbar />
+          </Box>
+        </Box>
+        <Flex
+          h={{
+            base: "unset",
+            md: "100vh",
+          }}
+          mt={{
+            base: "5rem",
+            md: "0",
+          }}
+        >
           <Box
             size="300px"
             display={{ base: "none", md: "unset" }}
             bg="gray.50"
+            overflowY={{ base: "unset", md: "scroll" }}
+            overflowX="hidden"
+            height="100%"
           >
             <Box padding="4" width="300px">
               <Navbar />
             </Box>
           </Box>
           <Box flex="1">
-            <Box display={{ base: "unset", md: "none" }}>
-              <Box padding="4">
-                <PhoneNavbar />
-              </Box>
-            </Box>
-
             <Switch>
               <Route path="/login">
                 <Login />

@@ -27,6 +27,9 @@ export class Client {
 
   constructor(backend: string = "/", token?: string) {
     this.backend = backend
+    if (!this.backend.endsWith("/")) {
+      this.backend += "/"
+    }
     this.token = token
   }
 

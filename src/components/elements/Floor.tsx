@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Button,
   Flex,
@@ -23,10 +22,10 @@ import {
   HandThumbsUpFill,
   ReplyFill,
 } from "~/src/components/utils/Icons"
-import { generateName } from "~/src/name_theme"
 import { useFortuneLayoutSettings } from "~src/settings"
 import { handleError } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
+import ThemeAvatar from "./ThemeAvatar"
 
 interface FloorComponentProps {
   floor: Floor
@@ -178,28 +177,33 @@ export function FloorComponent({
               />
             </Box>
           )}
-          <Flex>
-            <Text fontSize="sm" mr="2">
-              <Badge colorScheme="gray"># {floor.FloorID}</Badge>
-            </Text>
-            <Text fontSize="sm" mr="2" fontWeight="bold">
-              {generateName(theme, seed, parseInt(floor.Speakername))}
-              {floor.Speakername === "0" && " (洞主)"}
-            </Text>
+          <Flex alignItems="center">
+            <HStack mr="2">
+              <ThemeAvatar
+                theme={theme}
+                seed={seed}
+                id={parseInt(floor.Speakername)}
+                showIsPoster
+                floorId={parseInt(floor.FloorID)}
+              />
+            </HStack>
             {floor.Replytofloor !== 0 && (
               <>
                 <Text fontSize="sm" mr="2" fontWeight="bold">
                   <ArrowRight />
                 </Text>
-                <Text fontSize="sm" mr="2" fontWeight="bold">
-                  <Badge colorScheme="gray" mx="1">
-                    # {floor.Replytofloor}
-                  </Badge>
-                  {generateName(theme, seed, parseInt(floor.Replytoname))}
-                  {floor.Replytoname === "0" && " (洞主)"}
-                </Text>
+                <HStack>
+                  <ThemeAvatar
+                    theme={theme}
+                    seed={seed}
+                    id={parseInt(floor.Replytoname)}
+                    showIsPoster
+                    floorId={floor.Replytofloor}
+                  />
+                </HStack>
                 {allowExpand && !stackedFloor && (
                   <Button
+                    ml="2"
                     size="xs"
                     variant="ghost"
                     colorScheme="teal"

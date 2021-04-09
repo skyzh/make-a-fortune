@@ -24,6 +24,7 @@ import {
   ReplyFill,
 } from "~/src/components/utils/Icons"
 import { generateName } from "~/src/name_theme"
+import { useFortuneLayoutSettings } from "~src/settings"
 import { handleError } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
 
@@ -39,20 +40,43 @@ interface FloorComponentProps {
   requestFloor?: Function
 }
 
-export function FloorSkeleton() {
+export function FloorSkeleton({ showControl }) {
+  const layoutSettings = useFortuneLayoutSettings()
+
   return (
     <Flex width="100%">
-      <Box flex="1" p={5} shadow="sm" borderWidth="1px" borderRadius="md">
-        <Stack spacing="3">
+      <Box
+        flex="1"
+        p={layoutSettings.cardMargin}
+        shadow="sm"
+        borderWidth="1px"
+        borderRadius="md"
+      >
+        <Stack spacing={layoutSettings.cardSpacing}>
           <Skeleton height="1rem" />
           <SkeletonText spacing="4" />
         </Stack>
       </Box>
-      <Box size="80px" p="3" display={{ base: "none", sm: "unset" }}>
-        <Stack color="teal.500" width="80px">
+      <Box
+        size="80px"
+        p={layoutSettings.controlMargin}
+        display={{ base: "none", sm: "unset" }}
+      >
+        <Stack
+          color="teal.500"
+          width="80px"
+          spacing={layoutSettings.controlSpacing}
+        >
           <Text fontSize="sm">
             <HandThumbsUpFill />
           </Text>
+          {showControl && (
+            <>
+              <Skeleton height="6" />
+              <Skeleton height="6" />
+              <Skeleton height="6" />
+            </>
+          )}
         </Stack>
       </Box>
     </Flex>
@@ -98,11 +122,16 @@ export function FloorComponent({
         <Flag /> &nbsp; 举报
       </>
     ),
+    confirmComponent: <>确认举报</>,
+    confirm: true,
   })
 
   const [stackedFloor, setStackedFloor] = useState(null)
   const [isExpanding, setIsExpanding] = useState(false)
+
   const toast = useToast()
+
+  const layoutSettings = useFortuneLayoutSettings()
 
   const doExpand = () => {
     setIsExpanding(true)
@@ -126,8 +155,14 @@ export function FloorComponent({
 
   return (
     <Flex width="100%">
-      <Box flex="1" p={5} shadow="sm" borderWidth="1px" borderRadius="md">
-        <Stack spacing="3">
+      <Box
+        flex="1"
+        p={layoutSettings.cardMargin}
+        shadow="sm"
+        borderWidth="1px"
+        borderRadius="md"
+      >
+        <Stack spacing={layoutSettings.cardSpacing}>
           {stackedFloor && allowExpand && (
             <FloorComponent
               floor={stackedFloor}
@@ -201,8 +236,17 @@ export function FloorComponent({
         )}
       </Box>
       {showControl && (
-        <Box size="80px" p="3" display={{ base: "none", sm: "unset" }}>
-          <Stack color="teal.500" width="80px">
+        <Box
+          size="80px"
+          p={layoutSettings.controlMargin}
+          display={{ base: "none", sm: "unset" }}
+          height="100%"
+        >
+          <Stack
+            color="teal.500"
+            width="80px"
+            spacing={layoutSettings.controlSpacing}
+          >
             {likeTextControl}
             {likeButtonControl}
             {reportControl}

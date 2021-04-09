@@ -9,7 +9,7 @@ function NoMore() {
           没有更多帖子了。
         </Text>
       </Center>
-      <Box size="80px" p="3">
+      <Box size="80px" p="3" display={{ base: "none", sm: "unset" }}>
         <Box width="80px" />
       </Box>
     </Flex>

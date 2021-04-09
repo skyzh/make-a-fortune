@@ -95,7 +95,7 @@ export function FloorListComponent({
                 if (inView) moreEntries()
               }}
             >
-              <FloorSkeleton />
+              <FloorSkeleton showControl />
             </InView>
           ) : (
             <NoMore />
@@ -104,7 +104,7 @@ export function FloorListComponent({
       ) : (
         range(10).map((key) => (
           <Box key={key}>
-            <FloorSkeleton />
+            <FloorSkeleton showControl />
           </Box>
         ))
       )}

@@ -1,7 +1,16 @@
-import { Box, Button, Heading, Stack, Text, useToast } from "@chakra-ui/react"
+import {
+  Box,
+  Button,
+  Heading,
+  Radio,
+  RadioGroup,
+  Stack,
+  Text,
+  useToast,
+} from "@chakra-ui/react"
 import React, { useState } from "react"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
-import { FortuneSettings, useFortuneSettings } from "~/src/settings"
+import { useFortuneSettings } from "~/src/settings"
 import KeywordBlock from "./KeywordBlock"
 
 function useSetArray(defaultValue) {
@@ -20,19 +29,30 @@ function useSetArray(defaultValue) {
   return [Array.from(content), appendValue, deleteValue]
 }
 
-function Settings() {
-  const [
-    persistSetting,
-    setPersistSetting,
-  ] = useFortuneSettings<FortuneSettings>({})
-  const [keywords, addKeyword, deleteKeyword] = useSetArray(
-    persistSetting.blockedKeywords || []
+function LayoutSettings({ layout, setLayout }) {
+  return (
+    <RadioGroup value={layout} onChange={setLayout}>
+      <Stack spacing={3}>
+        <Radio value="compact">紧凑</Radio>
+        <Radio value="comfortable">舒适</Radio>
+      </Stack>
+    </RadioGroup>
   )
+}
+
+function Settings() {
+  const [persistSetting, setPersistSetting] = useFortuneSettings()
+
+  const [keywords, addKeyword, deleteKeyword] = useSetArray(
+    persistSetting.blockedKeywords
+  )
+  const [layout, setLayout] = useState(persistSetting.layout)
   const toast = useToast()
 
   const saveSettings = () => {
     setPersistSetting({
       blockedKeywords: keywords,
+      layout,
     })
     toast({
       title: "设置已保存",
@@ -45,7 +65,7 @@ function Settings() {
   return (
     <ScrollableContainer>
       <Box p={5} shadow="md" borderWidth="1px" width="100%">
-        <Stack spacing="3">
+        <Stack spacing="10">
           <Heading fontSize="xl" mb="5">
             设置
           </Heading>
@@ -61,16 +81,24 @@ function Settings() {
           </Box>
           <Box>
             <Heading fontSize="lg" mb="5">
+              布局
+            </Heading>
+            <LayoutSettings layout={layout} setLayout={setLayout} />
+          </Box>
+          <Box>
+            <Heading fontSize="lg" mb="5">
               通知
             </Heading>
             <Box my="1">敬请期待</Box>
           </Box>
-          <Button colorScheme="blue" isFullWidth onClick={saveSettings}>
-            保存
-          </Button>
-          <Text fontSize="sm" color="gray.500">
-            「闷声发财」的设置存储在您的浏览器中。当您切换浏览器或设备时，需要重新进行设置。
-          </Text>
+          <Box>
+            <Text fontSize="sm" color="gray.500" mb="3">
+              「闷声发财」的设置存储在您的浏览器中。当您切换浏览器或设备时，需要重新进行设置。
+            </Text>
+            <Button colorScheme="blue" isFullWidth onClick={saveSettings}>
+              保存
+            </Button>
+          </Box>
         </Stack>
       </Box>
     </ScrollableContainer>

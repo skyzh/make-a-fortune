@@ -1,31 +1,17 @@
-import React from "react"
-import { useState, useEffect } from "react"
-import Logo from "../widgets/Logo"
-
 import {
-  Stack,
   Box,
-  Heading,
-  Text,
-  HStack,
   Button,
-  Divider,
-  useDisclosure,
   Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
   DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  useDisclosure,
 } from "@chakra-ui/react"
-import { Route, NavLink } from "react-router-dom"
-import { useRPCState, useTokenState } from "~/src/settings"
-import { Client } from "~/src/client"
-import {
-  ArrowRightShort,
-  ArrowRightCircleFill,
-} from "~/src/components/utils/Icons"
+import React from "react"
 import Navbar from "~src/components/elements/Navbar"
+import Logo from "../widgets/Logo"
 
 const PhoneNavbar: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()

@@ -1,21 +1,19 @@
-import React from "react"
-import { useState } from "react"
-
 import {
   Button,
-  Modal,
-  ModalOverlay,
-  ModalBody,
-  ModalFooter,
-  ModalContent,
-  ModalHeader,
   HStack,
-  Stack,
-  Textarea,
-  Text,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spacer,
+  Stack,
+  Text,
+  Textarea,
 } from "@chakra-ui/react"
-import { sumBy, flow } from "lodash"
+import { flow, sumBy } from "lodash"
+import React, { useState } from "react"
 
 function ReplyModal({ isOpen, toFloor, onCancel, doReply, isLoading }) {
   const [replyContent, setReplyContent] = useState("")

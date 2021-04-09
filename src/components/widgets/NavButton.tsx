@@ -1,6 +1,6 @@
-import React from "react"
 import { Button } from "@chakra-ui/react"
-import { Route, NavLink } from "react-router-dom"
+import React from "react"
+import { NavLink, Route } from "react-router-dom"
 import {
   ArrowRightCircleFill,
   ArrowRightShort,

@@ -1,28 +1,27 @@
-import React from "react"
-
 import {
-  Stack,
-  HStack,
+  Badge,
   Box,
-  Text,
   Button,
   Flex,
-  Spacer,
-  Badge,
+  HStack,
   Skeleton,
   SkeletonText,
+  Spacer,
+  Stack,
+  Text,
 } from "@chakra-ui/react"
+import * as moment from "moment"
+import React from "react"
 import { Floor, useClient } from "~/src/client"
+import useLikeControl from "~/src/components/controls/LikeControl"
 import {
-  HandThumbsUpFill,
   ArrowRight,
   Flag,
-  ReplyFill,
   FlagFill,
+  HandThumbsUpFill,
+  ReplyFill,
 } from "~/src/components/utils/Icons"
-import * as moment from "moment"
 import { generateName } from "~/src/name_theme"
-import useLikeControl from "~/src/components/controls/LikeControl"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
 
 interface FloorComponentProps {

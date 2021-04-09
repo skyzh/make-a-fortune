@@ -1,9 +1,9 @@
+import { Box, Button, Collapse } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
-import { Button, Box, Collapse } from "@chakra-ui/react"
-import { ArrowDownShort, ArrowRightShort } from "~/src/components/utils/Icons"
-import NavButton from "~src/components/widgets/NavButton"
-import { PostCategory } from "~src/client"
 import { useLocation } from "react-router-dom"
+import { ArrowDownShort, ArrowRightShort } from "~/src/components/utils/Icons"
+import { PostCategory } from "~src/client"
+import NavButton from "~src/components/widgets/NavButton"
 
 const categories = [
   {

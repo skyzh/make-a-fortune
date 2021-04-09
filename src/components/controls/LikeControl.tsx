@@ -1,7 +1,5 @@
-import React from "react"
-import { useState } from "react"
-
-import { Text, Button, ButtonGroup, Box, useToast } from "@chakra-ui/react"
+import { Button, ButtonGroup, Text, useToast } from "@chakra-ui/react"
+import React, { useState } from "react"
 import {
   HandThumbsDown,
   HandThumbsDownFill,

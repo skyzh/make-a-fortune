@@ -1,21 +1,19 @@
-import React from "react"
-import { useState, useEffect } from "react"
-import Logo from "../widgets/Logo"
-
 import {
-  Stack,
   Box,
-  Heading,
-  Text,
-  HStack,
   Divider,
+  Heading,
+  HStack,
+  Stack,
+  Text,
   useToast,
 } from "@chakra-ui/react"
-import { useRPCState, useTokenState } from "~/src/settings"
+import React, { useEffect, useState } from "react"
 import { Client } from "~/src/client"
 import { ArrowRightShort } from "~/src/components/utils/Icons"
+import { useRPCState, useTokenState } from "~/src/settings"
 import CategoryNavigation from "~src/components/widgets/CategoryNavigation"
 import NavButton from "~src/components/widgets/NavButton"
+import Logo from "../widgets/Logo"
 
 const Navbar: React.FC = ({ onClose }) => {
   const [rpc, _setRpc] = useRPCState()

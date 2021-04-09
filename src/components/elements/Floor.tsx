@@ -23,6 +23,7 @@ import {
 } from "~/src/components/utils/Icons"
 import { generateName } from "~/src/name_theme"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
+import { Content } from "./Content"
 
 interface FloorComponentProps {
   floor: Floor
@@ -120,13 +121,7 @@ export function FloorComponent({
             <Spacer />
             <Text fontSize="sm">{moment(floor.RTime).calendar()}</Text>
           </Flex>
-          <Box>
-            {floor.Context.split("\n").map((line, index) => (
-              <Text mt={0} wordBreak="break-word" key={index}>
-                {line}
-              </Text>
-            ))}
-          </Box>
+          <Content content={floor.Context} />
         </Stack>
 
         {showControl && (

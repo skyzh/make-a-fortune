@@ -7,9 +7,7 @@ import {
   HStack,
   Skeleton,
   SkeletonText,
-  Collapse,
   useBoolean,
-  IconButton,
   Spacer,
   Stack,
   Text,
@@ -27,10 +25,9 @@ import {
   ReplyFill,
   Star,
   StarFill,
-  ArrowDown,
-  ArrowUp,
 } from "~/src/components/utils/Icons"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
+import { CollapseContent, Content } from "./Content"
 
 interface ThreadComponentProps {
   thread: Thread
@@ -132,14 +129,12 @@ export function ThreadComponent({
 
   const [collapsed, setCollapsed] = useBoolean(true)
 
-  const content = thread.Summary.split("\n").map((line, index) => (
-    <Text mt={0} wordBreak="break-word" key={index}>
-      {line}
-    </Text>
-  ))
-
   return (
-    <Flex width="100%">
+    <Flex
+      width="100%"
+      onMouseOver={setCollapsed.off}
+      onMouseOut={setCollapsed.on}
+    >
       <Box flex="1" p={5} shadow="sm" borderWidth="1px" borderRadius="md">
         <Stack spacing="3">
           <Flex>
@@ -162,26 +157,9 @@ export function ThreadComponent({
           </Flex>
           <Heading fontSize="md">{thread.Title}</Heading>
           {showControl ? (
-            <Box>{content}</Box>
+            <Content content={thread.Summary} />
           ) : (
-            <Flex>
-              <Collapse startingHeight={48} in={!collapsed}>
-                {content}
-              </Collapse>
-              <Spacer />
-              <Box alignSelf="flex-end">
-                <IconButton
-                  aria-label="toggle collapsed"
-                  size="sm"
-                  variant="ghost"
-                  icon={collapsed ? <ArrowDown /> : <ArrowUp />}
-                  onClick={(e: Event) => {
-                    setCollapsed.toggle()
-                    e.stopPropagation()
-                  }}
-                />
-              </Box>
-            </Flex>
+            <CollapseContent content={thread.Summary} collapsed={collapsed} />
           )}
 
           <Box display={{ base: "block", sm: "none" }}>

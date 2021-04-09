@@ -1,5 +1,5 @@
+import { Box, Collapse, Flex, Text } from "@chakra-ui/react"
 import React from "react"
-import { Box, Text, Flex, Collapse } from "@chakra-ui/react"
 
 export function Content({ content }: { content: string }) {
   return (

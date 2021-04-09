@@ -22,6 +22,10 @@
       "dest": "$1.woff2"
     },
     {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
       "src": ".*",
       "dest": "/index.html"
     }

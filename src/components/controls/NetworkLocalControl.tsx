@@ -10,6 +10,8 @@ interface NetworkLocalControlProps {
   failedText: string
   doneComponent: any
   initialComponent: any
+  confirm?: boolean
+  confirmComponent?: any
 }
 
 export default function useNetworkLocalControl({
@@ -19,14 +21,26 @@ export default function useNetworkLocalControl({
   failedText,
   doneComponent,
   initialComponent,
+  confirmComponent,
+  confirm,
 }: NetworkLocalControlProps) {
   const [whetherAction, setWhetherAction] = useState<boolean>(null)
   const whetherActionCombined =
     whetherAction === null ? clientState : whetherAction
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false)
   const toast = useToast()
+  const [isConfirming, setIsConfirming] = useState<boolean>(false)
 
   const toggleState = async () => {
+    if (confirm) {
+      if (!isConfirming) {
+        setIsConfirming(true)
+        setTimeout(() => setIsConfirming(false), 5000)
+        return
+      } else {
+        setIsConfirming(false)
+      }
+    }
     setIsActionLoading(true)
     try {
       if (whetherActionCombined) {
@@ -51,7 +65,11 @@ export default function useNetworkLocalControl({
       isLoading={isActionLoading}
       isDisabled={cancelAction == null && whetherActionCombined}
     >
-      {whetherActionCombined ? doneComponent : initialComponent}
+      {isConfirming
+        ? confirmComponent
+        : whetherActionCombined
+        ? doneComponent
+        : initialComponent}
     </Button>
   )
 }

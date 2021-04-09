@@ -17,7 +17,7 @@ export class ActionError extends Error {
   constructor(message: string) {
     super(message)
     // Set the prototype explicitly.
-    Object.setPrototypeOf(this, BannedError.prototype)
+    Object.setPrototypeOf(this, ActionError.prototype)
   }
 }
 
@@ -62,6 +62,9 @@ export class Client {
     }
     if (requiredField && response["requiredField"] != 1) {
       throw new ActionError(`${requiredField} 失败`)
+    }
+    if (response.ExistFlag === "0") {
+      throw new ActionError(`帖子已被屏蔽`)
     }
     return response
   }
@@ -313,6 +316,16 @@ export class Client {
       )
     )
   }
+
+  async verifyToken(token?: string) {
+    return (await this.sendRequest(
+      this.serialize(
+        token
+          ? new SerializeObject("-1").provideToken(token)
+          : new SerializeObject("-1")
+      )
+    )) as VerifyTokenResponse
+  }
 }
 
 class RPCVersion {
@@ -441,9 +454,13 @@ export class Thread {
   RandomSeed: number
   WhetherTop: number
   Tag: string
+  // only available in `this_thread` of post details
   WhetherFavour?: number
   WhetherLike?: number
   WhetherReport?: number
+  // only available in notifications
+  Judge?: number
+  Type?: number
 }
 
 export class FetchPostResponse {
@@ -510,6 +527,10 @@ export class ReplyPostRequest {
 export class SearchRequest {
   keyword: string
   lastSeen?: string
+}
+
+export class VerifyTokenResponse {
+  login_flag: string
 }
 
 export function useClient() {

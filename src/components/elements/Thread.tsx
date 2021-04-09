@@ -26,6 +26,8 @@ import {
   Star,
   StarFill,
 } from "~/src/components/utils/Icons"
+import { useFortuneLayoutSettings } from "~src/settings"
+import { parseThreadNotification } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
 import { CollapseContent, Content } from "./Content"
 
@@ -35,6 +37,7 @@ interface ThreadComponentProps {
   showPostTime?: boolean
   showControl?: boolean
   onReply: Function
+  isMessage?: boolean
 }
 
 interface ThreadSkeletonProps {
@@ -42,17 +45,33 @@ interface ThreadSkeletonProps {
 }
 
 export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
+  const layoutSettings = useFortuneLayoutSettings()
+
   return (
     <Flex width="100%">
-      <Box flex="1" p={5} shadow="sm" borderWidth="1px" borderRadius="md">
-        <Stack spacing="3">
+      <Box
+        flex="1"
+        p={layoutSettings.cardMargin}
+        shadow="sm"
+        borderWidth="1px"
+        borderRadius="md"
+      >
+        <Stack spacing={layoutSettings.cardSpacing}>
           <Skeleton height="3" />
           <Skeleton height="8" />
           <SkeletonText spacing="3" noOfLines="4" />
         </Stack>
       </Box>
-      <Box size="80px" p="3" display={{ base: "none", sm: "unset" }}>
-        <Stack color="teal.500" width="80px">
+      <Box
+        size="80px"
+        p={layoutSettings.controlMargin}
+        display={{ base: "none", sm: "unset" }}
+      >
+        <Stack
+          color="teal.500"
+          width="80px"
+          spacing={layoutSettings.controlSpacing}
+        >
           <Text fontSize="sm">
             <HandThumbsUpFill />
           </Text>
@@ -81,6 +100,7 @@ export function ThreadComponent({
   showPostTime,
   showControl,
   onReply,
+  isMessage,
 }: ThreadComponentProps) {
   const client = useClient()
 
@@ -125,18 +145,24 @@ export function ThreadComponent({
         <Flag /> &nbsp; 举报
       </>
     ),
+    confirmComponent: <>确认举报</>,
+    confirm: true,
   })
 
   const [collapsed, setCollapsed] = useBoolean(true)
 
+  const layoutSettings = useFortuneLayoutSettings()
+
   return (
-    <Flex
-      width="100%"
-      onMouseOver={setCollapsed.off}
-      onMouseOut={setCollapsed.on}
-    >
-      <Box flex="1" p={5} shadow="sm" borderWidth="1px" borderRadius="md">
-        <Stack spacing="3">
+    <Flex width="100%">
+      <Box
+        flex="1"
+        p={layoutSettings.cardMargin}
+        shadow="sm"
+        borderWidth="1px"
+        borderRadius="md"
+      >
+        <Stack spacing={layoutSettings.cardSpacing}>
           <Flex>
             <Text fontSize="sm">
               <Badge colorScheme="gray"># {thread.ThreadID}</Badge>
@@ -149,11 +175,20 @@ export function ThreadComponent({
               )}
             </Text>
             <Spacer />
-            <Text fontSize="sm">
+            <Text fontSize="sm" color="gray.500">
               {moment(
                 showPostTime ? thread.PostTime : thread.LastUpdateTime
               ).calendar()}
             </Text>
+            {isMessage && (
+              <Text
+                fontSize="sm"
+                ml="2"
+                color={thread.Judge === 0 ? "teal.500" : "gray.500"}
+              >
+                · {parseThreadNotification(thread)}
+              </Text>
+            )}
           </Flex>
           <Heading fontSize="md">{thread.Title}</Heading>
           {showControl ? (
@@ -197,8 +232,16 @@ export function ThreadComponent({
           </Box>
         </Stack>
       </Box>
-      <Box size="80px" p="3" display={{ base: "none", sm: "unset" }}>
-        <Stack color="teal.500" width="80px">
+      <Box
+        size="80px"
+        p={layoutSettings.controlMargin}
+        display={{ base: "none", sm: "unset" }}
+      >
+        <Stack
+          color="teal.500"
+          width="80px"
+          spacing={layoutSettings.controlSpacing}
+        >
           {likeTextControl}
           <Text fontSize="sm">
             <ChatSquareText /> {thread.Comment}

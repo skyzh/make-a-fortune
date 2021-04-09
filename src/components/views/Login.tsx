@@ -5,11 +5,13 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  HStack,
   Input,
   InputGroup,
   InputRightElement,
   Radio,
   RadioGroup,
+  Spinner,
   Stack,
   Tab,
   TabList,
@@ -20,6 +22,7 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react"
+import * as moment from "moment"
 import React, { useState } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { Client } from "~/src/client"
@@ -31,11 +34,13 @@ import { ArrowRightShort } from "../utils/Icons"
 function RpcSettings({ rpc, setRpc }) {
   const [connectionLoading, setConnectionLoading] = useState(false)
   const [backend, setBackend] = useState(null)
+  const [latency, setLatency] = useState(null)
   const toast = useToast()
 
   const checkConnection = () => {
     setConnectionLoading(true)
     const client = new Client(rpc)
+
     client
       .version()
       .then((backend) => {
@@ -48,6 +53,15 @@ function RpcSettings({ rpc, setRpc }) {
           return
         }
         setBackend(backend)
+        setLatency(null)
+        return (async () => {
+          const now = moment()
+          await client.verifyToken()
+          return moment().diff(now, "milliseconds")
+        })()
+      })
+      .then((latency) => {
+        setLatency(latency)
       })
       .catch((err) => handleError(toast, "无法连接到 RPC 服务器", err))
       .finally(() => setConnectionLoading(false))
@@ -69,11 +83,40 @@ function RpcSettings({ rpc, setRpc }) {
         <RadioGroup onChange={doSetRpc} value={rpc}>
           <Stack>
             <Radio value="https://fortune.skyzh.dev/">
-              https://fortune.skyzh.dev/
+              <HStack spacing={1}>
+                <Text>fortune.skyzh.dev</Text>
+                <Text color="gray.500">(Powered by VM)</Text>
+              </HStack>
             </Radio>
-            <Radio value="/">本地开发服务器</Radio>
+            <Radio value="https://make-a-fortune.vercel.app">
+              <HStack spacing={1}>
+                <Text>make-a-fortune.vercel.app</Text>
+                <Text color="gray.500">(Powered by Vercel Function)</Text>
+              </HStack>
+            </Radio>
+            <Radio value="http://localhost:8080">
+              <HStack spacing={1}>
+                <Text>本地 RPC 服务器</Text>
+                <Text color="gray.500">[*1]</Text>
+              </HStack>
+            </Radio>
+            <Radio value="/">
+              <HStack spacing={1}>
+                <Text>本地开发服务器</Text>
+                <Text color="gray.500">[*2]</Text>
+              </HStack>
+            </Radio>
           </Stack>
         </RadioGroup>
+        <Box my="3">
+          <Text color="gray.500" fontSize="sm">
+            [*1] 若使用本地 RPC 服务器，您需要使用 HTTP 协议打开前端。Vercel
+            默认不支持 HTTP 访问。
+          </Text>
+          <Text color="gray.500" fontSize="sm">
+            [*2] 如果您正在使用 yarn / parcel 进行开发，请选择此选项。
+          </Text>
+        </Box>
         <Input
           mt={3}
           value={rpc}
@@ -94,8 +137,10 @@ function RpcSettings({ rpc, setRpc }) {
       </Button>
       {backend && (
         <Stack spacing={1}>
+          <Text color="gray.500">RPC 后端：{backend?.name}</Text>
+          <Text color="gray.500">上游地址：{backend?.addr}</Text>
           <Text color="gray.500">
-            {backend?.name} @ {backend?.addr}
+            延迟：{latency || <Spinner size="xs" />} ms
           </Text>
           <Text color="blue.500">
             <a href={backend?.terms_of_service}>
@@ -198,26 +243,42 @@ function Login() {
   }
 
   const setTokenSetting = () => {
-    setPersistToken(token.trim())
-    setToken(token.trim())
-    setPersistRPC(rpc)
-    toast({
-      title: "设置成功",
-      description: "即将刷新网页",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    })
-    setTimeout(() => (window.location.href = "/"), 2000)
+    setLoginSent(true)
+    client
+      .verifyToken(token.trim())
+      .then((result) => {
+        if (result.login_flag === "1" || result.login_flag === "-1") {
+          setPersistToken(token.trim())
+          setToken(token.trim())
+          setPersistRPC(rpc)
+          toast({
+            title: "设置成功",
+            description: "即将刷新网页",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          })
+          setTimeout(() => (window.location.href = "/"), 2000)
+        } else if (result.login_flag === "0") {
+          toast({
+            title: "无法登录",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          })
+        }
+      })
+      .catch((err) => handleError(toast, "无法登录", err))
+      .finally(() => setLoginSent(false))
   }
 
   return (
     <ScrollableContainer>
-      <Stack spacing="3">
-        <Box p={5} shadow="md" borderWidth="1px" width="100%">
+      <Stack spacing="3" width="100%">
+        <Box p={5} shadow="md" borderWidth="1px">
           <RpcSettings rpc={rpc} setRpc={setRpc} />
         </Box>
-        <Box p={5} shadow="md" borderWidth="1px" width="100%">
+        <Box p={5} shadow="md" borderWidth="1px">
           <Heading fontSize="xl" mb="5">
             登录
           </Heading>
@@ -280,9 +341,16 @@ function Login() {
                     <Textarea
                       value={token}
                       onChange={(event) => setToken(event.target.value)}
+                      rows={5}
+                      onFocus={(e) => e.target.select()}
                     />
                   </FormControl>
-                  <Button mt={4} colorScheme="blue" onClick={setTokenSetting}>
+                  <Button
+                    mt={4}
+                    colorScheme="blue"
+                    onClick={setTokenSetting}
+                    isLoading={loginSent}
+                  >
                     更新 Token
                   </Button>
                 </Stack>

@@ -16,18 +16,20 @@ export function Content({ content }: { content: string }) {
 export function CollapseContent({
   content,
   collapsed,
-  minLines = 2,
-  maxLines = 4,
+  minLines = "auto",
+  maxLines = "auto",
 }: {
   content: string
   collapsed: boolean
-  minLines?: number
-  maxLines?: number
+  minLines?: number | "auto"
+  maxLines?: number | "min" | "auto"
 }) {
-  maxLines = maxLines ?? minLines;
+  const minHeight = (minLines == "auto" ? 2 : minLines) * 24 + 2
+  const maxHeight =
+    maxLines == "min" ? minHeight : (maxLines == "auto" ? 4 : maxLines) * 24 + 2
 
   return (
-    <Flex minHeight={`${minLines * 25}px`} maxHeight={`${maxLines * 25}px`}>
+    <Flex minHeight={`${minHeight}px`} maxHeight={`${maxHeight}px`}>
       <Collapse startingHeight={50} in={!collapsed} animateOpacity={false}>
         <Content content={content} />
       </Collapse>

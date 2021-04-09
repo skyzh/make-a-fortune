@@ -212,7 +212,7 @@ export function ThreadComponent({
               content={thread.Summary}
               collapsed={collapsed}
               maxLines={
-                layoutSettings.style === LayoutStyle.compact ? null : undefined
+                layoutSettings.style === LayoutStyle.compact ? "min" : "auto"
               }
             />
           )}

@@ -5,6 +5,7 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  HStack,
   Input,
   InputGroup,
   InputRightElement,
@@ -82,11 +83,40 @@ function RpcSettings({ rpc, setRpc }) {
         <RadioGroup onChange={doSetRpc} value={rpc}>
           <Stack>
             <Radio value="https://fortune.skyzh.dev/">
-              https://fortune.skyzh.dev/
+              <HStack spacing={1}>
+                <Text>fortune.skyzh.dev</Text>
+                <Text color="gray.500">(Powered by VM)</Text>
+              </HStack>
             </Radio>
-            <Radio value="/">本地开发服务器</Radio>
+            <Radio value="https://make-a-fortune.vercel.app">
+              <HStack spacing={1}>
+                <Text>make-a-fortune.vercel.app</Text>
+                <Text color="gray.500">(Powered by Vercel Function)</Text>
+              </HStack>
+            </Radio>
+            <Radio value="http://localhost:8080">
+              <HStack spacing={1}>
+                <Text>本地 RPC 服务器</Text>
+                <Text color="gray.500">[*1]</Text>
+              </HStack>
+            </Radio>
+            <Radio value="/">
+              <HStack spacing={1}>
+                <Text>本地开发服务器</Text>
+                <Text color="gray.500">[*2]</Text>
+              </HStack>
+            </Radio>
           </Stack>
         </RadioGroup>
+        <Box my="3">
+          <Text color="gray.500" fontSize="sm">
+            [*1] 若使用本地 RPC 服务器，您需要使用 HTTP 协议打开前端。Vercel
+            默认不支持 HTTP 访问。
+          </Text>
+          <Text color="gray.500" fontSize="sm">
+            [*2] 如果您正在使用 yarn / parcel 进行开发，请选择此选项。
+          </Text>
+        </Box>
         <Input
           mt={3}
           value={rpc}

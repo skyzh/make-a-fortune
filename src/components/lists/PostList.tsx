@@ -165,10 +165,10 @@ export function PostListTrend() {
 }
 
 export function PostListCategory() {
-  let { categoryId } = useParams()
+  const { categoryId } = useParams()
 
   return (
-    <ScrollableContainer>
+    <ScrollableContainer key={categoryId}>
       <PostListComponent
         lastSeenField="LastSeenThreadID"
         postCategory={categoryId}

@@ -104,12 +104,15 @@ export function generateName(theme: string, seed: number, id: number) {
   switch (theme) {
     case "abc": {
       mapping = ALICE_AND_BOB
+      break
     }
     case "us_president": {
       mapping = US_PRESIDENT
+      break
     }
     case "tarot": {
       mapping = TAROT
+      break
     }
   }
   if (seed != 0) {

@@ -6,7 +6,7 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react"
-import { concat, range } from "lodash"
+import { concat, find, range } from "lodash"
 import React, { useEffect, useState } from "react"
 import { InView } from "react-intersection-observer"
 import { useParams } from "react-router-dom"
@@ -30,6 +30,7 @@ interface FloorListComponentProps {
   orderBy: any
   onReply: Function
   onPostReply: Function
+  requestFloor?: Function
 }
 
 export function OrderBy({ value, setValue }) {
@@ -53,6 +54,7 @@ export function FloorListComponent({
   orderBy,
   onReply,
   onPostReply,
+  requestFloor,
 }: FloorListComponentProps) {
   return (
     <Stack spacing={3} width="100%" mb="3">
@@ -79,6 +81,8 @@ export function FloorListComponent({
                 threadId={thread.ThreadID}
                 onReply={onReply}
                 showControl
+                allowExpand
+                requestFloor={requestFloor}
               />
             </Box>
           ))}
@@ -118,24 +122,55 @@ export function ThreadListComponent() {
   const toast = useToast()
   const [orderBy, setOrderBy] = useState("0")
 
-  function doFetch(lastSeen, previousFloors, orderBy) {
-    async function fetch() {
-      const result = await client.fetchReply({
-        postId: postId,
-        order: orderBy,
-        lastSeen: lastSeen,
-      })
-      setThread(result.this_thread)
-      setLastSeen(result.LastSeenFloorID)
-      setFloors(
-        previousFloors
-          ? concat(previousFloors, result.floor_list)
-          : result.floor_list
-      )
-      setHasMore(result.floor_list.length !== 0)
-    }
+  async function fetchContent(lastSeen, previousFloors, orderBy) {
+    const result = await client.fetchReply({
+      postId: postId,
+      order: orderBy,
+      lastSeen: lastSeen,
+    })
+    const newFloors = previousFloors
+      ? concat(previousFloors, result.floor_list)
+      : result.floor_list
+    const newLastSeen = result.LastSeenFloorID
+    const hasMore = result.floor_list.length !== 0
+    setThread(result.this_thread)
+    setLastSeen(newLastSeen)
+    setFloors(newFloors)
+    setHasMore(hasMore)
+    return { newFloors, newLastSeen, hasMore }
+  }
 
-    fetch()
+  async function requestFloor(requestId) {
+    let currentLastSeen = lastSeen
+    let currentFloors = floors
+    if (!hasMore) {
+      return null
+    }
+    while (true) {
+      const floor = find(
+        currentFloors,
+        (floor: Floor) => floor.FloorID === requestId
+      )
+      if (floor) {
+        return floor
+      } else {
+        const { newFloors, newLastSeen, hasMore } = await fetchContent(
+          currentLastSeen,
+          currentFloors,
+          orderBy
+        )
+        currentFloors = newFloors
+        currentLastSeen = newLastSeen
+        if (!hasMore) {
+          break
+        }
+      }
+    }
+    return null
+  }
+
+  function doFetch(lastSeen, previousFloors, orderBy) {
+    fetchContent(lastSeen, previousFloors, orderBy)
       .then()
       .catch((err) => handleError(toast, "无法获取发帖信息", err))
   }
@@ -229,6 +264,7 @@ export function ThreadListComponent() {
         orderBy={orderByComponent}
         onReply={onReply}
         onPostReply={onPostReply}
+        requestFloor={requestFloor}
       />
     </ScrollableContainer>
   )

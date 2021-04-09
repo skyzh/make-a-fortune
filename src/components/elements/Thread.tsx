@@ -26,7 +26,7 @@ import {
   Star,
   StarFill,
 } from "~/src/components/utils/Icons"
-import { useFortuneLayoutSettings } from "~src/settings"
+import { LayoutStyle, useFortuneLayoutSettings } from "~src/settings"
 import { parseThreadNotification } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
 import { CollapseContent, Content } from "./Content"
@@ -198,7 +198,13 @@ export function ThreadComponent({
           {showControl ? (
             <Content content={thread.Summary} />
           ) : (
-            <CollapseContent content={thread.Summary} collapsed={collapsed} />
+            <CollapseContent
+              content={thread.Summary}
+              collapsed={collapsed}
+              maxLines={
+                layoutSettings.style === LayoutStyle.compact ? null : undefined
+              }
+            />
           )}
 
           <Box display={{ base: "block", sm: "none" }}>

@@ -24,6 +24,8 @@ export function CollapseContent({
   minLines?: number
   maxLines?: number
 }) {
+  maxLines = maxLines ?? minLines;
+
   return (
     <Flex minHeight={`${minLines * 25}px`} maxHeight={`${maxLines * 25}px`}>
       <Collapse startingHeight={50} in={!collapsed} animateOpacity={false}>

@@ -280,6 +280,8 @@ function Login() {
                     <Textarea
                       value={token}
                       onChange={(event) => setToken(event.target.value)}
+                      rows={5}
+                      onFocus={(e) => e.target.select()}
                     />
                   </FormControl>
                   <Button mt={4} colorScheme="blue" onClick={setTokenSetting}>

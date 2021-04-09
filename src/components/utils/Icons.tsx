@@ -95,3 +95,11 @@ export function X() {
 export function ArrowsExpand() {
   return <i className="bi bi-arrows-expand"></i>
 }
+
+export function MoonFill() {
+  return <i className="bi bi-moon-fill" />
+}
+
+export function SunFill() {
+  return <i className="bi bi-sun-fill" />
+}

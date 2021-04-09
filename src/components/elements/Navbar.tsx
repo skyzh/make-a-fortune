@@ -3,6 +3,7 @@ import {
   Divider,
   Heading,
   HStack,
+  Spacer,
   Stack,
   Text,
   useToast,
@@ -13,6 +14,7 @@ import { ArrowRightShort } from "~/src/components/utils/Icons"
 import { useRPCState, useTokenState } from "~/src/settings"
 import { getRpcDisplayName } from "~src/utils"
 import CategoryNavigation from "../widgets/CategoryNavigation"
+import { ColorModeButton } from "../widgets/ColorModeButton"
 import Logo from "../widgets/Logo"
 import NavButton from "../widgets/NavButton"
 
@@ -51,6 +53,8 @@ const Navbar: React.FC = ({ onClose }) => {
       <HStack mb="3">
         <Logo />
         <Heading fontSize="lg">闷声发财</Heading>
+        <Spacer />
+        <ColorModeButton />
       </HStack>
 
       <NB exact to="/">

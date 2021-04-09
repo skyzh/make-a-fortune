@@ -18,7 +18,6 @@ import Settings from "./components/views/Settings"
 
 function App() {
   const navBgColor = useColorModeValue("gray.50", "gray.900")
-  console.log({ navBgColor })
 
   return (
     <Router>

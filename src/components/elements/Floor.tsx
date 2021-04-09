@@ -212,7 +212,9 @@ export function FloorComponent({
               </>
             )}
             <Spacer />
-            <Text fontSize="sm" color="gray.500">{moment(floor.RTime).calendar()}</Text>
+            <Text fontSize="sm" color="gray.500">
+              {moment(floor.RTime).calendar()}
+            </Text>
           </Flex>
           <Text mt={4} wordBreak="break-word">
             {floor.Context}

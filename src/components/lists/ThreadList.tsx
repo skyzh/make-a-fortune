@@ -20,7 +20,7 @@ import {
 } from "~/src/components/elements/Thread"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import GoBack from "~/src/components/widgets/GoBack"
-import { handleError } from "~/src/utils"
+import { handleError, sleep } from "~/src/utils"
 
 interface FloorListComponentProps {
   thread?: Thread
@@ -137,7 +137,7 @@ export function ThreadListComponent() {
     setLastSeen(newLastSeen)
     setFloors(newFloors)
     setHasMore(hasMore)
-    return { newFloors, newLastSeen, hasMore }
+    return { newFloors, newLastSeen, newHasMore: hasMore }
   }
 
   async function requestFloor(requestId) {
@@ -148,23 +148,24 @@ export function ThreadListComponent() {
         currentFloors,
         (floor: Floor) => floor.FloorID === requestId
       )
+      if (floor) {
+        return floor
+      }
       if (!hasMore) {
         return null
       }
-      if (floor) {
-        return floor
-      } else {
-        const { newFloors, newLastSeen, hasMore } = await fetchContent(
-          currentLastSeen,
-          currentFloors,
-          orderBy
-        )
-        currentFloors = newFloors
-        currentLastSeen = newLastSeen
-        if (!hasMore) {
-          break
-        }
+      const { newFloors, newLastSeen, newHasMore } = await fetchContent(
+        currentLastSeen,
+        currentFloors,
+        orderBy
+      )
+      currentFloors = newFloors
+      currentLastSeen = newLastSeen
+      if (!newHasMore) {
+        break
       }
+      // add some delay before continuing resolving
+      await sleep(1000)
     }
     return null
   }

@@ -25,6 +25,7 @@ import {
   Star,
   StarFill,
 } from "~/src/components/utils/Icons"
+import { parseThreadNotification } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
 
 interface ThreadComponentProps {
@@ -33,6 +34,7 @@ interface ThreadComponentProps {
   showPostTime?: boolean
   showControl?: boolean
   onReply: Function
+  isMessage?: boolean
 }
 
 interface ThreadSkeletonProps {
@@ -79,6 +81,7 @@ export function ThreadComponent({
   showPostTime,
   showControl,
   onReply,
+  isMessage,
 }: ThreadComponentProps) {
   const client = useClient()
 
@@ -141,11 +144,20 @@ export function ThreadComponent({
               )}
             </Text>
             <Spacer />
-            <Text fontSize="sm">
+            <Text fontSize="sm" color="gray.500">
               {moment(
                 showPostTime ? thread.PostTime : thread.LastUpdateTime
               ).calendar()}
             </Text>
+            {isMessage && (
+              <Text
+                fontSize="sm"
+                ml="2"
+                color={thread.Judge === 0 ? "teal.500" : "gray.500"}
+              >
+                · {parseThreadNotification(thread)}
+              </Text>
+            )}
           </Flex>
           <Heading fontSize="md">{thread.Title}</Heading>
           <Text mt={4} wordBreak="break-word">

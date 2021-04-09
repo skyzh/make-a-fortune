@@ -1,4 +1,4 @@
-import { Avatar, Box, HStack, Text } from "@chakra-ui/react"
+import { Avatar, Box, HStack, Stack, Text } from "@chakra-ui/react"
 import React from "react"
 import { generateName } from "~src/name_theme"
 
@@ -20,14 +20,18 @@ export default function ThemeAvatar({
   return (
     <HStack alignItems="center">
       <Box my={-1} ml={1} mr={-1}>
-        <Avatar size="xs" name={name} />
+        <Avatar size="sm" name={name} showBorder={true} />
       </Box>
-      <HStack fontSize="sm" fontWeight="bold" spacing="1">
-        {floorId && <Text color="gray.500">#{floorId}</Text>}
-        <Text>
+      <Stack fontWeight="bold" spacing={-2}>
+        {floorId && (
+          <Text color="gray.500" fontSize="xs">
+            #{floorId}
+          </Text>
+        )}
+        <Text fontSize="sm">
           {name} {showIsPoster && id === 0 && " (洞主)"}
         </Text>
-      </HStack>
+      </Stack>
     </HStack>
   )
 }

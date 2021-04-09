@@ -1,4 +1,6 @@
+import { every, filter } from "lodash"
 import { BannedError, Thread } from "./client"
+import { useFortuneSettings } from "./settings"
 
 export function handleError(toast, title: string, err: Error) {
   if (err instanceof BannedError) {
@@ -45,4 +47,20 @@ export function parseThreadNotification(thread: Thread) {
     }
   }
   return null
+}
+
+export function useThreadFilter(threads) {
+  const [settings, _setSettings] = useFortuneSettings()
+
+  if (!threads) return threads
+  if (!settings?.blockedKeywords) return threads
+
+  return filter(threads, (thread: Thread) =>
+    every(
+      settings?.blockedKeywords,
+      (keyword: string) =>
+        !thread.Title.toLowerCase().includes(keyword.toLowerCase()) &&
+        !thread.Summary.toLowerCase().includes(keyword.toLowerCase())
+    )
+  )
 }

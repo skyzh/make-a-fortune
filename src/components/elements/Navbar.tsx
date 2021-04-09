@@ -77,6 +77,8 @@ const Navbar: React.FC = ({ onClose }) => {
         </Text>
       </Box>
       <NB to="/login">{token ? "切换用户" : "登录"}</NB>
+      <NB to="/settings">设置</NB>
+
       <Stack pt="5" px="2" spacing="3">
         <Text color="gray.500" fontSize="xs">
           「闷声发财」是一个通用的匿名社区前端。

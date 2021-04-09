@@ -213,11 +213,11 @@ function Login() {
 
   return (
     <ScrollableContainer>
-      <Stack spacing="3">
-        <Box p={5} shadow="md" borderWidth="1px" width="100%">
+      <Stack spacing="3" width="100%">
+        <Box p={5} shadow="md" borderWidth="1px">
           <RpcSettings rpc={rpc} setRpc={setRpc} />
         </Box>
-        <Box p={5} shadow="md" borderWidth="1px" width="100%">
+        <Box p={5} shadow="md" borderWidth="1px">
           <Heading fontSize="xl" mb="5">
             登录
           </Heading>

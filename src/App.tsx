@@ -14,6 +14,7 @@ import {
 } from "./components/lists/PostList"
 import ThreadList from "./components/lists/ThreadList"
 import Login from "./components/views/Login"
+import Settings from "./components/views/Settings"
 import { theme } from "./theme"
 
 function App() {
@@ -59,6 +60,9 @@ function App() {
             <Switch>
               <Route path="/login">
                 <Login />
+              </Route>
+              <Route path="/settings">
+                <Settings />
               </Route>
               <Route exact path="/">
                 <PostListTime />

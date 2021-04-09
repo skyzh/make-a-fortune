@@ -8,44 +8,14 @@ import {
   Heading,
   Text,
   HStack,
-  Button,
   Divider,
   useToast,
 } from "@chakra-ui/react"
-import { Route, NavLink } from "react-router-dom"
 import { useRPCState, useTokenState } from "~/src/settings"
 import { Client } from "~/src/client"
-import {
-  ArrowRightShort,
-  ArrowRightCircleFill,
-} from "~/src/components/utils/Icons"
-
-const NavButton: React.FC = ({ to, exact, children, ...rest }) => {
-  return (
-    <Route
-      path={to}
-      exact={exact}
-      children={({ match }) => (
-        <NavLink exact={exact} to={to}>
-          <Button
-            colorScheme={match ? "blue" : "gray"}
-            color={match ? "blue.600" : "gray.500"}
-            variant={match ? "outline" : "ghost"}
-            isFullWidth={true}
-            justifyContent="flex-start"
-            leftIcon={match ? <ArrowRightCircleFill /> : <ArrowRightShort />}
-            onClick={() => {
-              rest.onClose && rest.onClose()
-            }}
-            {...rest}
-          >
-            {children}
-          </Button>
-        </NavLink>
-      )}
-    />
-  )
-}
+import { ArrowRightShort } from "~/src/components/utils/Icons"
+import CategoryNavigation from "~src/components/widgets/CategoryNavigation"
+import NavButton from "~src/components/widgets/NavButton"
 
 const Navbar: React.FC = ({ onClose }) => {
   const [rpc, _setRpc] = useRPCState()
@@ -92,6 +62,9 @@ const Navbar: React.FC = ({ onClose }) => {
       <NB exact to="/">
         最新
       </NB>
+
+      <CategoryNavigation onClose={onClose} />
+
       <NB to="/posts/trend">趋势</NB>
       <NB to="/posts/search">搜索</NB>
       <Divider />

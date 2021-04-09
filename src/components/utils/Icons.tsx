@@ -4,6 +4,10 @@ export function ArrowRightShort() {
   return <i className="bi bi-arrow-right-short" />
 }
 
+export function ArrowDownShort() {
+  return <i className="bi bi-arrow-down-short" />
+}
+
 export function ArrowRight() {
   return <i className="bi bi-arrow-right" />
 }

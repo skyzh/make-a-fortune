@@ -297,6 +297,19 @@ export class Client {
       )
     )
   }
+
+  async search(request: SearchRequest) {
+    return this.checkResponse(
+      await this.sendRequest(
+        this.serialize(
+          new SerializeObject("b")
+            .parameter(request.keyword)
+            .parameter(request.lastSeen || "NULL")
+            .provideToken(this.token)
+        )
+      )
+    )
+  }
 }
 
 class RPCVersion {
@@ -489,6 +502,11 @@ export class ReplyReplyRequest {
 export class ReplyPostRequest {
   postId: string
   content: string
+}
+
+export class SearchRequest {
+  keyword: string
+  lastSeen?: string
 }
 
 export function useClient() {

@@ -86,6 +86,7 @@ const Navbar: React.FC = ({ onClose }) => {
         最新
       </NB>
       <NB to="/posts/trend">趋势</NB>
+      <NB to="/posts/search">搜索</NB>
       <Divider />
       <Box px="5">
         <Text color="gray.500" fontSize="sm">

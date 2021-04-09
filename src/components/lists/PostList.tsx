@@ -1,8 +1,17 @@
 import React from "react"
 import { useEffect, useState } from "react"
 
-import { Stack, Box, useToast } from "@chakra-ui/react"
-import { useHistory } from "react-router-dom"
+import {
+  Stack,
+  Box,
+  useToast,
+  InputGroup,
+  InputLeftElement,
+  Input,
+  Button,
+  HStack,
+} from "@chakra-ui/react"
+import { useHistory, useLocation } from "react-router-dom"
 import { useClient, PostType, PostCategory, Thread } from "~/src/client"
 import { handleError } from "~/src/utils"
 import { concat, range, uniqBy } from "lodash"
@@ -14,6 +23,7 @@ import Refresh from "~/src/components/widgets/Refresh"
 import { InView } from "react-intersection-observer"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import NoMore from "~/src/components/elements/NoMore"
+import { Search } from "../utils/Icons"
 
 interface ThreadListComponentProps {
   threadList?: Thread[]
@@ -183,10 +193,94 @@ export function PostListNotification() {
     <ScrollableContainer>
       <PostListComponent
         lastSeenField="LastSeenMessageThreadID"
-        isMessage={true}
+        isMessage
         postCategory={PostCategory.All}
         postType={PostType.Message}
       />
+    </ScrollableContainer>
+  )
+}
+
+function useSearchKeyword() {
+  return new URLSearchParams(useLocation().search)
+}
+
+export function PostListSearch() {
+  const client = useClient()
+  const [threadList, setThreadList] = useState(null)
+  const toast = useToast()
+  const [hasMore, setHasMore] = useState(true)
+  const [lastSeen, setLastSeen] = useState(null)
+  const keyword = useSearchKeyword().get("keyword")
+  const [inputKeyword, setInputKeyword] = useState(keyword)
+  const history = useHistory()
+
+  function doFetch(lastSeen, previousThreads) {
+    async function fetch() {
+      if (keyword === "") return
+      const result = await client.search({
+        lastSeen,
+        keyword,
+      })
+
+      const toMerge = result.thread_list
+
+      setThreadList(
+        previousThreads
+          ? uniqBy(concat(previousThreads, toMerge), "ThreadID")
+          : toMerge
+      )
+      setLastSeen(result["LastSeenQueryThreadID"])
+      setHasMore(toMerge.length !== 0)
+    }
+    fetch()
+      .then()
+      .catch((err) => handleError(toast, "无法搜索帖子", err))
+  }
+
+  useEffect(() => {
+    doFetch(null, null)
+  }, [keyword])
+
+  const moreEntries = () => doFetch(lastSeen, threadList)
+
+  const doSearch = (inputKeyword) => {
+    history.replace(`/posts/search?keyword=${encodeURIComponent(inputKeyword)}`)
+  }
+
+  return (
+    <ScrollableContainer>
+      <HStack spacing={4} width="100%" mb="3">
+        <InputGroup>
+          <InputLeftElement pointerEvents="none">
+            <Search />
+          </InputLeftElement>
+          <Input
+            placeholder="搜点什么？"
+            value={inputKeyword}
+            onChange={(event) => setInputKeyword(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") doSearch(inputKeyword)
+            }}
+          />
+        </InputGroup>
+        <Button
+          colorScheme="teal"
+          onClick={() => doSearch(inputKeyword)}
+          width="100px"
+        >
+          搜索
+        </Button>
+      </HStack>
+      {keyword !== "" ? (
+        <ThreadListComponent
+          threadList={threadList}
+          moreEntries={moreEntries}
+          hasMore={hasMore}
+        />
+      ) : (
+        <NoMore />
+      )}
     </ScrollableContainer>
   )
 }

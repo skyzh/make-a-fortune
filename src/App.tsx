@@ -18,6 +18,7 @@ import Settings from "./components/views/Settings"
 
 function App() {
   const navBgColor = useColorModeValue("gray.50", "gray.900")
+  const phoneNavbarBgColor = useColorModeValue("white", "gray.800")
 
   return (
     <Router>
@@ -25,6 +26,7 @@ function App() {
         display={{ base: "unset", md: "none" }}
         position={{ base: "fixed", md: "unset" }}
         top="0"
+        backgroundColor={phoneNavbarBgColor}
         shadow="sm"
         width="100%"
         zIndex="1000"

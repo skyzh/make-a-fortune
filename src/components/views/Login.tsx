@@ -20,8 +20,10 @@ import {
   Tabs,
   Text,
   Textarea,
+  useBoolean,
   useToast,
 } from "@chakra-ui/react"
+import { clone } from "lodash"
 import * as moment from "moment"
 import React, { useState } from "react"
 import { v4 as uuidv4 } from "uuid"
@@ -35,6 +37,7 @@ function RpcSettings({ rpc, setRpc }) {
   const [connectionLoading, setConnectionLoading] = useState(false)
   const [backend, setBackend] = useState(null)
   const [latency, setLatency] = useState(null)
+  const [isCheckingConnection, setIsCheckingConnection] = useBoolean(false)
   const toast = useToast()
 
   const checkConnection = () => {
@@ -54,17 +57,23 @@ function RpcSettings({ rpc, setRpc }) {
         }
         setBackend(backend)
         setLatency(null)
+        setIsCheckingConnection.on()
         return (async () => {
-          const now = moment()
-          await client.verifyToken()
-          return moment().diff(now, "milliseconds")
+          const latencies = []
+          for (let i = 0; i < 3; i++) {
+            const now = moment()
+            await client.verifyToken()
+            latencies.push(moment().diff(now, "milliseconds"))
+            setLatency(clone(latencies))
+          }
         })()
       })
-      .then((latency) => {
-        setLatency(latency)
-      })
+      .then()
       .catch((err) => handleError(toast, "无法连接到 RPC 服务器", err))
-      .finally(() => setConnectionLoading(false))
+      .finally(() => {
+        setConnectionLoading(false)
+        setIsCheckingConnection.off()
+      })
   }
 
   const doSetRpc = (value) => {
@@ -154,9 +163,24 @@ function RpcSettings({ rpc, setRpc }) {
           <Text color="gray.500">RPC 后端：{backend?.name}</Text>
           <Text color="gray.500">上游地址：{backend?.addr}</Text>
           <Text color="gray.500">版本：{backend?.version}</Text>
-          <Text color="gray.500">
-            延迟：{latency || <Spinner size="xs" />} ms
-          </Text>
+          <HStack color="gray.500" spacing={1}>
+            <Text>延迟：</Text>
+            {latency &&
+              latency.map((lat) => (
+                <Text
+                  color={
+                    lat <= 100
+                      ? "green.500"
+                      : lat <= 1000
+                      ? "yellow.500"
+                      : "orange.500"
+                  }
+                >
+                  {lat}ms
+                </Text>
+              ))}
+            {isCheckingConnection && <Spinner size="xs" />}
+          </HStack>
           <Text color="blue.500">
             <a href={backend?.terms_of_service}>
               <ArrowRightShort /> {backend?.name || "<匿名社区>"} 用户协议

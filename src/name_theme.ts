@@ -101,6 +101,8 @@ const TAROT = [
   "The World",
 ]
 
+let shuffleCache: object = {}
+
 // https://github.com/wu-qing-157/Anonymous/blob/3b3f087942ba6bf209cda689b65cce98ab79d61b/app/src/main/java/org/wkfg/anonymous/utils.kt#L300
 class randomN {
   // we have to use bigint to handle the random algorithm
@@ -151,7 +153,11 @@ function shuffle(nameList: string[], seed: number) {
   return newList
 }
 
-export function generateName(theme: string, seed: number, id: number) {
+function getMapping(theme: string, seed: number) {
+  if (shuffleCache[theme] && shuffleCache[theme][seed]) {
+    return shuffleCache[theme][seed]
+  }
+
   let mapping = []
   switch (theme) {
     case "abc": {
@@ -167,6 +173,16 @@ export function generateName(theme: string, seed: number, id: number) {
       break
     }
   }
+
+  if (!shuffleCache[theme]) shuffleCache[theme] = {}
+  shuffleCache[theme][seed] = mapping
+
+  return mapping
+}
+
+export function generateName(theme: string, seed: number, id: number) {
+  const mapping = getMapping(theme, seed)
+
   if (mapping.length === 0) {
     return `${id}.?`
   }

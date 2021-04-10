@@ -52,7 +52,8 @@ export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
     <Flex width="100%">
       <Box
         flex="1"
-        p={layoutSettings.cardMargin}
+        px={layoutSettings.cardPaddingX}
+        py={layoutSettings.cardPaddingY}
         shadow="sm"
         borderWidth="1px"
         borderRadius="md"
@@ -162,7 +163,8 @@ export function ThreadComponent({
     >
       <Box
         flex="1"
-        p={layoutSettings.cardMargin}
+        px={layoutSettings.cardPaddingX}
+        py={layoutSettings.cardPaddingY}
         shadow="sm"
         borderWidth="1px"
         borderRadius="md"
@@ -255,7 +257,7 @@ export function ThreadComponent({
       <Box
         size="80px"
         py={layoutSettings.controlMargin}
-        px={layoutSettings.cardMargin}
+        px={layoutSettings.cardPaddingX}
         display={{ base: "none", sm: "unset" }}
       >
         <Stack

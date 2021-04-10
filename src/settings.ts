@@ -19,10 +19,12 @@ export enum LayoutStyle {
 
 export class LayoutStyleSettings {
   style: LayoutStyle
-  cardMargin: number
+  cardPaddingX: number
+  cardPaddingY: number
   cardSpacing: number
   controlMargin: number
   controlSpacing: number
+  listSpacing: number
 }
 
 function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {
@@ -30,19 +32,23 @@ function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {
     case LayoutStyle.comfortable: {
       return {
         style: layout,
-        cardMargin: 5,
+        cardPaddingX: 5,
+        cardPaddingY: 3,
         cardSpacing: 3,
         controlMargin: 3,
         controlSpacing: 1,
+        listSpacing: 3,
       }
     }
     case LayoutStyle.compact: {
       return {
         style: layout,
-        cardMargin: 3,
+        cardPaddingX: 3,
+        cardPaddingY: 2,
         cardSpacing: 2,
         controlMargin: 1,
         controlSpacing: 1,
+        listSpacing: 1,
       }
     }
   }

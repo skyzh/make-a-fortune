@@ -108,11 +108,11 @@ export default function useLikeControl({
         <Button isFullWidth variant="solid" isLoading={isLikeLoading}></Button>
       )}
     </ButtonGroup>,
-    <HStack spacing={3}>
+    <HStack spacing={1}>
       <Button
         onClick={toggleLikePost}
         size="xs"
-        variant="outline"
+        variant="ghost"
         colorScheme="teal"
       >
         {whetherLikeCombined === 1 ? <HandThumbsUpFill /> : <HandThumbsUp />}{" "}
@@ -123,7 +123,7 @@ export default function useLikeControl({
       <Button
         onClick={toggleDislikePost}
         size="xs"
-        variant="outline"
+        variant="ghost"
         colorScheme="teal"
       >
         {whetherLikeCombined === -1 ? (

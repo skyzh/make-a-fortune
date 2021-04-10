@@ -1,5 +1,4 @@
-import { Button } from "@chakra-ui/button"
-import { useToast } from "@chakra-ui/toast"
+import { Button, useToast } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { handleError } from "~/src/utils"
 
@@ -54,15 +53,21 @@ export default function useNetworkLocalControl({
       setIsActionLoading(false)
     }
   }
-
-  return (
+  const BreakpointButton = ({
+    baseVariant,
+    display,
+  }: {
+    baseVariant: string
+    display: any
+  }) => (
     <Button
       colorScheme="teal"
       size="xs"
-      variant={whetherActionCombined ? "solid" : "outline"}
+      variant={whetherActionCombined ? "solid" : baseVariant}
       onClick={toggleState}
       isLoading={isActionLoading}
       isDisabled={!cancelAction && whetherActionCombined}
+      display={display}
     >
       {isConfirming
         ? confirmComponent
@@ -70,5 +75,17 @@ export default function useNetworkLocalControl({
         ? doneComponent
         : initialComponent}
     </Button>
+  )
+  return (
+    <>
+      <BreakpointButton
+        baseVariant="outline"
+        display={{ base: "none", md: "unset" }}
+      />
+      <BreakpointButton
+        baseVariant="ghost"
+        display={{ base: "unset", md: "none" }}
+      />
+    </>
   )
 }

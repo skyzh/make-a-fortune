@@ -4,6 +4,7 @@ import {
   Heading,
   Radio,
   RadioGroup,
+  SimpleGrid,
   Stack,
   Switch,
   Text,
@@ -11,7 +12,11 @@ import {
 } from "@chakra-ui/react"
 import React, { useState } from "react"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
-import { LayoutStyle, useFortuneSettings } from "~/src/settings"
+import {
+  getLayoutStyleSettings,
+  LayoutStyle,
+  useFortuneSettings,
+} from "~/src/settings"
 import KeywordBlock from "./KeywordBlock"
 
 function useSetArray<T>(defaultValue: T[]) {
@@ -38,12 +43,41 @@ function LayoutSettings({
   setLayout: (l: LayoutStyle) => void
 }) {
   return (
-    <RadioGroup value={layout} onChange={setLayout}>
-      <Stack spacing={3}>
-        <Radio value="compact">紧凑</Radio>
-        <Radio value="comfortable">舒适</Radio>
+    <SimpleGrid columns={[1, null, 2]} spacing={2}>
+      <RadioGroup value={layout} onChange={setLayout}>
+        <Stack spacing={3}>
+          <Radio value="compact">紧凑</Radio>
+          <Radio value="comfortable">舒适</Radio>
+        </Stack>
+      </RadioGroup>
+      <LayoutSkeleton layout={layout} />
+    </SimpleGrid>
+  )
+}
+
+function LayoutSkeleton({ layout }: { layout: LayoutStyle }) {
+  const layoutSettings = getLayoutStyleSettings(layout)
+  const SkeletonBox = () => (
+    <Box
+      width="100%"
+      px={layoutSettings.cardPaddingX}
+      py={layoutSettings.cardPaddingY}
+      shadow="sm"
+      borderWidth="1px"
+      borderRadius="md"
+    >
+      <Stack spacing={layoutSettings.cardSpacing}>
+        <Text>测试文本</Text>
       </Stack>
-    </RadioGroup>
+    </Box>
+  )
+  return (
+    <Box borderWidth="1px" borderRadius="md" p={5} minHeight="10rem">
+      <Stack spacing={layoutSettings.listSpacing}>
+        <SkeletonBox />
+        <SkeletonBox />
+      </Stack>
+    </Box>
   )
 }
 

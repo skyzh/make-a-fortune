@@ -8,7 +8,7 @@ import {
   useToast,
 } from "@chakra-ui/react"
 import { concat, find, range } from "lodash"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { InView } from "react-intersection-observer"
 import { useParams } from "react-router-dom"
 import { Floor, ReplyOrder, Thread, useClient } from "~/src/client"
@@ -131,8 +131,8 @@ export function ThreadListComponent() {
   const toast = useToast()
   const [orderBy, setOrderBy] = useState<ReplyOrder>(ReplyOrder.Earliest)
 
-  const [allLastSeen, setAllLastSeen] = useState<string>()
-  const [allFloors, setAllFloors] = useState<Floor[]>()
+  const allLastSeen = useRef<string>()
+  const allFloors = useRef<Floor[]>()
 
   async function fetchContent(
     orderBy: ReplyOrder,
@@ -155,16 +155,17 @@ export function ThreadListComponent() {
       setFloors(newFloors)
       setHasMore(hasMore)
     } else if (orderBy == ReplyOrder.Earliest) {
-      setAllFloors(newFloors)
-      setAllLastSeen(allLastSeen)
+      allFloors.current = newFloors
+      allLastSeen.current = newLastSeen
     }
 
     return { newFloors, newLastSeen, newHasMore: hasMore }
   }
 
   async function requestFloor(requestId: string) {
-    let currentLastSeen = orderBy === ReplyOrder.Host ? allLastSeen : lastSeen
-    let currentFloors = orderBy === ReplyOrder.Host ? allFloors : floors
+    let currentLastSeen =
+      orderBy === ReplyOrder.Host ? allLastSeen.current : lastSeen
+    let currentFloors = orderBy === ReplyOrder.Host ? allFloors.current : floors
 
     while (true) {
       const floor = find(
@@ -280,7 +281,7 @@ export function ThreadListComponent() {
         requestFloor={requestFloor}
       />
     ),
-    [orderBy, hasMore, floors, thread, allFloors]
+    [orderBy, hasMore, floors, thread]
   )
 
   return (

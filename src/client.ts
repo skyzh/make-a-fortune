@@ -1,4 +1,5 @@
 import axios from "axios"
+import { NameTheme } from "./name_theme"
 import { useRPCState, useTokenState } from "./settings"
 
 export class BannedError extends Error {
@@ -453,7 +454,7 @@ export class Thread {
   Comment!: number
   Read!: number
   LastUpdateTime!: string
-  AnonymousType!: string
+  AnonymousType!: NameTheme
   PostTime!: string
   RandomSeed!: number
   WhetherTop!: number
@@ -477,10 +478,15 @@ export class FetchPostResponse {
   message_list?: Thread[]
 }
 
-export type LastSeenField = NonNullable<{
-  [K in keyof FetchPostResponse]:
-  FetchPostResponse[K] extends (string | undefined) ? K : never
-}[keyof FetchPostResponse]>
+export type LastSeenField = NonNullable<
+  {
+    [K in keyof FetchPostResponse]: FetchPostResponse[K] extends
+      | string
+      | undefined
+      ? K
+      : never
+  }[keyof FetchPostResponse]
+>
 
 export enum ReplyOrder {
   Earliest = "0",

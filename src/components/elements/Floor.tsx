@@ -23,6 +23,7 @@ import {
   HandThumbsUpFill,
   ReplyFill,
 } from "~/src/components/utils/Icons"
+import { NameTheme } from "~src/name_theme"
 import { useFortuneLayoutSettings } from "~src/settings"
 import { handleError } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
@@ -33,7 +34,7 @@ import ThemeAvatar from "./ThemeAvatar"
 interface FloorComponentProps {
   floor: Floor
   key?: string
-  theme: string
+  theme: NameTheme
   seed: number
   threadId: string
   showControl?: boolean

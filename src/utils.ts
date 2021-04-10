@@ -1,9 +1,13 @@
+import { useToast } from "@chakra-ui/react/"
 import { every, filter } from "lodash"
 import { BannedError, Thread } from "./client"
 import { useFortuneSettings } from "./settings"
-import { useToast } from "@chakra-ui/react/"
 
-export function handleError(toast: ReturnType<typeof useToast>, title: string, err: Error) {
+export function handleError(
+  toast: ReturnType<typeof useToast>,
+  title: string,
+  err: Error
+) {
   if (err instanceof BannedError) {
     const bannedError = err as BannedError
     toast({

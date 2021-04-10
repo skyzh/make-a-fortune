@@ -1,11 +1,8 @@
-import { useState } from "react"
 import createPersistedState from "use-persisted-state"
 
 export const useTokenState = createPersistedState("fortune-settings")
 export const useRPCState = createPersistedState("fortune-rpc")
-const _useFortuneSettings = createPersistedState(
-  "fortune-local-settings"
-)
+const _useFortuneSettings = createPersistedState("fortune-local-settings")
 
 export class FortuneSettings {
   blockedKeywords!: string[]
@@ -57,7 +54,7 @@ function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {
 export function useFortuneSettings() {
   const [settings, setSettings] = _useFortuneSettings<FortuneSettings>({
     blockedKeywords: [],
-    layout: LayoutStyle.comfortable
+    layout: LayoutStyle.comfortable,
   })
   // const settings = cloneDeep(_settings)
   // if (!settings.blockedKeywords) {

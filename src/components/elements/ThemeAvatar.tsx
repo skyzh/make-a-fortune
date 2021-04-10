@@ -1,9 +1,9 @@
 import { Avatar, Box, HStack, Stack, Text } from "@chakra-ui/react"
 import React from "react"
-import { generateName } from "~src/name_theme"
+import { generateName, NameTheme } from "~src/name_theme"
 
 interface ThemeAvatarProps {
-  theme: string
+  theme: NameTheme
   seed: number
   id: number
   showIsPoster?: boolean

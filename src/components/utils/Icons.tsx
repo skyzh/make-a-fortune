@@ -95,3 +95,11 @@ export function X() {
 export function ArrowsExpand() {
   return <i className="bi bi-arrows-expand"></i>
 }
+
+export function ArrowBarUp() {
+  return <i className="bi bi-arrow-bar-up"></i>
+}
+
+export function ArrowBarDown() {
+  return <i className="bi bi-arrow-bar-down"></i>
+}

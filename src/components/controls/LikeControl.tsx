@@ -64,25 +64,42 @@ export default function useLikeControl({
         (whetherLike !== null ? whetherLike - clientWhetherLike : 0)}
     </Text>,
     <ButtonGroup isAttached colorScheme="teal" size="xs">
-      <Button
-        mr="-px"
-        isFullWidth
-        variant={whetherLikeCombined === 1 ? "solid" : "outline"}
-        isDisabled={whetherLikeCombined === -1}
-        onClick={toggleLikePost}
-        isLoading={isLikeLoading}
-      >
-        赞
-      </Button>
-      <Button
-        isFullWidth
-        variant={whetherLikeCombined === -1 ? "solid" : "outline"}
-        isDisabled={whetherLikeCombined === 1}
-        onClick={toggleDislikePost}
-        isLoading={isLikeLoading}
-      >
-        踩
-      </Button>
+      {whetherLikeCombined >= 0 && !isLikeLoading && (
+        <Button
+          mr="-px"
+          isFullWidth
+          variant={whetherLikeCombined === 1 ? "solid" : "outline"}
+          onClick={toggleLikePost}
+          isLoading={isLikeLoading}
+        >
+          {whetherLikeCombined === 1 && (
+            <>
+              {" "}
+              <HandThumbsUpFill /> &nbsp;{" "}
+            </>
+          )}{" "}
+          赞
+        </Button>
+      )}
+      {whetherLikeCombined <= 0 && !isLikeLoading && (
+        <Button
+          isFullWidth
+          variant={whetherLikeCombined === -1 ? "solid" : "outline"}
+          onClick={toggleDislikePost}
+          isLoading={isLikeLoading}
+        >
+          {whetherLikeCombined === -1 && (
+            <>
+              {" "}
+              <HandThumbsDownFill /> &nbsp;{" "}
+            </>
+          )}{" "}
+          踩
+        </Button>
+      )}
+      {isLikeLoading && (
+        <Button isFullWidth variant="solid" isLoading={isLikeLoading}></Button>
+      )}
     </ButtonGroup>,
     <Text fontSize="sm">
       <span onClick={toggleLikePost}>

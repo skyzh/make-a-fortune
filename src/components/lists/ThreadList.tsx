@@ -22,6 +22,7 @@ import {
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import GoBack from "~/src/components/widgets/GoBack"
 import { handleError, sleep } from "~/src/utils"
+import { useFortuneLayoutSettings } from "~src/settings"
 
 interface FloorListComponentProps {
   thread?: Thread
@@ -57,8 +58,10 @@ export function FloorListComponent({
   onPostReply,
   requestFloor,
 }: FloorListComponentProps) {
+  const layoutSettings = useFortuneLayoutSettings()
+
   return (
-    <Stack spacing={3} width="100%" mb="3">
+    <Stack spacing={layoutSettings.listSpacing} width="100%" mb="3">
       {thread ? (
         <ThreadComponent
           showPostTime
@@ -70,7 +73,7 @@ export function FloorListComponent({
         <ThreadSkeleton showControl />
       )}
       <Divider />
-      <Box my="2">{thread ? orderBy : <Skeleton height="2rem" />}</Box>
+      <Box p={1}>{thread ? orderBy : <Skeleton height="2rem" />}</Box>
       {thread && floors ? (
         <>
           {floors.map((floor) => (

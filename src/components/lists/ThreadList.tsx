@@ -8,7 +8,7 @@ import {
   useToast,
 } from "@chakra-ui/react"
 import { concat, find, range } from "lodash"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { InView } from "react-intersection-observer"
 import { useParams } from "react-router-dom"
 import { Floor, ReplyOrder, Thread, useClient } from "~/src/client"
@@ -23,6 +23,7 @@ import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import GoBack from "~/src/components/widgets/GoBack"
 import { handleError, sleep } from "~/src/utils"
 import { useFortuneLayoutSettings } from "~src/settings"
+import { Callback, RequestFloor } from "../utils/types"
 
 interface FloorListComponentProps {
   thread?: Thread
@@ -31,11 +32,17 @@ interface FloorListComponentProps {
   hasMore: boolean
   orderBy: any
   onReply: Function
-  onPostReply: Function
-  requestFloor?: Function
+  onPostReply: Callback
+  requestFloor?: RequestFloor
 }
 
-export function OrderBy({ value, setValue }) {
+export function OrderBy({
+  value,
+  setValue,
+}: {
+  value: ReplyOrder
+  setValue: (v: ReplyOrder) => void
+}) {
   return (
     <RadioGroup defaultValue="0" value={value} onChange={setValue}>
       <Stack spacing={4} direction="row">
@@ -118,33 +125,35 @@ export function FloorListComponent({
 
 export function ThreadListComponent() {
   const client = useClient()
-  let { postId } = useParams()
-  const [thread, setThread] = useState(null)
-  const [lastSeen, setLastSeen] = useState(null)
-  const [floors, setFloors] = useState(null)
+  let { postId } = useParams<{ postId: string }>()
+  const [thread, setThread] = useState<Thread>()
+  const [lastSeen, setLastSeen] = useState<string>()
+  const [floors, setFloors] = useState<Floor[]>()
   const [hasMore, setHasMore] = useState(true)
   const toast = useToast()
-  const [orderBy, setOrderBy] = useState("0")
+  const [orderBy, setOrderBy] = useState<ReplyOrder>(ReplyOrder.Earliest)
 
-  async function fetchContent(lastSeen, previousFloors, orderBy) {
+  async function fetchContent(
+    orderBy: ReplyOrder,
+    lastSeen?: string,
+    previousFloors?: Floor[]
+  ) {
     const result = await client.fetchReply({
       postId: postId,
       order: orderBy,
       lastSeen: lastSeen,
     })
-    const newFloors = previousFloors
-      ? concat(previousFloors, result.floor_list)
-      : result.floor_list
-    const newLastSeen = result.LastSeenFloorID
-    const hasMore = result.floor_list.length !== 0
-    setThread(result.this_thread)
+    const newFloors = concat(previousFloors ?? [], result?.floor_list ?? [])
+    const newLastSeen = result?.LastSeenFloorID ?? lastSeen
+    const hasMore = (result?.floor_list.length ?? 0) !== 0
+    setThread(result?.this_thread)
     setLastSeen(newLastSeen)
     setFloors(newFloors)
     setHasMore(hasMore)
     return { newFloors, newLastSeen, newHasMore: hasMore }
   }
 
-  async function requestFloor(requestId) {
+  async function requestFloor(requestId: string) {
     let currentLastSeen = lastSeen
     let currentFloors = floors
     while (true) {
@@ -159,9 +168,9 @@ export function ThreadListComponent() {
         return null
       }
       const { newFloors, newLastSeen, newHasMore } = await fetchContent(
+        orderBy,
         currentLastSeen,
-        currentFloors,
-        orderBy
+        currentFloors
       )
       currentFloors = newFloors
       currentLastSeen = newLastSeen
@@ -174,17 +183,21 @@ export function ThreadListComponent() {
     return null
   }
 
-  function doFetch(lastSeen, previousFloors, orderBy) {
-    fetchContent(lastSeen, previousFloors, orderBy)
+  function doFetch(
+    orderBy: ReplyOrder,
+    lastSeen?: string,
+    previousFloors?: Floor[]
+  ) {
+    fetchContent(orderBy, lastSeen, previousFloors)
       .then()
       .catch((err) => handleError(toast, "无法获取发帖信息", err))
   }
 
-  useEffect(() => doFetch(null, null, orderBy), [postId])
+  useEffect(() => doFetch(orderBy), [postId])
 
-  const moreEntries = () => doFetch(lastSeen, floors, orderBy)
+  const moreEntries = () => doFetch(orderBy, lastSeen, floors)
 
-  const [isReplyingFloor, setIsReplyingFloor] = useState(null)
+  const [isReplyingFloor, setIsReplyingFloor] = useState<Floor>()
   const [isReplyingPost, setIsReplyingPost] = useState(false)
   const [isReplyInProgress, setIsReplyInProgress] = useState(false)
 
@@ -197,15 +210,13 @@ export function ThreadListComponent() {
     />
   )
 
-  const updateOrderBy = (orderBy) => {
+  const updateOrderBy = (orderBy: ReplyOrder) => {
     setOrderBy(orderBy)
-    setFloors(null)
-    doFetch(null, null, orderBy)
+    setFloors(undefined)
+    doFetch(orderBy)
   }
 
-  const orderByComponent = <OrderBy value={orderBy} setValue={updateOrderBy} />
-
-  const onReply = (floor) => {
+  const onReply = (floor: Floor) => {
     setIsReplyingFloor(floor)
   }
 
@@ -213,18 +224,18 @@ export function ThreadListComponent() {
     setIsReplyingPost(true)
   }
 
-  const doReply = (replyContent) => {
+  const doReply = (replyContent: string) => {
     setIsReplyInProgress(true)
 
     let request
     if (isReplyingPost) {
-      const payload = { postId: thread.ThreadID, content: replyContent }
+      const payload = { postId: thread!.ThreadID, content: replyContent }
       request = client.replyPost(payload)
     } else {
       // reply to reply
       const payload = {
-        postId: thread.ThreadID,
-        replyId: isReplyingFloor.FloorID,
+        postId: thread!.ThreadID,
+        replyId: isReplyingFloor!.FloorID,
         content: replyContent,
       }
       request = client.replyReply(payload)
@@ -232,7 +243,7 @@ export function ThreadListComponent() {
 
     request
       .then(() => {
-        setIsReplyingFloor(null)
+        setIsReplyingFloor(undefined)
         setIsReplyingPost(false)
         toast({
           title: "回复成功",
@@ -248,29 +259,36 @@ export function ThreadListComponent() {
       })
   }
 
-  return (
-    <ScrollableContainer>
-      <GoBack />
-      <ReplyModal
-        isOpen={isReplyingFloor !== null || isReplyingPost}
-        toFloor={toFloorComponent}
-        onCancel={() => {
-          setIsReplyingFloor(null)
-          setIsReplyingPost(false)
-        }}
-        isLoading={isReplyInProgress}
-        doReply={doReply}
-      />
+  const floorList = useMemo(
+    () => (
       <FloorListComponent
         thread={thread}
         floors={floors}
         moreEntries={moreEntries}
         hasMore={hasMore}
-        orderBy={orderByComponent}
+        orderBy={<OrderBy value={orderBy} setValue={updateOrderBy} />}
         onReply={onReply}
         onPostReply={onPostReply}
         requestFloor={requestFloor}
       />
+    ),
+    [orderBy, hasMore, floors, thread]
+  )
+
+  return (
+    <ScrollableContainer>
+      <GoBack />
+      <ReplyModal
+        isOpen={!!isReplyingFloor || isReplyingPost}
+        toFloor={toFloorComponent}
+        onCancel={() => {
+          setIsReplyingFloor(undefined)
+          setIsReplyingPost(false)
+        }}
+        isLoading={isReplyInProgress}
+        doReply={doReply}
+      />
+      {floorList}
     </ScrollableContainer>
   )
 }

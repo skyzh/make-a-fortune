@@ -1,8 +1,8 @@
-import { Button, useColorMode } from "@chakra-ui/react"
+import { Button, ButtonProps, useColorMode } from "@chakra-ui/react"
 import React from "react"
 import { MoonFill, SunFill } from "../utils/Icons"
 
-export function ColorModeButton(props) {
+export function ColorModeButton(props: ButtonProps) {
   const mode = useColorMode()
 
   return (
@@ -10,7 +10,6 @@ export function ColorModeButton(props) {
       colorScheme="blue"
       variant="ghost"
       onClick={mode.toggleColorMode}
-      _focus={false}
       {...props}
     >
       {mode.colorMode == "light" ? <MoonFill /> : <SunFill />}

@@ -1,13 +1,10 @@
-import { cloneDeep } from "lodash"
 import createPersistedState from "use-persisted-state"
 
 export const useTokenState = createPersistedState("fortune-settings")
 export const useRPCState = createPersistedState("fortune-rpc")
-const _useFortuneSettings = createPersistedState<FortuneSettings>(
-  "fortune-local-settings"
-)
+const _useFortuneSettings = createPersistedState("fortune-local-settings")
 
-export class FortuneSettings {
+export interface FortuneSettings {
   blockedKeywords: string[]
   layout: LayoutStyle
 }
@@ -17,7 +14,7 @@ export enum LayoutStyle {
   compact = "compact",
 }
 
-export class LayoutStyleSettings {
+export interface LayoutStyleSettings {
   style: LayoutStyle
   cardPaddingX: number
   cardPaddingY: number
@@ -55,15 +52,18 @@ function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {
 }
 
 export function useFortuneSettings() {
-  const [_settings, setSettings] = _useFortuneSettings<FortuneSettings>({})
-  const settings = cloneDeep(_settings)
-  if (!settings.blockedKeywords) {
-    settings.blockedKeywords = []
-  }
-  if (!settings.layout) {
-    settings.layout = "comfortable"
-  }
-  return [settings as FortuneSettings, setSettings]
+  const [settings, setSettings] = _useFortuneSettings<FortuneSettings>({
+    blockedKeywords: [],
+    layout: LayoutStyle.comfortable,
+  })
+  // const settings = cloneDeep(_settings)
+  // if (!settings.blockedKeywords) {
+  //   settings.blockedKeywords = []
+  // }
+  // if (!settings.layout) {
+  //   settings.layout = LayoutStyle.comfortable
+  // }
+  return [settings, setSettings] as const
 }
 
 export function useFortuneSettingsRead() {

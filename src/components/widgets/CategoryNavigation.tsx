@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { ArrowDownShort, ArrowRightShort } from "~/src/components/utils/Icons"
 import { PostCategory } from "~src/client"
-import NavButton from "~src/components/widgets/NavButton"
+import NavButton, { NavButtonProps } from "~src/components/widgets/NavButton"
+import { AsyncCallback, Callback } from "../utils/types"
 
 const categories = [
   {
@@ -52,12 +53,18 @@ const categories = [
   },
 ]
 
-function CategoryNavigation({ onClose }) {
+function CategoryNavigation({
+  onClose,
+}: {
+  onClose?: AsyncCallback | Callback
+}) {
   const location = useLocation()
   const [expand, setExpand] = useState<boolean>(
     location.pathname.startsWith("/category/")
   )
-  const NB: React.FC = (props) => <NavButton {...props} onClose={onClose} />
+  const NB = (props: Omit<NavButtonProps, "onClose">) => (
+    <NavButton {...props} onClose={onClose} />
+  )
 
   useEffect(() => {
     setExpand(location.pathname.startsWith("/category/"))

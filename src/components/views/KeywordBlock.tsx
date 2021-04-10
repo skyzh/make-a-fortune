@@ -8,8 +8,15 @@ import {
   Text,
 } from "@chakra-ui/react"
 import React, { useState } from "react"
+import { AsyncCallback, Callback } from "../utils/types"
 
-function KeywordItem({ keyword, onDelete }) {
+function KeywordItem({
+  keyword,
+  onDelete,
+}: {
+  keyword: string
+  onDelete: AsyncCallback | Callback
+}) {
   return (
     <HStack>
       <Text>{keyword}</Text>
@@ -27,7 +34,15 @@ function KeywordItem({ keyword, onDelete }) {
   )
 }
 
-export default function KeywordBlock({ keywords, addKeyword, deleteKeyword }) {
+export default function KeywordBlock({
+  keywords,
+  addKeyword,
+  deleteKeyword,
+}: {
+  keywords: string[]
+  addKeyword: (s: string) => void
+  deleteKeyword: (s: string) => void
+}) {
   const [pendingKeyword, setPendingKeyword] = useState("")
 
   const addOnce = () => {

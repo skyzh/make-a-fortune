@@ -14,8 +14,21 @@ import {
 } from "@chakra-ui/react"
 import { flow, sumBy } from "lodash"
 import React, { useState } from "react"
+import { Callback } from "../utils/types"
 
-function ReplyModal({ isOpen, toFloor, onCancel, doReply, isLoading }) {
+function ReplyModal({
+  isOpen,
+  toFloor,
+  onCancel,
+  doReply,
+  isLoading,
+}: {
+  isOpen: boolean
+  toFloor?: React.ReactNode
+  onCancel: Callback
+  doReply: (s: string) => void
+  isLoading: boolean
+}) {
   const [replyContent, setReplyContent] = useState("")
   const lines =
     sumBy(

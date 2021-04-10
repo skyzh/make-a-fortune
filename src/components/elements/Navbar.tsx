@@ -9,20 +9,22 @@ import {
   useToast,
 } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
-import { Client } from "~/src/client"
+import { Client, RPCVersion } from "~/src/client"
 import { ArrowRightShort } from "~/src/components/utils/Icons"
 import { useRPCState, useTokenState } from "~/src/settings"
 import { getRpcDisplayName } from "~src/utils"
+import { AsyncCallback, Callback } from "../utils/types"
 import CategoryNavigation from "../widgets/CategoryNavigation"
 import { ColorModeButton } from "../widgets/ColorModeButton"
 import Logo from "../widgets/Logo"
-import NavButton from "../widgets/NavButton"
+import NavButton, { NavButtonProps } from "../widgets/NavButton"
 
-const Navbar: React.FC = ({ onClose }) => {
-  const [rpc, _setRpc] = useRPCState()
+function Navbar({ onClose }: { onClose?: AsyncCallback | Callback }) {
+  const [rpc, _setRpc] = useRPCState<string>()
   const [token, _setToken] = useTokenState()
-  const [backend, setBackend] = useState({})
+  const [backend, setBackend] = useState<RPCVersion>()
   const toast = useToast()
+
   useEffect(() => {
     async function sendRequest() {
       if (rpc) {
@@ -44,7 +46,9 @@ const Navbar: React.FC = ({ onClose }) => {
       )
   }, [rpc])
 
-  const NB: React.FC = (props) => <NavButton {...props} onClose={onClose} />
+  const NB = (props: Omit<NavButtonProps, "onClose">) => (
+    <NavButton {...props} onClose={onClose} />
+  )
 
   const rpcDisplayName = getRpcDisplayName(rpc)
 
@@ -91,7 +95,7 @@ const Navbar: React.FC = ({ onClose }) => {
         </Text>
         <Text color="gray.500" fontSize="xs">
           您正在使用 {rpcDisplayName} 作为「闷声发财」的 RPC 后端。 该 RPC
-          后端由 {backend?.name || "<无法获取信息>"} 提供服务。
+          后端由 {backend?.name ?? "<无法获取信息>"} 提供服务。
         </Text>
         <Text color="blue.500" fontSize="xs">
           <a href="https://github.com/skyzh/make-a-fortune">

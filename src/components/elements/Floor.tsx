@@ -10,7 +10,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react"
-import * as moment from "moment"
+import moment from "moment"
 import React, { useState } from "react"
 import { Floor, useClient } from "~/src/client"
 import useLikeControl from "~/src/components/controls/LikeControl"
@@ -23,25 +23,27 @@ import {
   HandThumbsUpFill,
   ReplyFill,
 } from "~/src/components/utils/Icons"
+import { NameTheme } from "~src/name_theme"
 import { useFortuneLayoutSettings } from "~src/settings"
 import { handleError } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
+import { RequestFloor } from "../utils/types"
 import { Content } from "./Content"
 import ThemeAvatar from "./ThemeAvatar"
 
 interface FloorComponentProps {
   floor: Floor
   key?: string
-  theme: string
+  theme: NameTheme
   seed: number
   threadId: string
   showControl?: boolean
   onReply?: Function
   allowExpand?: boolean
-  requestFloor?: Function
+  requestFloor?: RequestFloor
 }
 
-export function FloorSkeleton({ showControl }) {
+export function FloorSkeleton({ showControl }: { showControl?: boolean }) {
   const layoutSettings = useFortuneLayoutSettings()
 
   return (
@@ -128,7 +130,7 @@ export function FloorComponent({
     confirm: true,
   })
 
-  const [stackedFloor, setStackedFloor] = useState(null)
+  const [stackedFloor, setStackedFloor] = useState<Floor>()
   const [isExpanding, setIsExpanding] = useState(false)
 
   const toast = useToast()
@@ -137,7 +139,7 @@ export function FloorComponent({
 
   const doExpand = () => {
     setIsExpanding(true)
-    requestFloor(floor.Replytofloor.toString())
+    requestFloor?.(floor.Replytofloor.toString())
       .then((newFloor) => {
         if (!newFloor) {
           toast({
@@ -224,7 +226,7 @@ export function FloorComponent({
                     size="xs"
                     variant="ghost"
                     colorScheme="teal"
-                    onClick={() => setStackedFloor(null)}
+                    onClick={() => setStackedFloor(undefined)}
                   >
                     <ArrowBarDown />
                   </Button>
@@ -250,7 +252,7 @@ export function FloorComponent({
                     colorScheme="teal"
                     size="xs"
                     variant="outline"
-                    onClick={() => onReply(floor)}
+                    onClick={() => onReply?.(floor)}
                   >
                     <ReplyFill /> &nbsp; 回复
                   </Button>
@@ -280,7 +282,7 @@ export function FloorComponent({
               colorScheme="teal"
               size="xs"
               variant="outline"
-              onClick={() => onReply(floor)}
+              onClick={() => onReply?.(floor)}
             >
               <ReplyFill /> &nbsp; 回复
             </Button>

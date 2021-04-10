@@ -12,7 +12,7 @@ import {
   Text,
   useBoolean,
 } from "@chakra-ui/react"
-import * as moment from "moment"
+import moment from "moment"
 import React from "react"
 import { Thread, useClient } from "~/src/client"
 import useLikeControl from "~/src/components/controls/LikeControl"
@@ -37,7 +37,7 @@ interface ThreadComponentProps {
   key?: string
   showPostTime?: boolean
   showControl?: boolean
-  onReply: Function
+  onReply: React.MouseEventHandler<HTMLButtonElement>
   isMessage?: boolean
 }
 
@@ -61,7 +61,7 @@ export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
         <Stack spacing={layoutSettings.cardSpacing}>
           <Skeleton height="3" />
           <Skeleton height="8" />
-          <SkeletonText spacing="3" noOfLines="4" />
+          <SkeletonText spacing="3" noOfLines={4} />
         </Stack>
       </Box>
       <Box
@@ -108,7 +108,7 @@ export function ThreadComponent({
 
   const payload = { postId: thread.ThreadID }
   const [likeTextControl, likeButtonControl] = useLikeControl({
-    clientWhetherLike: thread.WhetherLike,
+    clientWhetherLike: thread.WhetherLike ?? 0,
     clientCurrentLike: thread.Like - thread.Dislike,
     onCancelLike: () => client.cancelLikePost(payload),
     onLike: () => client.likePost(payload),

@@ -24,19 +24,25 @@ import {
   useToast,
 } from "@chakra-ui/react"
 import { clone } from "lodash"
-import * as moment from "moment"
+import moment from "moment"
 import React, { useState } from "react"
 import { v4 as uuidv4 } from "uuid"
-import { Client } from "~/src/client"
+import { Client, RPCVersion } from "~/src/client"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import { useRPCState, useTokenState } from "~/src/settings"
 import { getRpcDisplayName, handleError } from "~src/utils"
 import { ArrowRightShort } from "../utils/Icons"
 
-function RpcSettings({ rpc, setRpc }) {
+function RpcSettings({
+  rpc,
+  setRpc,
+}: {
+  rpc: string
+  setRpc: (r: string) => void
+}) {
   const [connectionLoading, setConnectionLoading] = useState(false)
-  const [backend, setBackend] = useState(null)
-  const [latency, setLatency] = useState(null)
+  const [backend, setBackend] = useState<RPCVersion>()
+  const [latency, setLatency] = useState<number[]>()
   const [isCheckingConnection, setIsCheckingConnection] = useBoolean(false)
   const toast = useToast()
 
@@ -56,7 +62,7 @@ function RpcSettings({ rpc, setRpc }) {
           return
         }
         setBackend(backend)
-        setLatency(null)
+        setLatency(undefined)
         setIsCheckingConnection.on()
         return (async () => {
           const latencies = []
@@ -76,8 +82,8 @@ function RpcSettings({ rpc, setRpc }) {
       })
   }
 
-  const doSetRpc = (value) => {
-    setBackend(null)
+  const doSetRpc = (value: string) => {
+    setBackend(undefined)
     setRpc(value)
   }
 
@@ -182,17 +188,17 @@ function RpcSettings({ rpc, setRpc }) {
             {isCheckingConnection && <Spinner size="xs" />}
           </HStack>
           <Text color="blue.500">
-            <a href={backend?.terms_of_service}>
-              <ArrowRightShort /> {backend?.name || "<匿名社区>"} 用户协议
+            <a href={backend.terms_of_service}>
+              <ArrowRightShort /> {backend.name || "<匿名社区>"} 用户协议
             </a>
           </Text>
           <Text color="blue.500">
-            <a href={backend?.rpc_source_code}>
+            <a href={backend.rpc_source_code}>
               <ArrowRightShort /> {rpcDisplayName} 开源代码
             </a>
           </Text>
           <Text color="blue.500">
-            <a href={backend?.rpc_terms_of_service}>
+            <a href={backend.rpc_terms_of_service}>
               <ArrowRightShort /> {rpcDisplayName} 用户协议
             </a>
           </Text>

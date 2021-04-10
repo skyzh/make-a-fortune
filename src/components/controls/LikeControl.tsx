@@ -7,6 +7,7 @@ import {
   HandThumbsUpFill,
 } from "~/src/components/utils/Icons"
 import { handleError } from "~/src/utils"
+import { AsyncCallback } from "../utils/types"
 
 export default function useLikeControl({
   clientWhetherLike,
@@ -15,12 +16,18 @@ export default function useLikeControl({
   onLike,
   onCancelDislike,
   onDislike,
+}: {
+  clientWhetherLike: number
+  clientCurrentLike: number
+  onCancelLike: AsyncCallback
+  onLike: AsyncCallback
+  onCancelDislike: AsyncCallback
+  onDislike: AsyncCallback
 }) {
   const toast = useToast()
 
-  const [whetherLike, setWhetherLike] = useState<boolean>(null)
-  const whetherLikeCombined =
-    whetherLike === null ? clientWhetherLike : whetherLike
+  const [whetherLike, setWhetherLike] = useState<number>()
+  const whetherLikeCombined = whetherLike ?? clientWhetherLike
   const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false)
 
   const toggleLikePost = () => {
@@ -60,8 +67,7 @@ export default function useLikeControl({
   return [
     <Text fontSize="sm">
       <HandThumbsUpFill />{" "}
-      {clientCurrentLike +
-        (whetherLike !== null ? whetherLike - clientWhetherLike : 0)}
+      {clientCurrentLike + (whetherLike ? whetherLike - clientWhetherLike : 0)}
     </Text>,
     <ButtonGroup isAttached colorScheme="teal" size="xs">
       {whetherLikeCombined >= 0 && !isLikeLoading && (
@@ -106,8 +112,7 @@ export default function useLikeControl({
         {whetherLikeCombined === 1 ? <HandThumbsUpFill /> : <HandThumbsUp />}
       </span>
       &nbsp;
-      {clientCurrentLike +
-        (whetherLike !== null ? whetherLike - clientWhetherLike : 0)}
+      {clientCurrentLike + (whetherLike ? whetherLike - clientWhetherLike : 0)}
       &nbsp;&nbsp;&nbsp;
       <span onClick={toggleDislikePost}>
         {whetherLikeCombined === -1 ? (

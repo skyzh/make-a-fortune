@@ -1,4 +1,5 @@
 import axios from "axios"
+import { NameTheme } from "./name_theme"
 import { useRPCState, useTokenState } from "./settings"
 
 export class BannedError extends Error {
@@ -195,8 +196,8 @@ export class Client {
         this.serialize(
           new SerializeObject("8")
             .parameter(request.postId)
-            .parameter(null)
-            .parameter(null)
+            .parameter()
+            .parameter()
             .parameter(request.replyId)
             .provideToken(this.token)
         )
@@ -210,8 +211,8 @@ export class Client {
         this.serialize(
           new SerializeObject("8_2")
             .parameter(request.postId)
-            .parameter(null)
-            .parameter(null)
+            .parameter()
+            .parameter()
             .parameter(request.replyId)
             .provideToken(this.token)
         )
@@ -225,8 +226,8 @@ export class Client {
         this.serialize(
           new SerializeObject("8_5")
             .parameter(request.postId)
-            .parameter(null)
-            .parameter(null)
+            .parameter()
+            .parameter()
             .parameter(request.replyId)
             .provideToken(this.token)
         )
@@ -240,8 +241,8 @@ export class Client {
         this.serialize(
           new SerializeObject("8_6")
             .parameter(request.postId)
-            .parameter(null)
-            .parameter(null)
+            .parameter()
+            .parameter()
             .parameter(request.replyId)
             .provideToken(this.token)
         )
@@ -280,7 +281,7 @@ export class Client {
         this.serialize(
           new SerializeObject("4_2")
             .parameter(request.postId)
-            .parameter(null)
+            .parameter()
             .parameter(request.content)
             .parameter(request.replyId)
             .provideToken(this.token)
@@ -295,7 +296,7 @@ export class Client {
         this.serialize(
           new SerializeObject("4")
             .parameter(request.postId)
-            .parameter(null)
+            .parameter()
             .parameter(request.content)
             .parameter("")
             .provideToken(this.token)
@@ -328,24 +329,28 @@ export class Client {
   }
 }
 
-class RPCVersion {
+export interface RPCVersion {
   name: string
   addr: string
+  version?: string
+  terms_of_service?: string
+  rpc_source_code?: string
+  rpc_terms_of_service?: string
 }
 
 class SerializeObject {
   op: string
   token: string | null
-  p1: string | null
-  p2: string | null
-  p3: string | null
-  p4: string | null
-  p5: string | null
-  p6: string | null
+  p1: string | undefined
+  p2: string | undefined
+  p3: string | undefined
+  p4: string | undefined
+  p5: string | undefined
+  p6: string | undefined
 
   constructor(op: string, token?: string) {
     this.op = op
-    this.token = token
+    this.token = token ?? null
     this.p_count = 1
   }
 
@@ -392,21 +397,21 @@ class SerializeObject {
   }
 }
 
-class RequestLoginCodeRequest {
+export interface RequestLoginCodeRequest {
   email: string
 }
 
-class RequestLoginCodeResponse {
+export interface RequestLoginCodeResponse {
   VarifiedEmailAddress: number
 }
 
-class LoginRequest {
+export interface LoginRequest {
   email: string
   code: string
   device: string
 }
 
-class LoginResponse {
+export interface LoginResponse {
   login_flag: number
   Token: string
 }
@@ -433,13 +438,13 @@ export enum PostCategory {
   Life = 10,
 }
 
-export class FetchPostRequest {
+export interface FetchPostRequest {
   postType: PostType
   postCategory: PostCategory
   lastSeen?: string
 }
 
-export class Thread {
+export interface Thread {
   ThreadID: string
   Block: number
   Title: string
@@ -449,7 +454,7 @@ export class Thread {
   Comment: number
   Read: number
   LastUpdateTime: string
-  AnonymousType: string
+  AnonymousType: NameTheme
   PostTime: string
   RandomSeed: number
   WhetherTop: number
@@ -463,13 +468,25 @@ export class Thread {
   Type?: number
 }
 
-export class FetchPostResponse {
+export interface FetchPostResponse {
   LastSeenThreadID?: string
   LastSeenHotThreadID?: string
   LastSeenMyThreadID?: string
+  LastSeenFavorThreadID?: string
+  LastSeenMessageThreadID?: string
   thread_list?: Thread[]
   message_list?: Thread[]
 }
+
+export type LastSeenField = NonNullable<
+  {
+    [K in keyof FetchPostResponse]: FetchPostResponse[K] extends
+      | string
+      | undefined
+      ? K
+      : never
+  }[keyof FetchPostResponse]
+>
 
 export enum ReplyOrder {
   Earliest = "0",
@@ -478,13 +495,13 @@ export enum ReplyOrder {
   Hot = "2",
 }
 
-export class FetchReplyRequest {
+export interface FetchReplyRequest {
   postId: string
   order: ReplyOrder
   lastSeen?: string
 }
 
-export class Floor {
+export interface Floor {
   FloorID: string
   Speakername: string
   Replytoname: string
@@ -497,39 +514,39 @@ export class Floor {
   WhetherReport: number
 }
 
-export class FetchReplyResponse {
+export interface FetchReplyResponse {
   LastSeenFloorID: string
   ExistFlag: string
   floor_list: Floor[]
   this_thread: Thread
 }
 
-export class ActionPostRequest {
+export interface ActionPostRequest {
   postId: string
 }
 
-export class ActionReplyRequest {
+export interface ActionReplyRequest {
   postId: string
   replyId: string
 }
 
-export class ReplyReplyRequest {
+export interface ReplyReplyRequest {
   postId: string
   replyId: string
   content: string
 }
 
-export class ReplyPostRequest {
+export interface ReplyPostRequest {
   postId: string
   content: string
 }
 
-export class SearchRequest {
+export interface SearchRequest {
   keyword: string
   lastSeen?: string
 }
 
-export class VerifyTokenResponse {
+export interface VerifyTokenResponse {
   login_flag: string
 }
 

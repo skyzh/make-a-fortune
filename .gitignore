@@ -26,3 +26,5 @@ dist/
 .cache/
 .vscode/
 .parcel-cache/
+
+.vercel

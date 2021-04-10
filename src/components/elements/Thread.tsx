@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react"
 import moment from "moment"
 import React from "react"
-import { Thread, useClient } from "~/src/client"
+import { Tag, Thread, useClient } from "~/src/client"
 import useLikeControl from "~/src/components/controls/LikeControl"
 import {
   Broadcast,
@@ -26,9 +26,14 @@ import {
   Star,
   StarFill,
 } from "~/src/components/utils/Icons"
-import { LayoutStyle, useFortuneLayoutSettings } from "~src/settings"
+import {
+  LayoutStyle,
+  useFortuneLayoutSettings,
+  useFortuneSettingsRead,
+} from "~src/settings"
 import { parseThreadNotification } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
+import { tagToDisplayString, tagToObscureString } from "../utils/tag"
 import { CollapseContent, Content } from "./Content"
 import ThemeAvatar from "./ThemeAvatar"
 
@@ -158,6 +163,7 @@ export function ThreadComponent({
   const [collapsed, setCollapsed] = useBoolean(true)
 
   const layoutSettings = useFortuneLayoutSettings()
+  const obscureTag = useFortuneSettingsRead().obscureTag
 
   return (
     <Flex
@@ -179,10 +185,12 @@ export function ThreadComponent({
               <Badge colorScheme="gray"># {thread.ThreadID}</Badge>
             </Text>
 
-            {thread.Tag !== "NULL" && (
+            {thread.Tag !== Tag.Normal && (
               <Text fontSize="sm">
                 <Badge ml="2" colorScheme="teal">
-                  {thread.Tag}
+                  {obscureTag
+                    ? tagToObscureString(thread.Tag)
+                    : tagToDisplayString(thread.Tag)}
                 </Badge>
               </Text>
             )}

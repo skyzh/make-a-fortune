@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Text, useToast } from "@chakra-ui/react"
+import { Button, ButtonGroup, HStack, Text, useToast } from "@chakra-ui/react"
 import React, { useState } from "react"
 import {
   HandThumbsDown,
@@ -67,7 +67,8 @@ export default function useLikeControl({
   return [
     <Text fontSize="sm">
       <HandThumbsUpFill />{" "}
-      {clientCurrentLike + (whetherLike ? whetherLike - clientWhetherLike : 0)}
+      {clientCurrentLike +
+        (whetherLike !== undefined ? whetherLike - clientWhetherLike : 0)}
     </Text>,
     <ButtonGroup isAttached colorScheme="teal" size="xs">
       {whetherLikeCombined >= 0 && !isLikeLoading && (
@@ -107,20 +108,30 @@ export default function useLikeControl({
         <Button isFullWidth variant="solid" isLoading={isLikeLoading}></Button>
       )}
     </ButtonGroup>,
-    <Text fontSize="sm">
-      <span onClick={toggleLikePost}>
-        {whetherLikeCombined === 1 ? <HandThumbsUpFill /> : <HandThumbsUp />}
-      </span>
-      &nbsp;
-      {clientCurrentLike + (whetherLike ? whetherLike - clientWhetherLike : 0)}
-      &nbsp;&nbsp;&nbsp;
-      <span onClick={toggleDislikePost}>
+    <HStack spacing={3}>
+      <Button
+        onClick={toggleLikePost}
+        size="xs"
+        variant="outline"
+        colorScheme="teal"
+      >
+        {whetherLikeCombined === 1 ? <HandThumbsUpFill /> : <HandThumbsUp />}{" "}
+        &nbsp;
+        {clientCurrentLike +
+          (whetherLike !== undefined ? whetherLike - clientWhetherLike : 0)}
+      </Button>
+      <Button
+        onClick={toggleDislikePost}
+        size="xs"
+        variant="outline"
+        colorScheme="teal"
+      >
         {whetherLikeCombined === -1 ? (
           <HandThumbsDownFill />
         ) : (
           <HandThumbsDown />
         )}
-      </span>
-    </Text>,
+      </Button>
+    </HStack>,
   ]
 }

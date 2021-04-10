@@ -67,7 +67,7 @@ export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
       <Box
         size="80px"
         p={layoutSettings.controlMargin}
-        display={{ base: "none", sm: "unset" }}
+        display={{ base: "none", md: "unset" }}
       >
         <Stack
           color="teal.500"
@@ -219,18 +219,17 @@ export function ThreadComponent({
             />
           )}
 
-          <Box display={{ base: "block", sm: "none" }}>
+          <Box display={{ base: "block", md: "none" }}>
             <Stack color="teal.500">
-              <HStack justifyContent="space-between">
+              <HStack justifyContent="space-between" spacing={4}>
                 {likeTextControl}
-                <HStack>
-                  <Text fontSize="sm">
-                    <ChatSquareText /> {thread.Comment}
-                  </Text>
-                  <Text fontSize="sm">
-                    <Broadcast /> {thread.Read}
-                  </Text>
-                </HStack>
+                <Text fontSize="sm">
+                  <ChatSquareText /> {thread.Comment}
+                </Text>
+                <Spacer />
+                <Text fontSize="sm">
+                  <Broadcast /> {thread.Read}
+                </Text>
               </HStack>
 
               {showControl && (
@@ -258,7 +257,7 @@ export function ThreadComponent({
         size="80px"
         py={layoutSettings.controlMargin}
         px={layoutSettings.cardPaddingX}
-        display={{ base: "none", sm: "unset" }}
+        display={{ base: "none", md: "unset" }}
       >
         <Stack
           color="teal.500"

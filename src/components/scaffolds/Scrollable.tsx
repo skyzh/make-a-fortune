@@ -3,11 +3,7 @@ import React from "react"
 
 const ScrollableContainer: React.FC = ({ children }) => {
   return (
-    <Box
-      overflowY={{ base: "unset", md: "scroll" }}
-      overflowX="hidden"
-      height="100%"
-    >
+    <Box overflowX="hidden">
       <Container maxW="container.md" centerContent my="3">
         {children}
       </Container>

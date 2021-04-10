@@ -179,7 +179,7 @@ export function PostListCategory() {
   const { categoryId } = useParams<{ categoryId: string }>()
 
   return (
-    <ScrollableContainer key={categoryId}>
+    <ScrollableContainer>
       <PostListComponent
         lastSeenField="LastSeenThreadID"
         postCategory={parseInt(categoryId)}

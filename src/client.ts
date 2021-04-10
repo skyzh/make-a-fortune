@@ -196,8 +196,8 @@ export class Client {
         this.serialize(
           new SerializeObject("8")
             .parameter(request.postId)
-            .parameter(null)
-            .parameter(null)
+            .parameter()
+            .parameter()
             .parameter(request.replyId)
             .provideToken(this.token)
         )
@@ -211,8 +211,8 @@ export class Client {
         this.serialize(
           new SerializeObject("8_2")
             .parameter(request.postId)
-            .parameter(null)
-            .parameter(null)
+            .parameter()
+            .parameter()
             .parameter(request.replyId)
             .provideToken(this.token)
         )
@@ -226,8 +226,8 @@ export class Client {
         this.serialize(
           new SerializeObject("8_5")
             .parameter(request.postId)
-            .parameter(null)
-            .parameter(null)
+            .parameter()
+            .parameter()
             .parameter(request.replyId)
             .provideToken(this.token)
         )
@@ -241,8 +241,8 @@ export class Client {
         this.serialize(
           new SerializeObject("8_6")
             .parameter(request.postId)
-            .parameter(null)
-            .parameter(null)
+            .parameter()
+            .parameter()
             .parameter(request.replyId)
             .provideToken(this.token)
         )
@@ -281,7 +281,7 @@ export class Client {
         this.serialize(
           new SerializeObject("4_2")
             .parameter(request.postId)
-            .parameter(null)
+            .parameter()
             .parameter(request.content)
             .parameter(request.replyId)
             .provideToken(this.token)
@@ -296,7 +296,7 @@ export class Client {
         this.serialize(
           new SerializeObject("4")
             .parameter(request.postId)
-            .parameter(null)
+            .parameter()
             .parameter(request.content)
             .parameter("")
             .provideToken(this.token)
@@ -341,12 +341,12 @@ export class RPCVersion {
 class SerializeObject {
   op: string
   token: string | null
-  p1!: string | null
-  p2!: string | null
-  p3!: string | null
-  p4!: string | null
-  p5!: string | null
-  p6!: string | null
+  p1: string | undefined
+  p2: string | undefined
+  p3: string | undefined
+  p4: string | undefined
+  p5: string | undefined
+  p6: string | undefined
 
   constructor(op: string, token?: string) {
     this.op = op
@@ -356,7 +356,7 @@ class SerializeObject {
 
   p_count: number
 
-  parameter(val: string | null) {
+  parameter(val?: string) {
     switch (this.p_count) {
       case 1: {
         this.p1 = val

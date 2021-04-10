@@ -21,6 +21,7 @@ import {
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import Refresh from "~/src/components/widgets/Refresh"
 import { handleError, useThreadFilter } from "~/src/utils"
+import { useFortuneLayoutSettings } from "~src/settings"
 import { Search } from "../utils/Icons"
 
 interface ThreadListComponentProps {
@@ -44,8 +45,10 @@ function ThreadListComponent({
   isMessage,
 }: ThreadListComponentProps) {
   const history = useHistory()
+  const layoutSettings = useFortuneLayoutSettings()
+
   return (
-    <Stack spacing={3} width="100%" mb="3">
+    <Stack spacing={layoutSettings.listSpacing} width="100%" mb="3">
       {threadList !== null ? (
         <>
           {threadList.map((thread) => (

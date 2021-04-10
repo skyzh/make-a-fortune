@@ -15,8 +15,9 @@ import React, { useState } from "react"
 import { Floor, useClient } from "~/src/client"
 import useLikeControl from "~/src/components/controls/LikeControl"
 import {
+  ArrowBarDown,
+  ArrowBarUp,
   ArrowRight,
-  ArrowsExpand,
   Flag,
   FlagFill,
   HandThumbsUpFill,
@@ -47,7 +48,8 @@ export function FloorSkeleton({ showControl }) {
     <Flex width="100%">
       <Box
         flex="1"
-        p={layoutSettings.cardMargin}
+        px={layoutSettings.cardPaddingX}
+        py={layoutSettings.cardPaddingY}
         shadow="sm"
         borderWidth="1px"
         borderRadius="md"
@@ -157,7 +159,8 @@ export function FloorComponent({
     <Flex width="100%">
       <Box
         flex="1"
-        p={layoutSettings.cardMargin}
+        px={layoutSettings.cardPaddingX}
+        py={layoutSettings.cardPaddingY}
         shadow="sm"
         borderWidth="1px"
         borderRadius="md"
@@ -165,8 +168,9 @@ export function FloorComponent({
         <Stack spacing={layoutSettings.cardSpacing}>
           {stackedFloor && allowExpand && (
             <Box
-              mx={-layoutSettings.cardMargin + 1}
-              mt={-layoutSettings.cardMargin + 1}
+              ml={-layoutSettings.cardPaddingX + 1}
+              mr={-layoutSettings.cardPaddingX + 2}
+              mt={-layoutSettings.cardPaddingY + 1}
             >
               <FloorComponent
                 floor={stackedFloor}
@@ -179,7 +183,7 @@ export function FloorComponent({
             </Box>
           )}
           <Flex alignItems="center">
-            <HStack mr="2">
+            <HStack mr="2" ml={-2}>
               <ThemeAvatar
                 theme={theme}
                 seed={seed}
@@ -211,7 +215,18 @@ export function FloorComponent({
                     isLoading={isExpanding}
                     onClick={doExpand}
                   >
-                    <ArrowsExpand />
+                    <ArrowBarUp />
+                  </Button>
+                )}
+                {stackedFloor && showControl && (
+                  <Button
+                    ml="2"
+                    size="xs"
+                    variant="ghost"
+                    colorScheme="teal"
+                    onClick={() => setStackedFloor(null)}
+                  >
+                    <ArrowBarDown />
                   </Button>
                 )}
               </>
@@ -249,7 +264,7 @@ export function FloorComponent({
         <Box
           size="80px"
           py={layoutSettings.controlMargin}
-          px={layoutSettings.cardMargin}
+          px={layoutSettings.cardPaddingX}
           display={{ base: "none", sm: "unset" }}
           height="100%"
         >

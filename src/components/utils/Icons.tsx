@@ -103,3 +103,11 @@ export function MoonFill() {
 export function SunFill() {
   return <i className="bi bi-sun-fill" />
 }
+
+export function ArrowBarUp() {
+  return <i className="bi bi-arrow-bar-up"></i>
+}
+
+export function ArrowBarDown() {
+  return <i className="bi bi-arrow-bar-down"></i>
+}

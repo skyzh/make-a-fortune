@@ -29,7 +29,7 @@ function ReplyModal({ isOpen, toFloor, onCancel, doReply, isLoading }) {
     lines <= maxLines && characters <= maxCharacters && characters > 0
   return (
     <>
-      <Modal isOpen={isOpen} isCentered onClose={onCancel} size="lg">
+      <Modal isOpen={isOpen} isCentered onClose={onCancel} size="xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>回复</ModalHeader>
@@ -39,6 +39,7 @@ function ReplyModal({ isOpen, toFloor, onCancel, doReply, isLoading }) {
               <Textarea
                 value={replyContent}
                 onChange={(event) => setReplyContent(event.target.value)}
+                rows={8}
               />
             </Stack>
           </ModalBody>

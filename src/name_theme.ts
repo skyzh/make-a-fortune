@@ -101,7 +101,12 @@ const TAROT = [
   "The World",
 ]
 
-let shuffleCache: object = {}
+export type NameTheme = "abc" | "us_president" | "tarot"
+type ShuffleCache = {
+  [T in NameTheme]?: Record<number, string[]>
+}
+
+let shuffleCache: ShuffleCache = {}
 
 // https://github.com/wu-qing-157/Anonymous/blob/3b3f087942ba6bf209cda689b65cce98ab79d61b/app/src/main/java/org/wkfg/anonymous/utils.kt#L300
 class randomN {
@@ -153,9 +158,10 @@ function shuffle(nameList: string[], seed: number) {
   return newList
 }
 
-function getMapping(theme: string, seed: number) {
-  if (shuffleCache[theme] && shuffleCache[theme][seed]) {
-    return shuffleCache[theme][seed]
+function getMapping(theme: NameTheme, seed: number) {
+  const cache = shuffleCache[theme]
+  if (cache && cache[seed]) {
+    return cache[seed]
   }
 
   let mapping = []
@@ -175,12 +181,12 @@ function getMapping(theme: string, seed: number) {
   }
 
   if (!shuffleCache[theme]) shuffleCache[theme] = {}
-  shuffleCache[theme][seed] = mapping
+  shuffleCache[theme]![seed] = mapping
 
   return mapping
 }
 
-export function generateName(theme: string, seed: number, id: number) {
+export function generateName(theme: NameTheme, seed: number, id: number) {
   const mapping = getMapping(theme, seed)
 
   if (mapping.length === 0) {

@@ -1,12 +1,19 @@
 import { Button } from "@chakra-ui/react"
-import React from "react"
+import React, { PropsWithChildren } from "react"
 import { NavLink, Route } from "react-router-dom"
 import {
   ArrowRightCircleFill,
   ArrowRightShort,
 } from "~/src/components/utils/Icons"
+import { AsyncCallback, Callback } from "../utils/types"
 
-const NavButton: React.FC = ({ to, exact, children, ...rest }) => {
+export type NavButtonProps = PropsWithChildren<{
+  to: string
+  exact?: boolean
+  onClose?: AsyncCallback | Callback
+}>
+
+function NavButton({ to, exact = false, children, ...rest }: NavButtonProps) {
   return (
     <Route
       path={to}

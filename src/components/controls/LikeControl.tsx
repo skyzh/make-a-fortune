@@ -7,6 +7,7 @@ import {
   HandThumbsUpFill,
 } from "~/src/components/utils/Icons"
 import { handleError } from "~/src/utils"
+import { AsyncCallback } from "../utils/types"
 
 export default function useLikeControl({
   clientWhetherLike,
@@ -15,12 +16,18 @@ export default function useLikeControl({
   onLike,
   onCancelDislike,
   onDislike,
+}: {
+  clientWhetherLike: number
+  clientCurrentLike: number
+  onCancelLike: AsyncCallback
+  onLike: AsyncCallback
+  onCancelDislike: AsyncCallback
+  onDislike: AsyncCallback
 }) {
   const toast = useToast()
 
-  const [whetherLike, setWhetherLike] = useState<boolean>(null)
-  const whetherLikeCombined =
-    whetherLike === null ? clientWhetherLike : whetherLike
+  const [whetherLike, setWhetherLike] = useState<number | null>(null)
+  const whetherLikeCombined = whetherLike ?? clientWhetherLike
   const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false)
 
   const toggleLikePost = () => {

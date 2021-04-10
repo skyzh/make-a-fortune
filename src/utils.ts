@@ -1,8 +1,9 @@
 import { every, filter } from "lodash"
 import { BannedError, Thread } from "./client"
 import { useFortuneSettings } from "./settings"
+import { useToast } from "@chakra-ui/react/"
 
-export function handleError(toast, title: string, err: Error) {
+export function handleError(toast: ReturnType<typeof useToast>, title: string, err: Error) {
   if (err instanceof BannedError) {
     const bannedError = err as BannedError
     toast({
@@ -23,7 +24,7 @@ export function handleError(toast, title: string, err: Error) {
   }
 }
 
-export function getRpcDisplayName(rpc) {
+export function getRpcDisplayName(rpc: string | null) {
   return rpc === "/"
     ? window.location.hostname
     : rpc?.replace(/(^https?:\/\/)|(\/*$)/g, "")
@@ -34,7 +35,7 @@ export function parseThreadNotification(thread: Thread) {
     if (thread.Type === 0) {
       return "有新回复"
     }
-    if (thread.Type > 0) {
+    if (thread.Type ?? 0 > 0) {
       return `新增 ${thread.Type} 个赞`
     }
   }
@@ -42,14 +43,14 @@ export function parseThreadNotification(thread: Thread) {
     if (thread.Type === 0) {
       return "已读回复"
     }
-    if (thread.Type > 0) {
+    if (thread.Type ?? 0 > 0) {
       return `${thread.Type} 个人赞了`
     }
   }
   return null
 }
 
-export function useThreadFilter(threads) {
+export function useThreadFilter(threads: Thread[]) {
   const [settings, _setSettings] = useFortuneSettings()
 
   if (!threads) return threads
@@ -65,6 +66,6 @@ export function useThreadFilter(threads) {
   )
 }
 
-export function sleep(ms) {
+export function sleep(ms?: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }

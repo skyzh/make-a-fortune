@@ -1,15 +1,14 @@
-import { cloneDeep } from "lodash"
 import createPersistedState from "use-persisted-state"
 
 export const useTokenState = createPersistedState("fortune-settings")
 export const useRPCState = createPersistedState("fortune-rpc")
-const _useFortuneSettings = createPersistedState<FortuneSettings>(
+const _useFortuneSettings = createPersistedState(
   "fortune-local-settings"
 )
 
 export class FortuneSettings {
-  blockedKeywords: string[]
-  layout: LayoutStyle
+  blockedKeywords!: string[]
+  layout!: LayoutStyle
 }
 
 export enum LayoutStyle {
@@ -18,13 +17,13 @@ export enum LayoutStyle {
 }
 
 export class LayoutStyleSettings {
-  style: LayoutStyle
-  cardPaddingX: number
-  cardPaddingY: number
-  cardSpacing: number
-  controlMargin: number
-  controlSpacing: number
-  listSpacing: number
+  style!: LayoutStyle
+  cardPaddingX!: number
+  cardPaddingY!: number
+  cardSpacing!: number
+  controlMargin!: number
+  controlSpacing!: number
+  listSpacing!: number
 }
 
 function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {
@@ -55,15 +54,18 @@ function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {
 }
 
 export function useFortuneSettings() {
-  const [_settings, setSettings] = _useFortuneSettings<FortuneSettings>({})
-  const settings = cloneDeep(_settings)
-  if (!settings.blockedKeywords) {
-    settings.blockedKeywords = []
-  }
-  if (!settings.layout) {
-    settings.layout = "comfortable"
-  }
-  return [settings as FortuneSettings, setSettings]
+  const [settings, setSettings] = _useFortuneSettings<FortuneSettings>({
+    blockedKeywords: [],
+    layout: LayoutStyle.comfortable
+  })
+  // const settings = cloneDeep(_settings)
+  // if (!settings.blockedKeywords) {
+  //   settings.blockedKeywords = []
+  // }
+  // if (!settings.layout) {
+  //   settings.layout = LayoutStyle.comfortable
+  // }
+  return [settings, setSettings] as const
 }
 
 export function useFortuneSettingsRead() {

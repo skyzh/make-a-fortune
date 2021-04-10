@@ -331,27 +331,30 @@ export class Client {
 export class RPCVersion {
   name!: string
   addr!: string
+  terms_of_service?: string
+  rpc_source_code?: string
+  rpc_terms_of_service?: string
 }
 
 class SerializeObject {
   op: string
   token: string | null
-  p1: string | null
-  p2: string | null
-  p3: string | null
-  p4: string | null
-  p5: string | null
-  p6: string | null
+  p1!: string | null
+  p2!: string | null
+  p3!: string | null
+  p4!: string | null
+  p5!: string | null
+  p6!: string | null
 
   constructor(op: string, token?: string) {
     this.op = op
-    this.token = token
+    this.token = token ?? null
     this.p_count = 1
   }
 
   p_count: number
 
-  parameter(val?: string) {
+  parameter(val: string | null) {
     switch (this.p_count) {
       case 1: {
         this.p1 = val
@@ -393,22 +396,22 @@ class SerializeObject {
 }
 
 class RequestLoginCodeRequest {
-  email: string
+  email!: string
 }
 
 class RequestLoginCodeResponse {
-  VarifiedEmailAddress: number
+  VarifiedEmailAddress!: number
 }
 
 class LoginRequest {
-  email: string
-  code: string
-  device: string
+  email!: string
+  code!: string
+  device!: string
 }
 
 class LoginResponse {
-  login_flag: number
-  Token: string
+  login_flag!: number
+  Token!: string
 }
 
 export enum PostType {
@@ -434,26 +437,26 @@ export enum PostCategory {
 }
 
 export class FetchPostRequest {
-  postType: PostType
-  postCategory: PostCategory
+  postType!: PostType
+  postCategory!: PostCategory
   lastSeen?: string
 }
 
 export class Thread {
-  ThreadID: string
-  Block: number
-  Title: string
-  Summary: string
-  Like: number
-  Dislike: number
-  Comment: number
-  Read: number
-  LastUpdateTime: string
-  AnonymousType: string
-  PostTime: string
-  RandomSeed: number
-  WhetherTop: number
-  Tag: string
+  ThreadID!: string
+  Block!: number
+  Title!: string
+  Summary!: string
+  Like!: number
+  Dislike!: number
+  Comment!: number
+  Read!: number
+  LastUpdateTime!: string
+  AnonymousType!: string
+  PostTime!: string
+  RandomSeed!: number
+  WhetherTop!: number
+  Tag!: string
   // only available in `this_thread` of post details
   WhetherFavour?: number
   WhetherLike?: number
@@ -479,58 +482,58 @@ export enum ReplyOrder {
 }
 
 export class FetchReplyRequest {
-  postId: string
-  order: ReplyOrder
+  postId!: string
+  order!: ReplyOrder
   lastSeen?: string
 }
 
 export class Floor {
-  FloorID: string
-  Speakername: string
-  Replytoname: string
-  Replytofloor: number
-  Context: string
-  RTime: string
-  Like: number
-  Dislike: number
-  WhetherLike: number
-  WhetherReport: number
+  FloorID!: string
+  Speakername!: string
+  Replytoname!: string
+  Replytofloor!: number
+  Context!: string
+  RTime!: string
+  Like!: number
+  Dislike!: number
+  WhetherLike!: number
+  WhetherReport!: number
 }
 
 export class FetchReplyResponse {
-  LastSeenFloorID: string
-  ExistFlag: string
-  floor_list: Floor[]
-  this_thread: Thread
+  LastSeenFloorID!: string
+  ExistFlag!: string
+  floor_list!: Floor[]
+  this_thread!: Thread
 }
 
 export class ActionPostRequest {
-  postId: string
+  postId!: string
 }
 
 export class ActionReplyRequest {
-  postId: string
-  replyId: string
+  postId!: string
+  replyId!: string
 }
 
 export class ReplyReplyRequest {
-  postId: string
-  replyId: string
-  content: string
+  postId!: string
+  replyId!: string
+  content!: string
 }
 
 export class ReplyPostRequest {
-  postId: string
-  content: string
+  postId!: string
+  content!: string
 }
 
 export class SearchRequest {
-  keyword: string
+  keyword!: string
   lastSeen?: string
 }
 
 export class VerifyTokenResponse {
-  login_flag: string
+  login_flag!: string
 }
 
 export function useClient() {

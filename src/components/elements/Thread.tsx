@@ -108,7 +108,7 @@ export function ThreadComponent({
 
   const payload = { postId: thread.ThreadID }
   const [likeTextControl, likeButtonControl] = useLikeControl({
-    clientWhetherLike: thread.WhetherLike,
+    clientWhetherLike: thread.WhetherLike ?? 0,
     clientCurrentLike: thread.Like - thread.Dislike,
     onCancelLike: () => client.cancelLikePost(payload),
     onLike: () => client.likePost(payload),

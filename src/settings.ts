@@ -27,7 +27,9 @@ export interface LayoutStyleSettings {
   listSpacing: number
 }
 
-function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {
+export function getLayoutStyleSettings(
+  layout: LayoutStyle
+): LayoutStyleSettings {
   switch (layout) {
     case LayoutStyle.comfortable: {
       return {

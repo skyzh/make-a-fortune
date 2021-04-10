@@ -1909,6 +1909,14 @@
     "@parcel/utils" "2.0.0-nightly.638+ff1a55e8"
     nullthrows "^1.1.1"
 
+"@parcel/packager-raw-url@2.0.0-nightly.2260":
+  version "2.0.0-nightly.2260"
+  resolved "https://registry.yarnpkg.com/@parcel/packager-raw-url/-/packager-raw-url-2.0.0-nightly.2260.tgz#dc531aaaf018c687b36aa878c0907955100bcd9b"
+  integrity sha512-pzbEmB/G6SJPxrgPm4K7BtOfK1OLplGA4O2vaVhkyE9YMLlUN8Rfh9v8iZCDNOnGaKhxCLSjoPcDis0tJ+XUlQ==
+  dependencies:
+    "@parcel/plugin" "2.0.0-nightly.638+ff1a55e8"
+    "@parcel/utils" "2.0.0-nightly.638+ff1a55e8"
+
 "@parcel/packager-raw@2.0.0-nightly.638+ff1a55e8":
   version "2.0.0-nightly.638"
   resolved "https://registry.yarnpkg.com/@parcel/packager-raw/-/packager-raw-2.0.0-nightly.638.tgz#2b373107b4711685bfb8d8ca50e74dc63042c9cd"
@@ -2172,6 +2180,16 @@
   dependencies:
     "@parcel/plugin" "2.0.0-nightly.638+ff1a55e8"
     "@parcel/ts-utils" "2.0.0-nightly.638+ff1a55e8"
+
+"@parcel/transformer-webmanifest@2.0.0-nightly.2260":
+  version "2.0.0-nightly.2260"
+  resolved "https://registry.yarnpkg.com/@parcel/transformer-webmanifest/-/transformer-webmanifest-2.0.0-nightly.2260.tgz#59515a7ee32d8b4c8c17a3ebc4dc131dde5c8bb5"
+  integrity sha512-TmhWDZUR/JWnp5qESUTyvVSF0K/JlVLO/UBaUeZ/qplNgNi1l99A1LBCM2iuzlxM3BjFTGOul7XRaj3zcZnDew==
+  dependencies:
+    "@parcel/diagnostic" "2.0.0-nightly.638+ff1a55e8"
+    "@parcel/plugin" "2.0.0-nightly.638+ff1a55e8"
+    "@parcel/utils" "2.0.0-nightly.638+ff1a55e8"
+    json-source-map "^0.6.1"
 
 "@parcel/ts-utils@2.0.0-nightly.638+ff1a55e8":
   version "2.0.0-nightly.638"

@@ -1,0 +1,8 @@
+{
+    "short_name": "闷声发财",
+    "name": "闷声发财",
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff"
+}

@@ -26,7 +26,7 @@ const ALICE_AND_BOB = [
   "Walter",
   "Xavier",
   "Young",
-  "Zoe"
+  "Zoe",
 ]
 
 const US_PRESIDENT = [
@@ -73,7 +73,7 @@ const US_PRESIDENT = [
   "Clinton",
   "G.W.Bush",
   "Obama",
-  "Trump"
+  "Trump",
 ]
 
 const TAROT = [
@@ -98,7 +98,7 @@ const TAROT = [
   "The Moon",
   "The Sun",
   "Judgement",
-  "The World"
+  "The World",
 ]
 
 let shuffleCache: object = {}

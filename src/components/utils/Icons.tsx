@@ -111,3 +111,7 @@ export function ArrowBarUp() {
 export function ArrowBarDown() {
   return <i className="bi bi-arrow-bar-down"></i>
 }
+
+export function ChevronDoubleUp() {
+  return <i className="bi bi-chevron-double-up"></i>
+}

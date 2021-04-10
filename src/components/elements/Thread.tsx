@@ -107,7 +107,11 @@ export function ThreadComponent({
   const client = useClient()
 
   const payload = { postId: thread.ThreadID }
-  const [likeTextControl, likeButtonControl] = useLikeControl({
+  const [
+    likeTextControl,
+    likeButtonControl,
+    likeTextButtonControl,
+  ] = useLikeControl({
     clientWhetherLike: thread.WhetherLike ?? 0,
     clientCurrentLike: thread.Like - thread.Dislike,
     onCancelLike: () => client.cancelLikePost(payload),
@@ -219,14 +223,14 @@ export function ThreadComponent({
             />
           )}
 
+          {/* Small screen controls */}
           <Box display={{ base: "block", md: "none" }}>
             <Stack color="teal.500">
               <HStack justifyContent="space-between" spacing={4}>
-                {likeTextControl}
+                <Spacer />
                 <Text fontSize="sm">
                   <ChatSquareText /> {thread.Comment}
                 </Text>
-                <Spacer />
                 <Text fontSize="sm">
                   <Broadcast /> {thread.Read}
                 </Text>
@@ -234,7 +238,7 @@ export function ThreadComponent({
 
               {showControl && (
                 <HStack justifyContent="space-between">
-                  {likeButtonControl}
+                  {likeTextButtonControl}
                   <HStack>
                     {favourControl}
                     {reportControl}
@@ -253,6 +257,8 @@ export function ThreadComponent({
           </Box>
         </Stack>
       </Box>
+
+      {/* Large screen controls */}
       <Box
         size="80px"
         py={layoutSettings.controlMargin}

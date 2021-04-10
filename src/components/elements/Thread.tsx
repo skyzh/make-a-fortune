@@ -29,6 +29,7 @@ import {
 import { LayoutStyle, useFortuneLayoutSettings } from "~src/settings"
 import { parseThreadNotification } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
+import { tagToDisplayString } from "../utils/tag"
 import { CollapseContent, Content } from "./Content"
 import ThemeAvatar from "./ThemeAvatar"
 
@@ -182,7 +183,7 @@ export function ThreadComponent({
             {thread.Tag !== Tag.Normal && (
               <Text fontSize="sm">
                 <Badge ml="2" colorScheme="teal">
-                  {thread.Tag}
+                  {tagToDisplayString(thread.Tag)}
                 </Badge>
               </Text>
             )}

@@ -450,7 +450,7 @@ export enum Tag {
   Uncomfort = "uncomfort",
   Unproved = "unproved",
   War = "war",
-  Normal = "NULL"
+  Normal = "NULL",
 }
 
 export interface Thread {
@@ -490,10 +490,10 @@ export interface FetchPostResponse {
 export type LastSeenField = NonNullable<
   {
     [K in keyof FetchPostResponse]: FetchPostResponse[K] extends
-    | string
-    | undefined
-    ? K
-    : never
+      | string
+      | undefined
+      ? K
+      : never
   }[keyof FetchPostResponse]
 >
 

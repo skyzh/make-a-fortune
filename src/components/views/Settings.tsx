@@ -13,6 +13,7 @@ import React, { useState } from "react"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import { LayoutStyle, useFortuneSettings } from "~/src/settings"
 import { Tag } from "~src/client"
+import { tagToDisplayString } from "../utils/tag"
 import KeywordBlock from "./KeywordBlock"
 
 function useSetArray<T>(defaultValue: T[]) {
@@ -73,7 +74,7 @@ function TagBlockSettings({
           isChecked={tags.includes(tag)}
           key={tag}
         >
-          {tag}
+          {tagToDisplayString(tag)}
         </Switch>
       ))}
     </Stack>

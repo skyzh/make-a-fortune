@@ -60,13 +60,15 @@ export function useThreadFilter(threads: Thread[]) {
   if (!threads) return threads
   if (!settings?.blockedKeywords) return threads
 
-  return filter(threads, (thread: Thread) =>
-    every(
-      settings?.blockedKeywords,
-      (keyword: string) =>
-        !thread.Title.toLowerCase().includes(keyword.toLowerCase()) &&
-        !thread.Summary.toLowerCase().includes(keyword.toLowerCase())
-    )
+  return filter(
+    threads,
+    (thread: Thread) =>
+      every(
+        settings?.blockedKeywords,
+        (keyword: string) =>
+          !thread.Title.toLowerCase().includes(keyword.toLowerCase()) &&
+          !thread.Summary.toLowerCase().includes(keyword.toLowerCase())
+      ) && every(settings?.blockedTags, (tag: string) => thread.Tag !== tag)
   )
 }
 

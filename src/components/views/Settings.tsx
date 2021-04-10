@@ -17,6 +17,8 @@ import {
   LayoutStyle,
   useFortuneSettings,
 } from "~/src/settings"
+import { Tag } from "~src/client"
+import { tagToDisplayString } from "../utils/tag"
 import KeywordBlock from "./KeywordBlock"
 
 function useSetArray<T>(defaultValue: T[]) {
@@ -81,6 +83,38 @@ function LayoutSkeleton({ layout }: { layout: LayoutStyle }) {
   )
 }
 
+function TagBlockSettings({
+  tags,
+  addTag,
+  deleteTag,
+}: {
+  tags: Tag[]
+  addTag: (t: Tag | null) => void
+  deleteTag: (t: Tag) => void
+}) {
+  const toggleTagFilter = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    tag: Tag
+  ) => {
+    if (e.currentTarget.checked) addTag(tag)
+    else deleteTag(tag)
+  }
+
+  return (
+    <Stack spacing={3}>
+      {Object.values(Tag).map((tag) => (
+        <Switch
+          onChange={(e) => toggleTagFilter(e, tag)}
+          isChecked={tags.includes(tag)}
+          key={tag}
+        >
+          {tagToDisplayString(tag)}
+        </Switch>
+      ))}
+    </Stack>
+  )
+}
+
 function Settings() {
   const [persistSetting, setPersistSetting] = useFortuneSettings()
 
@@ -89,19 +123,15 @@ function Settings() {
   )
   const [tags, addTag, deleteTag] = useSetArray(persistSetting.blockedTags)
   const [layout, setLayout] = useState(persistSetting.layout)
+  const [obscureTag, setObscureTag] = useState(persistSetting.obscureTag)
   const toast = useToast()
-
-  // now we only need to filter out NSFW contents
-  const toggleSex = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.currentTarget.checked) addTag("sex")
-    else deleteTag("sex")
-  }
 
   const saveSettings = () => {
     setPersistSetting({
       blockedKeywords: keywords,
       blockedTags: tags,
       layout,
+      obscureTag,
     })
     toast({
       title: "设置已保存",
@@ -129,13 +159,14 @@ function Settings() {
             />
           </Box>
           <Box>
-            <Heading fontSize="lg" mb="5">
-              隐藏「性相关」内容
+            <Heading fontSize="lg" mb="2">
+              标签屏蔽
             </Heading>
-            <Switch
-              size="lg"
-              onChange={toggleSex}
-              isChecked={tags.includes("sex")}
+            <Box mb={4}>隐藏标记有以下标签的帖子</Box>
+            <TagBlockSettings
+              tags={tags}
+              addTag={addTag}
+              deleteTag={deleteTag}
             />
           </Box>
           <Box>
@@ -143,6 +174,17 @@ function Settings() {
               布局
             </Heading>
             <LayoutSettings layout={layout} setLayout={setLayout} />
+          </Box>
+          <Box>
+            <Heading fontSize="lg" mb="5">
+              标签风格
+            </Heading>
+            <Switch
+              onChange={(e) => setObscureTag(e.currentTarget.checked)}
+              isChecked={obscureTag}
+            >
+              使用隐晦描述
+            </Switch>
           </Box>
           <Box>
             <Heading fontSize="lg" mb="5">

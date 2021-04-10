@@ -444,6 +444,15 @@ export interface FetchPostRequest {
   lastSeen?: string
 }
 
+export enum Tag {
+  Sex = "sex",
+  Politics = "politics",
+  Uncomfort = "uncomfort",
+  Unproved = "unproved",
+  War = "war",
+  Normal = "NULL",
+}
+
 export interface Thread {
   ThreadID: string
   Block: number
@@ -458,7 +467,7 @@ export interface Thread {
   PostTime: string
   RandomSeed: number
   WhetherTop: number
-  Tag: string
+  Tag: Tag
   // only available in `this_thread` of post details
   WhetherFavour?: number
   WhetherLike?: number

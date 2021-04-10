@@ -7,12 +7,12 @@ export function ColorModeButton(props: ButtonProps) {
 
   return (
     <Button
-      colorScheme="blue"
+      colorScheme={mode.colorMode === "light" ? "blue" : "orange"}
       variant="ghost"
       onClick={mode.toggleColorMode}
       {...props}
     >
-      {mode.colorMode == "light" ? <MoonFill /> : <SunFill />}
+      {mode.colorMode === "light" ? <MoonFill /> : <SunFill />}
     </Button>
   )
 }

@@ -64,7 +64,7 @@ export function FloorSkeleton({ showControl }: { showControl?: boolean }) {
       <Box
         size="80px"
         p={layoutSettings.controlMargin}
-        display={{ base: "none", sm: "unset" }}
+        display={{ base: "none", md: "unset" }}
       >
         <Stack
           color="teal.500"
@@ -241,8 +241,9 @@ export function FloorComponent({
           <Content content={floor.Context} />
         </Stack>
 
+        {/* Small screen controls */}
         {showControl && (
-          <Box display={{ base: "block", sm: "none" }} paddingTop={3}>
+          <Box display={{ base: "block", md: "none" }} paddingTop={3}>
             <Stack color="teal.500">
               <HStack justifyContent="space-between">
                 {likeTextButtonControl}
@@ -262,12 +263,14 @@ export function FloorComponent({
           </Box>
         )}
       </Box>
+
+      {/* Large screen controls */}
       {showControl && (
         <Box
           size="80px"
           py={layoutSettings.controlMargin}
           px={layoutSettings.cardPaddingX}
-          display={{ base: "none", sm: "unset" }}
+          display={{ base: "none", md: "unset" }}
           height="100%"
         >
           <Stack

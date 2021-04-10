@@ -26,7 +26,7 @@ export function handleError(toast, title: string, err: Error) {
 export function getRpcDisplayName(rpc) {
   return rpc === "/"
     ? window.location.hostname
-    : rpc?.replace("https://", "")?.replace("/", "")
+    : rpc?.replace(/(^https?:\/\/)|(\/*$)/g, "")
 }
 
 export function parseThreadNotification(thread: Thread) {

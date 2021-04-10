@@ -7,6 +7,7 @@ const _useFortuneSettings = createPersistedState("fortune-local-settings")
 export interface FortuneSettings {
   blockedKeywords: string[]
   layout: LayoutStyle
+  blockedTags: string[]
 }
 
 export enum LayoutStyle {
@@ -54,6 +55,7 @@ function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {
 export function useFortuneSettings() {
   const [settings, setSettings] = _useFortuneSettings<FortuneSettings>({
     blockedKeywords: [],
+    blockedTags: [],
     layout: LayoutStyle.comfortable,
   })
   // const settings = cloneDeep(_settings)

@@ -5,6 +5,7 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  Switch,
   Text,
   useToast,
 } from "@chakra-ui/react"
@@ -52,12 +53,20 @@ function Settings() {
   const [keywords, addKeyword, deleteKeyword] = useSetArray(
     persistSetting.blockedKeywords
   )
+  const [tags, addTag, deleteTag] = useSetArray(persistSetting.blockedTags)
   const [layout, setLayout] = useState(persistSetting.layout)
   const toast = useToast()
+
+  // now we only need to filter out NSFW contents
+  const toggleSex = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.checked) addTag("sex")
+    else deleteTag("sex")
+  }
 
   const saveSettings = () => {
     setPersistSetting({
       blockedKeywords: keywords,
+      blockedTags: tags,
       layout,
     })
     toast({
@@ -83,6 +92,16 @@ function Settings() {
               keywords={keywords}
               addKeyword={addKeyword}
               deleteKeyword={deleteKeyword}
+            />
+          </Box>
+          <Box>
+            <Heading fontSize="lg" mb="5">
+              隐藏「性相关」内容
+            </Heading>
+            <Switch
+              size="lg"
+              onChange={toggleSex}
+              isChecked={tags.includes("sex")}
             />
           </Box>
           <Box>

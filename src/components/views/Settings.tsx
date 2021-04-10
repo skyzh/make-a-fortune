@@ -48,6 +48,38 @@ function LayoutSettings({
   )
 }
 
+function TagBlockSettings({
+  tags,
+  addTag,
+  deleteTag,
+}: {
+  tags: Tag[]
+  addTag: (t: Tag | null) => void
+  deleteTag: (t: Tag) => void
+}) {
+  const toggleTagFilter = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    tag: Tag
+  ) => {
+    if (e.currentTarget.checked) addTag(tag)
+    else deleteTag(tag)
+  }
+
+  return (
+    <Stack spacing={3}>
+      {Object.values(Tag).map((tag) => (
+        <Switch
+          onChange={(e) => toggleTagFilter(e, tag)}
+          isChecked={tags.includes(tag)}
+          key={tag}
+        >
+          {tag}
+        </Switch>
+      ))}
+    </Stack>
+  )
+}
+
 function Settings() {
   const [persistSetting, setPersistSetting] = useFortuneSettings()
 
@@ -57,15 +89,6 @@ function Settings() {
   const [tags, addTag, deleteTag] = useSetArray(persistSetting.blockedTags)
   const [layout, setLayout] = useState(persistSetting.layout)
   const toast = useToast()
-
-  // now we only need to filter out NSFW contents
-  const toggleTagFilter = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    tag: Tag
-  ) => {
-    if (e.currentTarget.checked) addTag(tag)
-    else deleteTag(tag)
-  }
 
   const saveSettings = () => {
     setPersistSetting({
@@ -99,13 +122,14 @@ function Settings() {
             />
           </Box>
           <Box>
-            <Heading fontSize="lg" mb="5">
-              隐藏「性相关」内容
+            <Heading fontSize="lg" mb="2">
+              标签屏蔽
             </Heading>
-            <Switch
-              size="lg"
-              onChange={(e) => toggleTagFilter(e, Tag.Sex)}
-              isChecked={tags.includes(Tag.Sex)}
+            <Box mb={4}>隐藏标记有以下标签的帖子</Box>
+            <TagBlockSettings
+              tags={tags}
+              addTag={addTag}
+              deleteTag={deleteTag}
             />
           </Box>
           <Box>

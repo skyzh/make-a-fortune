@@ -67,8 +67,7 @@ export default function useLikeControl({
   return [
     <Text fontSize="sm">
       <HandThumbsUpFill />{" "}
-      {clientCurrentLike +
-        (whetherLike !== undefined ? whetherLike - clientWhetherLike : 0)}
+      {clientCurrentLike + (whetherLike ? whetherLike - clientWhetherLike : 0)}
     </Text>,
     <ButtonGroup isAttached colorScheme="teal" size="xs">
       {whetherLikeCombined >= 0 && !isLikeLoading && (
@@ -113,8 +112,7 @@ export default function useLikeControl({
         {whetherLikeCombined === 1 ? <HandThumbsUpFill /> : <HandThumbsUp />}
       </span>
       &nbsp;
-      {clientCurrentLike +
-        (whetherLike !== undefined ? whetherLike - clientWhetherLike : 0)}
+      {clientCurrentLike + (whetherLike ? whetherLike - clientWhetherLike : 0)}
       &nbsp;&nbsp;&nbsp;
       <span onClick={toggleDislikePost}>
         {whetherLikeCombined === -1 ? (

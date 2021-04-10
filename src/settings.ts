@@ -9,6 +9,7 @@ export interface FortuneSettings {
   blockedKeywords: string[]
   layout: LayoutStyle
   blockedTags: Tag[]
+  obscureTag: boolean
 }
 
 export enum LayoutStyle {
@@ -58,6 +59,7 @@ export function useFortuneSettings() {
     blockedKeywords: [],
     blockedTags: [],
     layout: LayoutStyle.comfortable,
+    obscureTag: false,
   })
   return [settings, setSettings] as const
 }

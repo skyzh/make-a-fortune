@@ -89,6 +89,7 @@ function Settings() {
   )
   const [tags, addTag, deleteTag] = useSetArray(persistSetting.blockedTags)
   const [layout, setLayout] = useState(persistSetting.layout)
+  const [obscureTag, setObscureTag] = useState(persistSetting.obscureTag)
   const toast = useToast()
 
   const saveSettings = () => {
@@ -96,6 +97,7 @@ function Settings() {
       blockedKeywords: keywords,
       blockedTags: tags,
       layout,
+      obscureTag,
     })
     toast({
       title: "设置已保存",
@@ -138,6 +140,17 @@ function Settings() {
               布局
             </Heading>
             <LayoutSettings layout={layout} setLayout={setLayout} />
+          </Box>
+          <Box>
+            <Heading fontSize="lg" mb="5">
+              标签风格
+            </Heading>
+            <Switch
+              onChange={(e) => setObscureTag(e.currentTarget.checked)}
+              isChecked={obscureTag}
+            >
+              使用隐晦描述
+            </Switch>
           </Box>
           <Box>
             <Heading fontSize="lg" mb="5">

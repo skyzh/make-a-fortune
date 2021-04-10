@@ -16,3 +16,20 @@ export function tagToDisplayString(tag: Tag): string {
       return "常规内容"
   }
 }
+
+export function tagToObscureString(tag: Tag): string {
+  switch (tag) {
+    case Tag.Sex:
+      return "SE"
+    case Tag.Politics:
+      return "PO"
+    case Tag.Uncomfort:
+      return "UC"
+    case Tag.Unproved:
+      return "UP"
+    case Tag.War:
+      return "WA"
+    case Tag.Normal:
+      return "N"
+  }
+}

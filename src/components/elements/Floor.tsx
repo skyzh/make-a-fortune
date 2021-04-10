@@ -248,7 +248,8 @@ export function FloorComponent({
       {showControl && (
         <Box
           size="80px"
-          p={layoutSettings.controlMargin}
+          py={layoutSettings.controlMargin}
+          px={layoutSettings.cardMargin}
           display={{ base: "none", sm: "unset" }}
           height="100%"
         >

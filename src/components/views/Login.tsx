@@ -85,7 +85,7 @@ function RpcSettings({ rpc, setRpc }) {
             <Radio value="https://fortune.skyzh.dev/">
               <HStack spacing={1}>
                 <Text>fortune.skyzh.dev</Text>
-                <Text color="gray.500">(Powered by VM)</Text>
+                <Text color="gray.500">(Powered by Vultr)</Text>
               </HStack>
             </Radio>
             <Radio value="https://make-a-fortune.vercel.app">
@@ -104,7 +104,7 @@ function RpcSettings({ rpc, setRpc }) {
               <HStack spacing={1}>
                 <Text>fortune.lightquantum.me:9108</Text>
                 <Text color="gray.500">
-                  (Powered by Tencent Cloud, low bandwidth)
+                  (Powered by Tencent Cloud, 低延迟低带宽)
                 </Text>
               </HStack>
             </Radio>
@@ -153,6 +153,7 @@ function RpcSettings({ rpc, setRpc }) {
         <Stack spacing={1}>
           <Text color="gray.500">RPC 后端：{backend?.name}</Text>
           <Text color="gray.500">上游地址：{backend?.addr}</Text>
+          <Text color="gray.500">版本：{backend?.version}</Text>
           <Text color="gray.500">
             延迟：{latency || <Spinner size="xs" />} ms
           </Text>

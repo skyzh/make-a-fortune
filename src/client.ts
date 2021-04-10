@@ -329,9 +329,9 @@ export class Client {
   }
 }
 
-export class RPCVersion {
-  name!: string
-  addr!: string
+export interface RPCVersion {
+  name: string
+  addr: string
   version?: string
   terms_of_service?: string
   rpc_source_code?: string
@@ -397,23 +397,23 @@ class SerializeObject {
   }
 }
 
-class RequestLoginCodeRequest {
-  email!: string
+export interface RequestLoginCodeRequest {
+  email: string
 }
 
-class RequestLoginCodeResponse {
-  VarifiedEmailAddress!: number
+export interface RequestLoginCodeResponse {
+  VarifiedEmailAddress: number
 }
 
-class LoginRequest {
-  email!: string
-  code!: string
-  device!: string
+export interface LoginRequest {
+  email: string
+  code: string
+  device: string
 }
 
-class LoginResponse {
-  login_flag!: number
-  Token!: string
+export interface LoginResponse {
+  login_flag: number
+  Token: string
 }
 
 export enum PostType {
@@ -438,27 +438,27 @@ export enum PostCategory {
   Life = 10,
 }
 
-export class FetchPostRequest {
-  postType!: PostType
-  postCategory!: PostCategory
+export interface FetchPostRequest {
+  postType: PostType
+  postCategory: PostCategory
   lastSeen?: string
 }
 
-export class Thread {
-  ThreadID!: string
-  Block!: number
-  Title!: string
-  Summary!: string
-  Like!: number
-  Dislike!: number
-  Comment!: number
-  Read!: number
-  LastUpdateTime!: string
-  AnonymousType!: NameTheme
-  PostTime!: string
-  RandomSeed!: number
-  WhetherTop!: number
-  Tag!: string
+export interface Thread {
+  ThreadID: string
+  Block: number
+  Title: string
+  Summary: string
+  Like: number
+  Dislike: number
+  Comment: number
+  Read: number
+  LastUpdateTime: string
+  AnonymousType: NameTheme
+  PostTime: string
+  RandomSeed: number
+  WhetherTop: number
+  Tag: string
   // only available in `this_thread` of post details
   WhetherFavour?: number
   WhetherLike?: number
@@ -468,7 +468,7 @@ export class Thread {
   Type?: number
 }
 
-export class FetchPostResponse {
+export interface FetchPostResponse {
   LastSeenThreadID?: string
   LastSeenHotThreadID?: string
   LastSeenMyThreadID?: string
@@ -495,59 +495,59 @@ export enum ReplyOrder {
   Hot = "2",
 }
 
-export class FetchReplyRequest {
-  postId!: string
-  order!: ReplyOrder
+export interface FetchReplyRequest {
+  postId: string
+  order: ReplyOrder
   lastSeen?: string
 }
 
-export class Floor {
-  FloorID!: string
-  Speakername!: string
-  Replytoname!: string
-  Replytofloor!: number
-  Context!: string
-  RTime!: string
-  Like!: number
-  Dislike!: number
-  WhetherLike!: number
-  WhetherReport!: number
+export interface Floor {
+  FloorID: string
+  Speakername: string
+  Replytoname: string
+  Replytofloor: number
+  Context: string
+  RTime: string
+  Like: number
+  Dislike: number
+  WhetherLike: number
+  WhetherReport: number
 }
 
-export class FetchReplyResponse {
-  LastSeenFloorID!: string
-  ExistFlag!: string
-  floor_list!: Floor[]
-  this_thread!: Thread
+export interface FetchReplyResponse {
+  LastSeenFloorID: string
+  ExistFlag: string
+  floor_list: Floor[]
+  this_thread: Thread
 }
 
-export class ActionPostRequest {
-  postId!: string
+export interface ActionPostRequest {
+  postId: string
 }
 
-export class ActionReplyRequest {
-  postId!: string
-  replyId!: string
+export interface ActionReplyRequest {
+  postId: string
+  replyId: string
 }
 
-export class ReplyReplyRequest {
-  postId!: string
-  replyId!: string
-  content!: string
+export interface ReplyReplyRequest {
+  postId: string
+  replyId: string
+  content: string
 }
 
-export class ReplyPostRequest {
-  postId!: string
-  content!: string
+export interface ReplyPostRequest {
+  postId: string
+  content: string
 }
 
-export class SearchRequest {
-  keyword!: string
+export interface SearchRequest {
+  keyword: string
   lastSeen?: string
 }
 
-export class VerifyTokenResponse {
-  login_flag!: string
+export interface VerifyTokenResponse {
+  login_flag: string
 }
 
 export function useClient() {

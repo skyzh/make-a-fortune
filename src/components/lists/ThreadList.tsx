@@ -8,7 +8,7 @@ import {
   useToast,
 } from "@chakra-ui/react"
 import { concat, find, range } from "lodash"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { InView } from "react-intersection-observer"
 import { useParams } from "react-router-dom"
 import { Floor, ReplyOrder, Thread, useClient } from "~/src/client"
@@ -216,8 +216,6 @@ export function ThreadListComponent() {
     doFetch(orderBy)
   }
 
-  const orderByComponent = <OrderBy value={orderBy} setValue={updateOrderBy} />
-
   const onReply = (floor: Floor) => {
     setIsReplyingFloor(floor)
   }
@@ -261,11 +259,27 @@ export function ThreadListComponent() {
       })
   }
 
+  const floorList = useMemo(
+    () => (
+      <FloorListComponent
+        thread={thread}
+        floors={floors}
+        moreEntries={moreEntries}
+        hasMore={hasMore}
+        orderBy={<OrderBy value={orderBy} setValue={updateOrderBy} />}
+        onReply={onReply}
+        onPostReply={onPostReply}
+        requestFloor={requestFloor}
+      />
+    ),
+    [orderBy, hasMore, floors, thread]
+  )
+
   return (
     <ScrollableContainer>
       <GoBack />
       <ReplyModal
-        isOpen={isReplyingFloor !== undefined || isReplyingPost}
+        isOpen={!!isReplyingFloor || isReplyingPost}
         toFloor={toFloorComponent}
         onCancel={() => {
           setIsReplyingFloor(undefined)
@@ -274,16 +288,7 @@ export function ThreadListComponent() {
         isLoading={isReplyInProgress}
         doReply={doReply}
       />
-      <FloorListComponent
-        thread={thread}
-        floors={floors}
-        moreEntries={moreEntries}
-        hasMore={hasMore}
-        orderBy={orderByComponent}
-        onReply={onReply}
-        onPostReply={onPostReply}
-        requestFloor={requestFloor}
-      />
+      {floorList}
     </ScrollableContainer>
   )
 }

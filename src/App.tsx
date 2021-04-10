@@ -45,6 +45,8 @@ function App() {
           top={0}
           bottom={0}
           bg={navBgColor}
+          overflowY={{ base: "unset", md: "scroll" }}
+          overflowX="hidden"
         >
           <Box padding="4" width="300px">
             <Navbar />

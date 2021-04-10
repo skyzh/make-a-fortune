@@ -13,6 +13,7 @@ import {
 import React, { useState } from "react"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import {
+  EnhancedSettings,
   getLayoutStyleSettings,
   LayoutStyle,
   useFortuneSettings,
@@ -115,6 +116,35 @@ function TagBlockSettings({
   )
 }
 
+function EnhancedModeSettings({
+  value,
+  setValue,
+}: {
+  value: EnhancedSettings
+  setValue: (value: EnhancedSettings) => void
+}) {
+  return (
+    <Stack spacing={3}>
+      <Switch
+        onChange={(e) =>
+          setValue({ ...value, enableHistory: e.currentTarget.checked })
+        }
+        isChecked={value.enableHistory}
+      >
+        启用历史记录
+      </Switch>
+      <Switch
+        onChange={(e) =>
+          setValue({ ...value, enableStar: e.currentTarget.checked })
+        }
+        isChecked={value.enableStar}
+      >
+        增强收藏功能
+      </Switch>
+    </Stack>
+  )
+}
+
 function Settings() {
   const [persistSetting, setPersistSetting] = useFortuneSettings()
 
@@ -124,6 +154,7 @@ function Settings() {
   const [tags, addTag, deleteTag] = useSetArray(persistSetting.blockedTags)
   const [layout, setLayout] = useState(persistSetting.layout)
   const [obscureTag, setObscureTag] = useState(persistSetting.obscureTag)
+  const [enhancedMode, setEnhancedMode] = useState(persistSetting.enhancedMode)
   const toast = useToast()
 
   const saveSettings = () => {
@@ -132,6 +163,7 @@ function Settings() {
       blockedTags: tags,
       layout,
       obscureTag,
+      enhancedMode,
     })
     toast({
       title: "设置已保存",
@@ -185,6 +217,15 @@ function Settings() {
             >
               使用隐晦描述
             </Switch>
+          </Box>
+          <Box>
+            <Heading fontSize="lg" mb="5">
+              增强功能 (暂未实现)
+            </Heading>
+            <EnhancedModeSettings
+              value={enhancedMode}
+              setValue={setEnhancedMode}
+            />
           </Box>
           <Box>
             <Heading fontSize="lg" mb="5">

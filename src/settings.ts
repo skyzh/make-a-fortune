@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash"
 import createPersistedState from "use-persisted-state"
 import { Tag } from "./client"
 
@@ -5,11 +6,16 @@ export const useTokenState = createPersistedState("fortune-settings")
 export const useRPCState = createPersistedState("fortune-rpc")
 const _useFortuneSettings = createPersistedState("fortune-local-settings")
 
+export interface EnhancedSettings {
+  enableHistory: boolean
+  enableStar: boolean
+}
 export interface FortuneSettings {
   blockedKeywords: string[]
   layout: LayoutStyle
   blockedTags: Tag[]
   obscureTag: boolean
+  enhancedMode: EnhancedSettings
 }
 
 export enum LayoutStyle {
@@ -57,12 +63,35 @@ export function getLayoutStyleSettings(
 }
 
 export function useFortuneSettings() {
-  const [settings, setSettings] = _useFortuneSettings<FortuneSettings>({
+  const [_settings, setSettings] = _useFortuneSettings<FortuneSettings>({
     blockedKeywords: [],
     blockedTags: [],
     layout: LayoutStyle.comfortable,
     obscureTag: false,
+    enhancedMode: {
+      enableHistory: false,
+      enableStar: false,
+    },
   })
+  const settings = cloneDeep(_settings)
+  if (settings.blockedKeywords === undefined) {
+    settings.blockedKeywords = []
+  }
+  if (settings.layout === undefined) {
+    settings.layout = LayoutStyle.comfortable
+  }
+  if (settings.blockedTags === undefined) {
+    settings.blockedTags = []
+  }
+  if (settings.obscureTag === undefined) {
+    settings.obscureTag = false
+  }
+  if (settings.enhancedMode === undefined) {
+    settings.enhancedMode = {
+      enableHistory: false,
+      enableStar: false,
+    }
+  }
   return [settings, setSettings] as const
 }
 

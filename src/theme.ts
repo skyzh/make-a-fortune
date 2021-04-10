@@ -5,4 +5,8 @@ export const theme = extendTheme({
     semibold: 500,
     bold: 500,
   },
+  config: {
+    initialColorMode: "light",
+    useSystemColorMode: false,
+  },
 })

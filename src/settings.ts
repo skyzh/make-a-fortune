@@ -1,4 +1,5 @@
 import createPersistedState from "use-persisted-state"
+import { Tag } from "./client"
 
 export const useTokenState = createPersistedState("fortune-settings")
 export const useRPCState = createPersistedState("fortune-rpc")
@@ -7,7 +8,7 @@ const _useFortuneSettings = createPersistedState("fortune-local-settings")
 export interface FortuneSettings {
   blockedKeywords: string[]
   layout: LayoutStyle
-  blockedTags: string[]
+  blockedTags: Tag[]
 }
 
 export enum LayoutStyle {
@@ -58,13 +59,6 @@ export function useFortuneSettings() {
     blockedTags: [],
     layout: LayoutStyle.comfortable,
   })
-  // const settings = cloneDeep(_settings)
-  // if (!settings.blockedKeywords) {
-  //   settings.blockedKeywords = []
-  // }
-  // if (!settings.layout) {
-  //   settings.layout = LayoutStyle.comfortable
-  // }
   return [settings, setSettings] as const
 }
 

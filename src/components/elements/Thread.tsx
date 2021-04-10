@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react"
 import moment from "moment"
 import React from "react"
-import { Thread, useClient } from "~/src/client"
+import { Tag, Thread, useClient } from "~/src/client"
 import useLikeControl from "~/src/components/controls/LikeControl"
 import {
   Broadcast,
@@ -179,7 +179,7 @@ export function ThreadComponent({
               <Badge colorScheme="gray"># {thread.ThreadID}</Badge>
             </Text>
 
-            {thread.Tag !== "NULL" && (
+            {thread.Tag !== Tag.Normal && (
               <Text fontSize="sm">
                 <Badge ml="2" colorScheme="teal">
                   {thread.Tag}

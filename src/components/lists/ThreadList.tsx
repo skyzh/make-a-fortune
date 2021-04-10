@@ -192,6 +192,8 @@ export function ThreadListComponent() {
     return null
   }
 
+  console.log(thread)
+
   function doFetch(
     orderBy: ReplyOrder,
     lastSeen?: string,

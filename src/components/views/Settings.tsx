@@ -12,6 +12,7 @@ import {
 import React, { useState } from "react"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import { LayoutStyle, useFortuneSettings } from "~/src/settings"
+import { Tag } from "~src/client"
 import KeywordBlock from "./KeywordBlock"
 
 function useSetArray<T>(defaultValue: T[]) {
@@ -58,9 +59,12 @@ function Settings() {
   const toast = useToast()
 
   // now we only need to filter out NSFW contents
-  const toggleSex = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.currentTarget.checked) addTag("sex")
-    else deleteTag("sex")
+  const toggleTagFilter = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    tag: Tag
+  ) => {
+    if (e.currentTarget.checked) addTag(tag)
+    else deleteTag(tag)
   }
 
   const saveSettings = () => {
@@ -100,8 +104,8 @@ function Settings() {
             </Heading>
             <Switch
               size="lg"
-              onChange={toggleSex}
-              isChecked={tags.includes("sex")}
+              onChange={(e) => toggleTagFilter(e, Tag.Sex)}
+              isChecked={tags.includes(Tag.Sex)}
             />
           </Box>
           <Box>

@@ -33,10 +33,16 @@ import { useRPCState, useTokenState } from "~/src/settings"
 import { getRpcDisplayName, handleError } from "~src/utils"
 import { ArrowRightShort } from "../utils/Icons"
 
-function RpcSettings({ rpc, setRpc }) {
+function RpcSettings({
+  rpc,
+  setRpc,
+}: {
+  rpc: string
+  setRpc: (r: string) => void
+}) {
   const [connectionLoading, setConnectionLoading] = useState(false)
-  const [backend, setBackend] = useState<RPCVersion | null>(null)
-  const [latency, setLatency] = useState<number | undefined>(undefined)
+  const [backend, setBackend] = useState<RPCVersion>()
+  const [latency, setLatency] = useState<number[]>()
   const [isCheckingConnection, setIsCheckingConnection] = useBoolean(false)
   const toast = useToast()
 
@@ -77,7 +83,7 @@ function RpcSettings({ rpc, setRpc }) {
   }
 
   const doSetRpc = (value: string) => {
-    setBackend(null)
+    setBackend(undefined)
     setRpc(value)
   }
 
@@ -182,17 +188,17 @@ function RpcSettings({ rpc, setRpc }) {
             {isCheckingConnection && <Spinner size="xs" />}
           </HStack>
           <Text color="blue.500">
-            <a href={backend?.terms_of_service}>
-              <ArrowRightShort /> {backend?.name || "<匿名社区>"} 用户协议
+            <a href={backend.terms_of_service}>
+              <ArrowRightShort /> {backend.name || "<匿名社区>"} 用户协议
             </a>
           </Text>
           <Text color="blue.500">
-            <a href={backend?.rpc_source_code}>
+            <a href={backend.rpc_source_code}>
               <ArrowRightShort /> {rpcDisplayName} 开源代码
             </a>
           </Text>
           <Text color="blue.500">
-            <a href={backend?.rpc_terms_of_service}>
+            <a href={backend.rpc_terms_of_service}>
               <ArrowRightShort /> {rpcDisplayName} 用户协议
             </a>
           </Text>

@@ -24,9 +24,8 @@ export default function useNetworkLocalControl({
   confirmComponent,
   confirm,
 }: NetworkLocalControlProps) {
-  const [whetherAction, setWhetherAction] = useState<boolean>(null!)
-  const whetherActionCombined =
-    whetherAction === null ? clientState : whetherAction
+  const [whetherAction, setWhetherAction] = useState<boolean>()
+  const whetherActionCombined = whetherAction ?? clientState
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false)
   const toast = useToast()
   const [isConfirming, setIsConfirming] = useState<boolean>(false)
@@ -63,7 +62,7 @@ export default function useNetworkLocalControl({
       variant={whetherActionCombined ? "solid" : "outline"}
       onClick={toggleState}
       isLoading={isActionLoading}
-      isDisabled={cancelAction == null && whetherActionCombined}
+      isDisabled={cancelAction === undefined && whetherActionCombined}
     >
       {isConfirming
         ? confirmComponent

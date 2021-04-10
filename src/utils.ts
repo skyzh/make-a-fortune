@@ -24,7 +24,7 @@ export function handleError(toast: ReturnType<typeof useToast>, title: string, e
   }
 }
 
-export function getRpcDisplayName(rpc: string | null) {
+export function getRpcDisplayName(rpc?: string) {
   return rpc === "/"
     ? window.location.hostname
     : rpc?.replace(/(^https?:\/\/)|(\/*$)/g, "")

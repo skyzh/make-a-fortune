@@ -331,6 +331,7 @@ export class Client {
 export class RPCVersion {
   name!: string
   addr!: string
+  version?: string
   terms_of_service?: string
   rpc_source_code?: string
   rpc_terms_of_service?: string
@@ -470,9 +471,16 @@ export class FetchPostResponse {
   LastSeenThreadID?: string
   LastSeenHotThreadID?: string
   LastSeenMyThreadID?: string
+  LastSeenFavorThreadID?: string
+  LastSeenMessageThreadID?: string
   thread_list?: Thread[]
   message_list?: Thread[]
 }
+
+export type LastSeenField = NonNullable<{
+  [K in keyof FetchPostResponse]:
+  FetchPostResponse[K] extends (string | undefined) ? K : never
+}[keyof FetchPostResponse]>
 
 export enum ReplyOrder {
   Earliest = "0",

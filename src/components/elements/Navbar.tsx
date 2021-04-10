@@ -20,9 +20,9 @@ import Logo from "../widgets/Logo"
 import NavButton, { NavButtonProps } from "../widgets/NavButton"
 
 function Navbar({ onClose }: { onClose?: AsyncCallback | Callback }) {
-  const [rpc, _setRpc] = useRPCState()
+  const [rpc, _setRpc] = useRPCState<string>()
   const [token, _setToken] = useTokenState()
-  const [backend, setBackend] = useState<RPCVersion | null>()
+  const [backend, setBackend] = useState<RPCVersion>()
   const toast = useToast()
 
   useEffect(() => {

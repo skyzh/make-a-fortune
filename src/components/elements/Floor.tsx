@@ -26,6 +26,7 @@ import {
 import { useFortuneLayoutSettings } from "~src/settings"
 import { handleError } from "~src/utils"
 import useNetworkLocalControl from "../controls/NetworkLocalControl"
+import { RequestFloor } from "../utils/types"
 import { Content } from "./Content"
 import ThemeAvatar from "./ThemeAvatar"
 
@@ -38,7 +39,7 @@ interface FloorComponentProps {
   showControl?: boolean
   onReply?: Function
   allowExpand?: boolean
-  requestFloor?: (f: string) => Promise<Floor>
+  requestFloor?: RequestFloor
 }
 
 export function FloorSkeleton({ showControl }: { showControl?: boolean }) {
@@ -128,7 +129,7 @@ export function FloorComponent({
     confirm: true,
   })
 
-  const [stackedFloor, setStackedFloor] = useState<Floor>(null!)
+  const [stackedFloor, setStackedFloor] = useState<Floor>()
   const [isExpanding, setIsExpanding] = useState(false)
 
   const toast = useToast()
@@ -224,7 +225,7 @@ export function FloorComponent({
                     size="xs"
                     variant="ghost"
                     colorScheme="teal"
-                    onClick={() => setStackedFloor(null)}
+                    onClick={() => setStackedFloor(undefined)}
                   >
                     <ArrowBarDown />
                   </Button>

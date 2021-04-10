@@ -15,7 +15,7 @@ import Logo from "../widgets/Logo"
 
 const PhoneNavbar: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const btnRef = React.useRef<HTMLButtonElement>(null!)
+  const btnRef = React.useRef<HTMLButtonElement>(undefined!)
 
   const drawerBgColor = useColorModeValue("gray.50", "gray.900")
 

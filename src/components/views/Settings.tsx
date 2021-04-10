@@ -10,26 +10,32 @@ import {
 } from "@chakra-ui/react"
 import React, { useState } from "react"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
-import { useFortuneSettings } from "~/src/settings"
+import { LayoutStyle, useFortuneSettings } from "~/src/settings"
 import KeywordBlock from "./KeywordBlock"
 
-function useSetArray(defaultValue) {
+function useSetArray<T>(defaultValue: T[]) {
   const [content, setContent] = useState(new Set(defaultValue))
-  const appendValue = (value) => {
+  const appendValue = (value: T | null) => {
     if (!value) return
     const newContent = new Set(content)
     newContent.add(value)
     setContent(newContent)
   }
-  const deleteValue = (value) => {
+  const deleteValue = (value: T) => {
     const newContent = new Set(content)
     newContent.delete(value)
     setContent(newContent)
   }
-  return [Array.from(content), appendValue, deleteValue]
+  return [Array.from(content), appendValue, deleteValue] as const
 }
 
-function LayoutSettings({ layout, setLayout }) {
+function LayoutSettings({
+  layout,
+  setLayout,
+}: {
+  layout: LayoutStyle
+  setLayout: (l: LayoutStyle) => void
+}) {
   return (
     <RadioGroup value={layout} onChange={setLayout}>
       <Stack spacing={3}>

@@ -12,7 +12,13 @@ import { concat, range, uniqBy } from "lodash"
 import React, { useEffect, useState } from "react"
 import { InView } from "react-intersection-observer"
 import { useHistory, useLocation, useParams } from "react-router-dom"
-import { PostCategory, PostType, Thread, useClient } from "~/src/client"
+import {
+  LastSeenField,
+  PostCategory,
+  PostType,
+  Thread,
+  useClient,
+} from "~/src/client"
 import NoMore from "~/src/components/elements/NoMore"
 import {
   ThreadComponent,
@@ -25,7 +31,7 @@ import { useFortuneLayoutSettings } from "~src/settings"
 import { Search } from "../utils/Icons"
 
 interface ThreadListComponentProps {
-  threadList?: Thread[]
+  threadList: Thread[]
   moreEntries: Function
   hasMore: boolean
   isMessage?: boolean
@@ -34,7 +40,7 @@ interface ThreadListComponentProps {
 interface PostListComponentProps {
   postCategory: number
   postType: PostType
-  lastSeenField?: string
+  lastSeenField: LastSeenField
   isMessage?: boolean
 }
 
@@ -49,7 +55,7 @@ function ThreadListComponent({
 
   return (
     <Stack spacing={layoutSettings.listSpacing} width="100%" mb="3">
-      {threadList !== null ? (
+      {threadList && threadList.length > 0 ? (
         <>
           {threadList?.map((thread) => (
             <Box
@@ -65,8 +71,6 @@ function ThreadListComponent({
             </Box>
           ))}
           {hasMore ? (
-            // TS2322 caused by react-intersection-observer
-            // @ts-ignore
             <InView
               as="div"
               onChange={(inView) => {
@@ -97,27 +101,24 @@ export function PostListComponent({
   isMessage,
 }: PostListComponentProps) {
   const client = useClient()
-  const [threadList, setThreadList] = useState(null)
+  const [threadList, setThreadList] = useState<Thread[]>()
   const toast = useToast()
   const [hasMore, setHasMore] = useState(true)
-  const [lastSeen, setLastSeen] = useState(null)
+  const [lastSeen, setLastSeen] = useState<string>()
 
-  function doFetch(lastSeen, previousThreads) {
+  function doFetch(lastSeen?: string, previousThreads: Thread[] = []) {
     async function fetch() {
       const result = await client.fetchPost({
         postCategory,
         postType,
         lastSeen,
       })
-      const toMerge = isMessage ? result.message_list : result.thread_list
+      const toMerge =
+        (isMessage ? result.message_list : result.thread_list) ?? []
 
-      setThreadList(
-        previousThreads
-          ? uniqBy(concat(previousThreads, toMerge), "ThreadID")
-          : toMerge
-      )
+      setThreadList(uniqBy(concat(previousThreads, toMerge), "ThreadID"))
       setLastSeen(result[lastSeenField])
-      setHasMore(toMerge.length !== 0)
+      setHasMore((toMerge?.length ?? 0) !== 0)
     }
     fetch()
       .then()
@@ -125,17 +126,17 @@ export function PostListComponent({
   }
 
   useEffect(() => {
-    doFetch(null, null)
+    doFetch()
   }, [postCategory, postType, lastSeenField])
 
   const moreEntries = () => doFetch(lastSeen, threadList)
 
   const refresh = () => {
-    setThreadList(null)
-    doFetch(null, null)
+    setThreadList(undefined)
+    doFetch()
   }
 
-  const finalThreadList = useThreadFilter(threadList)
+  const finalThreadList = useThreadFilter(threadList ?? [])
 
   return (
     <>
@@ -231,15 +232,15 @@ function useSearchKeyword() {
 
 export function PostListSearch() {
   const client = useClient()
-  const [threadList, setThreadList] = useState(null)
+  const [threadList, setThreadList] = useState<Thread[]>()
   const toast = useToast()
   const [hasMore, setHasMore] = useState(true)
-  const [lastSeen, setLastSeen] = useState(null)
+  const [lastSeen, setLastSeen] = useState<string>()
   const keyword = useSearchKeyword().get("keyword")
   const [inputKeyword, setInputKeyword] = useState(keyword)
   const history = useHistory()
 
-  function doFetch(lastSeen, previousThreads) {
+  function doFetch(lastSeen?: string, previousThreads: Thread[] = []) {
     async function fetch() {
       if (!keyword) return
       const result = await client.search({
@@ -263,16 +264,18 @@ export function PostListSearch() {
   }
 
   useEffect(() => {
-    doFetch(null, null)
+    doFetch()
   }, [keyword])
 
   const moreEntries = () => doFetch(lastSeen, threadList)
 
   const doSearch = (inputKeyword: string | null) => {
-    history.replace(`/posts/search?keyword=${encodeURIComponent(inputKeyword ?? "")}`)
+    history.replace(
+      `/posts/search?keyword=${encodeURIComponent(inputKeyword ?? "")}`
+    )
   }
 
-  const finalThreadList = useThreadFilter(threadList)
+  const finalThreadList = useThreadFilter(threadList ?? [])
 
   return (
     <ScrollableContainer>
@@ -298,7 +301,7 @@ export function PostListSearch() {
           搜索
         </Button>
       </HStack>
-      {keyword !== "" && keyword !== null ? (
+      {keyword && keyword !== "" ? (
         <ThreadListComponent
           threadList={finalThreadList}
           moreEntries={moreEntries}

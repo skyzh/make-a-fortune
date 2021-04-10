@@ -26,7 +26,7 @@ export default function useLikeControl({
 }) {
   const toast = useToast()
 
-  const [whetherLike, setWhetherLike] = useState<number | null>(null)
+  const [whetherLike, setWhetherLike] = useState<number>()
   const whetherLikeCombined = whetherLike ?? clientWhetherLike
   const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false)
 
@@ -68,7 +68,7 @@ export default function useLikeControl({
     <Text fontSize="sm">
       <HandThumbsUpFill />{" "}
       {clientCurrentLike +
-        (whetherLike !== null ? whetherLike - clientWhetherLike : 0)}
+        (whetherLike !== undefined ? whetherLike - clientWhetherLike : 0)}
     </Text>,
     <ButtonGroup isAttached colorScheme="teal" size="xs">
       {whetherLikeCombined >= 0 && !isLikeLoading && (
@@ -114,7 +114,7 @@ export default function useLikeControl({
       </span>
       &nbsp;
       {clientCurrentLike +
-        (whetherLike !== null ? whetherLike - clientWhetherLike : 0)}
+        (whetherLike !== undefined ? whetherLike - clientWhetherLike : 0)}
       &nbsp;&nbsp;&nbsp;
       <span onClick={toggleDislikePost}>
         {whetherLikeCombined === -1 ? (

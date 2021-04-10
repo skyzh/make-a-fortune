@@ -1,3 +1,4 @@
+import { useState } from "react"
 import createPersistedState from "use-persisted-state"
 
 export const useTokenState = createPersistedState("fortune-settings")

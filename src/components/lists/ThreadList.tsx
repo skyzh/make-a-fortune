@@ -98,8 +98,6 @@ export function FloorListComponent({
             </Box>
           ))}
           {hasMore ? (
-            // TS2322 caused by react-intersection-observer
-            // @ts-ignore
             <InView
               as="div"
               onChange={(inView) => {
@@ -133,10 +131,14 @@ export function ThreadListComponent() {
   const toast = useToast()
   const [orderBy, setOrderBy] = useState<ReplyOrder>(ReplyOrder.Earliest)
 
+  const [allLastSeen, setAllLastSeen] = useState<string>()
+  const [allFloors, setAllFloors] = useState<Floor[]>()
+
   async function fetchContent(
     orderBy: ReplyOrder,
     lastSeen?: string,
-    previousFloors?: Floor[]
+    previousFloors?: Floor[],
+    update: boolean = true // whether to update view state or `allXxx`
   ) {
     const result = await client.fetchReply({
       postId: postId,
@@ -146,16 +148,24 @@ export function ThreadListComponent() {
     const newFloors = concat(previousFloors ?? [], result?.floor_list ?? [])
     const newLastSeen = result?.LastSeenFloorID ?? lastSeen
     const hasMore = (result?.floor_list.length ?? 0) !== 0
-    setThread(result?.this_thread)
-    setLastSeen(newLastSeen)
-    setFloors(newFloors)
-    setHasMore(hasMore)
+
+    if (update) {
+      setThread(result?.this_thread)
+      setLastSeen(newLastSeen)
+      setFloors(newFloors)
+      setHasMore(hasMore)
+    } else if (orderBy == ReplyOrder.Earliest) {
+      setAllFloors(newFloors)
+      setAllLastSeen(allLastSeen)
+    }
+
     return { newFloors, newLastSeen, newHasMore: hasMore }
   }
 
   async function requestFloor(requestId: string) {
-    let currentLastSeen = lastSeen
-    let currentFloors = floors
+    let currentLastSeen = orderBy === ReplyOrder.Host ? allLastSeen : lastSeen
+    let currentFloors = orderBy === ReplyOrder.Host ? allFloors : floors
+
     while (true) {
       const floor = find(
         currentFloors,
@@ -164,13 +174,11 @@ export function ThreadListComponent() {
       if (floor) {
         return floor
       }
-      if (!hasMore) {
-        return null
-      }
       const { newFloors, newLastSeen, newHasMore } = await fetchContent(
-        orderBy,
+        orderBy !== ReplyOrder.Host ? orderBy : ReplyOrder.Earliest,
         currentLastSeen,
-        currentFloors
+        currentFloors,
+        orderBy !== ReplyOrder.Host
       )
       currentFloors = newFloors
       currentLastSeen = newLastSeen
@@ -178,7 +186,7 @@ export function ThreadListComponent() {
         break
       }
       // add some delay before continuing resolving
-      await sleep(1000)
+      await sleep(200)
     }
     return null
   }
@@ -272,7 +280,7 @@ export function ThreadListComponent() {
         requestFloor={requestFloor}
       />
     ),
-    [orderBy, hasMore, floors, thread]
+    [orderBy, hasMore, floors, thread, allFloors]
   )
 
   return (

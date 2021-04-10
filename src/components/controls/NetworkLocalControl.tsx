@@ -62,7 +62,7 @@ export default function useNetworkLocalControl({
       variant={whetherActionCombined ? "solid" : "outline"}
       onClick={toggleState}
       isLoading={isActionLoading}
-      isDisabled={cancelAction === undefined && whetherActionCombined}
+      isDisabled={!cancelAction && whetherActionCombined}
     >
       {isConfirming
         ? confirmComponent

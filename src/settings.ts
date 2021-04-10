@@ -4,9 +4,9 @@ export const useTokenState = createPersistedState("fortune-settings")
 export const useRPCState = createPersistedState("fortune-rpc")
 const _useFortuneSettings = createPersistedState("fortune-local-settings")
 
-export class FortuneSettings {
-  blockedKeywords!: string[]
-  layout!: LayoutStyle
+export interface FortuneSettings {
+  blockedKeywords: string[]
+  layout: LayoutStyle
 }
 
 export enum LayoutStyle {
@@ -14,14 +14,14 @@ export enum LayoutStyle {
   compact = "compact",
 }
 
-export class LayoutStyleSettings {
-  style!: LayoutStyle
-  cardPaddingX!: number
-  cardPaddingY!: number
-  cardSpacing!: number
-  controlMargin!: number
-  controlSpacing!: number
-  listSpacing!: number
+export interface LayoutStyleSettings {
+  style: LayoutStyle
+  cardPaddingX: number
+  cardPaddingY: number
+  cardSpacing: number
+  controlMargin: number
+  controlSpacing: number
+  listSpacing: number
 }
 
 function getLayoutStyleSettings(layout: LayoutStyle): LayoutStyleSettings {

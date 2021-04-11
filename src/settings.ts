@@ -2,9 +2,14 @@ import { cloneDeep } from "lodash"
 import createPersistedState from "use-persisted-state"
 import { Tag } from "./client"
 
-export const useTokenState = createPersistedState("fortune-settings")
-export const useRPCState = createPersistedState("fortune-rpc")
-const _useFortuneSettings = createPersistedState("fortune-local-settings")
+export const FORTUNE_TOKEN_KEY = "fortune-settings"
+export const useTokenState = createPersistedState(FORTUNE_TOKEN_KEY)
+export const FORTUNE_RPC_KEY = "fortune-rpc"
+export const useRPCState = createPersistedState(FORTUNE_RPC_KEY)
+export const FORTUNE_LOCAL_SETTINGS_KEY = "fortune-local-settings"
+const _useFortuneSettings = createPersistedState(FORTUNE_LOCAL_SETTINGS_KEY)
+export const FORTUNE_HISTORY_KEY = "fortune-posts-history"
+export const FORTUNE_STAR_KEY = "fortune-posts-star"
 
 export interface EnhancedSettings {
   enableHistory: boolean

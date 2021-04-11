@@ -26,6 +26,7 @@ import {
   Star,
   StarFill,
 } from "~/src/components/utils/Icons"
+import { addToStar, removeFromStar } from "~src/enhanced_control"
 import {
   LayoutStyle,
   useFortuneLayoutSettings,
@@ -125,10 +126,21 @@ export function ThreadComponent({
     onDislike: () => client.dislikePost(payload),
   })
 
+  const settings = useFortuneSettingsRead()
+
   const favourControl = useNetworkLocalControl({
     clientState: thread.WhetherFavour === 1,
-    doAction: () => client.favorPost(payload),
-    cancelAction: () => client.defavorPost(payload),
+    doAction: () =>
+      client
+        .favorPost(payload)
+        .then(() => settings.enhancedMode.enableStar && addToStar(thread)),
+    cancelAction: () =>
+      client
+        .defavorPost(payload)
+        .then(
+          () =>
+            settings.enhancedMode.enableStar && removeFromStar(thread.ThreadID)
+        ),
     failedText: "无法收藏",
     doneComponent: (
       <>

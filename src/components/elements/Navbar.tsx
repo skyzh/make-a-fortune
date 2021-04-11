@@ -11,7 +11,11 @@ import {
 import React, { useEffect, useState } from "react"
 import { Client, RPCVersion } from "~/src/client"
 import { ArrowRightShort } from "~/src/components/utils/Icons"
-import { useRPCState, useTokenState } from "~/src/settings"
+import {
+  useFortuneSettingsRead,
+  useRPCState,
+  useTokenState,
+} from "~/src/settings"
 import { getRpcDisplayName } from "~src/utils"
 import { AsyncCallback, Callback } from "../utils/types"
 import CategoryNavigation from "../widgets/CategoryNavigation"
@@ -52,6 +56,8 @@ function Navbar({ onClose }: { onClose?: AsyncCallback | Callback }) {
 
   const rpcDisplayName = getRpcDisplayName(rpc)
 
+  const settings = useFortuneSettingsRead()
+
   return (
     <Stack spacing={1}>
       <HStack mb="3">
@@ -78,6 +84,9 @@ function Navbar({ onClose }: { onClose?: AsyncCallback | Callback }) {
       <NB to="/posts/star">收藏</NB>
       <NB to="/posts/notification">通知</NB>
       <NB to="/posts/me">我的发帖</NB>
+      {settings.enhancedMode.enableHistory && (
+        <NB to="/posts/history">浏览历史</NB>
+      )}
       <Divider />
       <Box px="5">
         <Text color="gray.500" fontSize="sm">

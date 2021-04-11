@@ -1,6 +1,7 @@
 import {
   Box,
   Divider,
+  Flex,
   Heading,
   HStack,
   Spacer,
@@ -11,11 +12,16 @@ import {
 import React, { useEffect, useState } from "react"
 import { Client, RPCVersion } from "~/src/client"
 import { ArrowRightShort } from "~/src/components/utils/Icons"
-import { useRPCState, useTokenState } from "~/src/settings"
+import {
+  useFortuneSettingsRead,
+  useRPCState,
+  useTokenState,
+} from "~/src/settings"
 import { getRpcDisplayName } from "~src/utils"
 import { AsyncCallback, Callback } from "../utils/types"
 import CategoryNavigation from "../widgets/CategoryNavigation"
 import { ColorModeButton } from "../widgets/ColorModeButton"
+import DevBadge from "../widgets/DevBadge"
 import Logo from "../widgets/Logo"
 import NavButton, { NavButtonProps } from "../widgets/NavButton"
 
@@ -52,6 +58,8 @@ function Navbar({ onClose }: { onClose?: AsyncCallback | Callback }) {
 
   const rpcDisplayName = getRpcDisplayName(rpc)
 
+  const settings = useFortuneSettingsRead()
+
   return (
     <Stack spacing={1}>
       <HStack mb="3">
@@ -60,6 +68,9 @@ function Navbar({ onClose }: { onClose?: AsyncCallback | Callback }) {
         <Spacer />
         <ColorModeButton />
       </HStack>
+      <Flex justifyContent="flex-end" direction="row">
+        <DevBadge />
+      </Flex>
 
       <NB exact to="/">
         最新
@@ -78,6 +89,9 @@ function Navbar({ onClose }: { onClose?: AsyncCallback | Callback }) {
       <NB to="/posts/star">收藏</NB>
       <NB to="/posts/notification">通知</NB>
       <NB to="/posts/me">我的发帖</NB>
+      {settings.enhancedMode.enableHistory && (
+        <NB to="/posts/history">浏览历史</NB>
+      )}
       <Divider />
       <Box px="5">
         <Text color="gray.500" fontSize="sm">

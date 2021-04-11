@@ -26,6 +26,7 @@ import {
   Star,
   StarFill,
 } from "~/src/components/utils/Icons"
+import { addToStar, removeFromStar } from "~src/enhanced_control"
 import {
   LayoutStyle,
   useFortuneLayoutSettings,
@@ -102,6 +103,22 @@ export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
   )
 }
 
+export function ThreadTag({
+  tag,
+  obscureTag,
+}: {
+  tag: Tag
+  obscureTag: boolean
+}) {
+  return (
+    <Text fontSize="sm">
+      <Badge colorScheme="teal">
+        {obscureTag ? tagToObscureString(tag) : tagToDisplayString(tag)}
+      </Badge>
+    </Text>
+  )
+}
+
 export function ThreadComponent({
   thread,
   showPostTime,
@@ -125,10 +142,21 @@ export function ThreadComponent({
     onDislike: () => client.dislikePost(payload),
   })
 
+  const settings = useFortuneSettingsRead()
+
   const favourControl = useNetworkLocalControl({
     clientState: thread.WhetherFavour === 1,
-    doAction: () => client.favorPost(payload),
-    cancelAction: () => client.defavorPost(payload),
+    doAction: () =>
+      client
+        .favorPost(payload)
+        .then(() => settings.enhancedMode.enableStar && addToStar(thread)),
+    cancelAction: () =>
+      client
+        .defavorPost(payload)
+        .then(
+          () =>
+            settings.enhancedMode.enableStar && removeFromStar(thread.ThreadID)
+        ),
     failedText: "无法收藏",
     doneComponent: (
       <>
@@ -188,13 +216,9 @@ export function ThreadComponent({
             </Text>
 
             {thread.Tag !== Tag.Normal && (
-              <Text fontSize="sm">
-                <Badge ml="2" colorScheme="teal">
-                  {obscureTag
-                    ? tagToObscureString(thread.Tag)
-                    : tagToDisplayString(thread.Tag)}
-                </Badge>
-              </Text>
+              <Box ml={2}>
+                <ThreadTag tag={thread.Tag} obscureTag={obscureTag} />
+              </Box>
             )}
 
             {showControl && (
@@ -224,7 +248,7 @@ export function ThreadComponent({
             {thread.Title}
           </Heading>
           {showControl ? (
-            <Content content={thread.Summary} />
+            <Content content={thread.Summary} showControl />
           ) : (
             <CollapseContent
               content={thread.Summary}

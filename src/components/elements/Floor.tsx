@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Collapse,
   Flex,
   HStack,
   Skeleton,
@@ -17,7 +18,7 @@ import useLikeControl from "~/src/components/controls/LikeControl"
 import {
   ArrowBarDown,
   ArrowBarUp,
-  ArrowRight,
+  ChevronRight,
   Flag,
   FlagFill,
   HandThumbsUpFill,
@@ -131,6 +132,7 @@ export function FloorComponent({
   })
 
   const [stackedFloor, setStackedFloor] = useState<Floor>()
+  const [expand, setExpand] = useState(false)
   const [isExpanding, setIsExpanding] = useState(false)
 
   const toast = useToast()
@@ -151,6 +153,7 @@ export function FloorComponent({
           })
           return
         }
+        setExpand(true)
         setStackedFloor(newFloor)
       })
       .catch((err) => handleError(toast, "无法展开回复", err))
@@ -168,22 +171,29 @@ export function FloorComponent({
         borderRadius="md"
       >
         <Stack spacing={layoutSettings.cardSpacing}>
-          {stackedFloor && allowExpand && (
-            <Box
-              ml={-layoutSettings.cardPaddingX + 1}
-              mr={-layoutSettings.cardPaddingX + 2}
-              mt={-layoutSettings.cardPaddingY + 1}
+          <Box
+            ml={-layoutSettings.cardPaddingX + 1}
+            mr={-layoutSettings.cardPaddingX + 2}
+            mt={-layoutSettings.cardPaddingY + 1}
+          >
+            <Collapse
+              in={expand}
+              onAnimationComplete={(definition) => {
+                if (!expand && definition === "exit") setStackedFloor(undefined)
+              }}
             >
-              <FloorComponent
-                floor={stackedFloor}
-                theme={theme}
-                seed={seed}
-                threadId={threadId}
-                allowExpand={allowExpand}
-                requestFloor={requestFloor}
-              />
-            </Box>
-          )}
+              {stackedFloor && allowExpand && (
+                <FloorComponent
+                  floor={stackedFloor}
+                  theme={theme}
+                  seed={seed}
+                  threadId={threadId}
+                  allowExpand={allowExpand}
+                  requestFloor={requestFloor}
+                />
+              )}
+            </Collapse>
+          </Box>
           <Flex alignItems="center">
             <HStack mr="2" ml={-2}>
               <ThemeAvatar
@@ -197,7 +207,7 @@ export function FloorComponent({
             {floor.Replytofloor !== 0 && (
               <>
                 <Text fontSize="sm" mr="2" fontWeight="bold">
-                  <ArrowRight />
+                  <ChevronRight />
                 </Text>
                 <HStack>
                   <ThemeAvatar
@@ -208,7 +218,7 @@ export function FloorComponent({
                     floorId={floor.Replytofloor}
                   />
                 </HStack>
-                {allowExpand && !stackedFloor && (
+                {allowExpand && !expand && (
                   <Button
                     ml="2"
                     size="xs"
@@ -220,13 +230,13 @@ export function FloorComponent({
                     <ArrowBarUp />
                   </Button>
                 )}
-                {stackedFloor && showControl && (
+                {expand && showControl && (
                   <Button
                     ml="2"
                     size="xs"
                     variant="ghost"
                     colorScheme="teal"
-                    onClick={() => setStackedFloor(undefined)}
+                    onClick={() => setExpand(false)}
                   >
                     <ArrowBarDown />
                   </Button>
@@ -238,7 +248,7 @@ export function FloorComponent({
               {moment(floor.RTime).calendar()}
             </Text>
           </Flex>
-          <Content content={floor.Context} />
+          <Content content={floor.Context} showControl={showControl} />
         </Stack>
 
         {/* Small screen controls */}

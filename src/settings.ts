@@ -2,9 +2,14 @@ import { cloneDeep } from "lodash"
 import createPersistedState from "use-persisted-state"
 import { Tag } from "./client"
 
-export const useTokenState = createPersistedState("fortune-settings")
-export const useRPCState = createPersistedState("fortune-rpc")
-const _useFortuneSettings = createPersistedState("fortune-local-settings")
+export const FORTUNE_TOKEN_KEY = "fortune-settings"
+export const useTokenState = createPersistedState(FORTUNE_TOKEN_KEY)
+export const FORTUNE_RPC_KEY = "fortune-rpc"
+export const useRPCState = createPersistedState(FORTUNE_RPC_KEY)
+export const FORTUNE_LOCAL_SETTINGS_KEY = "fortune-local-settings"
+const _useFortuneSettings = createPersistedState(FORTUNE_LOCAL_SETTINGS_KEY)
+export const FORTUNE_HISTORY_KEY = "fortune-posts-history"
+export const FORTUNE_STAR_KEY = "fortune-posts-star"
 
 export interface EnhancedSettings {
   enableHistory: boolean
@@ -16,6 +21,12 @@ export interface FortuneSettings {
   blockedTags: Tag[]
   obscureTag: boolean
   enhancedMode: EnhancedSettings
+  notification: NotificationSettings
+}
+
+export interface NotificationSettings {
+  enabled: boolean
+  intervalMinutes: number
 }
 
 export enum LayoutStyle {
@@ -72,6 +83,10 @@ export function useFortuneSettings() {
       enableHistory: false,
       enableStar: false,
     },
+    notification: {
+      enabled: false,
+      intervalMinutes: 10,
+    },
   })
   const settings = cloneDeep(_settings)
   if (settings.blockedKeywords === undefined) {
@@ -90,6 +105,12 @@ export function useFortuneSettings() {
     settings.enhancedMode = {
       enableHistory: false,
       enableStar: false,
+    }
+  }
+  if (settings.notification === undefined) {
+    settings.notification = {
+      enabled: false,
+      intervalMinutes: 10,
     }
   }
   return [settings, setSettings] as const

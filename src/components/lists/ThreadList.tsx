@@ -22,7 +22,8 @@ import {
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import GoBack from "~/src/components/widgets/GoBack"
 import { handleError, sleep } from "~/src/utils"
-import { useFortuneLayoutSettings } from "~src/settings"
+import { addToHistory } from "~src/enhanced_control"
+import { useFortuneLayoutSettings, useFortuneSettingsRead } from "~src/settings"
 import { Callback, RequestFloor } from "../utils/types"
 
 interface FloorListComponentProps {
@@ -159,7 +160,12 @@ export function ThreadListComponent() {
       allLastSeen.current = newLastSeen
     }
 
-    return { newFloors, newLastSeen, newHasMore: hasMore }
+    return {
+      thread: result?.this_thread,
+      newFloors,
+      newLastSeen,
+      newHasMore: hasMore,
+    }
   }
 
   async function requestFloor(requestId: string) {
@@ -197,12 +203,29 @@ export function ThreadListComponent() {
     lastSeen?: string,
     previousFloors?: Floor[]
   ) {
-    fetchContent(orderBy, lastSeen, previousFloors)
+    return fetchContent(orderBy, lastSeen, previousFloors)
       .then()
       .catch((err) => handleError(toast, "无法获取发帖信息", err))
   }
 
-  useEffect(() => doFetch(orderBy), [postId])
+  const settings = useFortuneSettingsRead()
+
+  useEffect(() => {
+    fetchContent(orderBy)
+      .then(({ thread }) => {
+        if (settings.enhancedMode.enableHistory) {
+          // Add thread to history
+          //
+          // We do not want to trigger rerender upon LocalStorage update,
+          // so we directly read / write to localstorage instead of using
+          // existing React Hooks
+          if (thread) {
+            addToHistory(thread)
+          }
+        }
+      })
+      .catch((err) => handleError(toast, "无法获取发帖信息", err))
+  }, [postId])
 
   const moreEntries = () => doFetch(orderBy, lastSeen, floors)
 

@@ -1,15 +1,21 @@
 import {
   Box,
   Button,
+  Center,
+  Flex,
   HStack,
   Input,
   InputGroup,
   InputLeftElement,
+  Spacer,
   Stack,
+  Switch,
+  Text,
+  useBoolean,
   useToast,
 } from "@chakra-ui/react"
 import { concat, range, uniqBy } from "lodash"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { InView } from "react-intersection-observer"
 import { useHistory, useLocation, useParams } from "react-router-dom"
 import {
@@ -27,11 +33,17 @@ import {
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import Refresh from "~/src/components/widgets/Refresh"
 import { handleError, useThreadFilter } from "~/src/utils"
-import { useFortuneLayoutSettings } from "~src/settings"
+import {
+  FORTUNE_HISTORY_KEY,
+  FORTUNE_STAR_KEY,
+  useFortuneLayoutSettings,
+  useFortuneSettingsRead,
+} from "~src/settings"
 import { Search } from "../utils/Icons"
+import { FortuneHistoryItem, FortuneStarItem } from "../utils/types"
 
 interface ThreadListComponentProps {
-  threadList: Thread[]
+  threadList?: Thread[]
   moreEntries: Function
   hasMore: boolean
   isMessage?: boolean
@@ -55,7 +67,7 @@ function ThreadListComponent({
 
   return (
     <Stack spacing={layoutSettings.listSpacing} width="100%" mb="3">
-      {threadList && threadList.length > 0 ? (
+      {threadList ? (
         <>
           {threadList?.map((thread) => (
             <Box
@@ -136,7 +148,7 @@ export function PostListComponent({
     doFetch()
   }
 
-  const finalThreadList = useThreadFilter(threadList ?? [])
+  const finalThreadList = useThreadFilter(threadList)
 
   return (
     <>
@@ -202,14 +214,58 @@ export function PostListMy() {
 }
 
 export function PostListStar() {
+  const [enhancedEnabled, setEnhancedEnabled] = useBoolean()
+  const settings = useFortuneSettingsRead()
+
   return (
     <ScrollableContainer>
-      <PostListComponent
-        lastSeenField="LastSeenFavorThreadID"
-        postCategory={PostCategory.All}
-        postType={PostType.Favoured}
-      />
+      {settings.enhancedMode.enableStar && (
+        <Flex width="100%" mb={3}>
+          <Spacer />
+          <Switch
+            onChange={() => {
+              setEnhancedEnabled.toggle()
+            }}
+            isChecked={enhancedEnabled}
+          >
+            按收藏时间排序
+          </Switch>
+        </Flex>
+      )}
+      {enhancedEnabled ? (
+        <PostListEnhancedStar />
+      ) : (
+        <PostListComponent
+          lastSeenField="LastSeenFavorThreadID"
+          postCategory={PostCategory.All}
+          postType={PostType.Favoured}
+        />
+      )}
     </ScrollableContainer>
+  )
+}
+
+export function PostListEnhancedStar() {
+  const threadList = useMemo<Thread[]>(() => {
+    const historyItems: FortuneStarItem[] = JSON.parse(
+      localStorage.getItem(FORTUNE_STAR_KEY) || "[]"
+    )
+    return historyItems.map((x) => x.thread)
+  }, [])
+
+  return (
+    <>
+      <Box p={3} width="100%">
+        <Text color="gray.500" mb={3}>
+          该页面中帖子的回复数、点赞数不会实时更新。
+        </Text>
+      </Box>
+      <ThreadListComponent
+        threadList={threadList}
+        hasMore={false}
+        moreEntries={() => {}}
+      />
+    </>
   )
 }
 
@@ -275,7 +331,7 @@ export function PostListSearch() {
     )
   }
 
-  const finalThreadList = useThreadFilter(threadList ?? [])
+  const finalThreadList = useThreadFilter(threadList)
 
   return (
     <ScrollableContainer>
@@ -309,6 +365,41 @@ export function PostListSearch() {
         />
       ) : (
         <NoMore />
+      )}
+    </ScrollableContainer>
+  )
+}
+
+export function PostListHistory() {
+  const settings = useFortuneSettingsRead()
+
+  const threadList = useMemo<Thread[]>(() => {
+    const historyItems: FortuneHistoryItem[] = JSON.parse(
+      localStorage.getItem(FORTUNE_HISTORY_KEY) || "[]"
+    )
+    return historyItems.map((x) => x.thread)
+  }, [])
+
+  return (
+    <ScrollableContainer>
+      {settings.enhancedMode.enableHistory ? (
+        <>
+          <Box p={3} width="100%">
+            <Text color="gray.500" mb={3}>
+              该页面中帖子的回复数、点赞数不会实时更新。
+            </Text>
+          </Box>
+
+          <ThreadListComponent
+            threadList={threadList}
+            hasMore={false}
+            moreEntries={() => {}}
+          />
+        </>
+      ) : (
+        <Center>
+          <Text>您没有启用历史记录功能。</Text>
+        </Center>
       )}
     </ScrollableContainer>
   )

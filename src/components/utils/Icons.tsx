@@ -16,6 +16,10 @@ export function ArrowLeft() {
   return <i className="bi bi-arrow-left" />
 }
 
+export function ChevronRight() {
+  return <i className="bi bi-chevron-right" />
+}
+
 export function ArrowUp() {
   return <i className="bi bi-arrow-up" />
 }
@@ -85,15 +89,15 @@ export function List() {
 }
 
 export function Search() {
-  return <i className="bi bi-search"></i>
+  return <i className="bi bi-search" />
 }
 
 export function X() {
-  return <i className="bi bi-x"></i>
+  return <i className="bi bi-x" />
 }
 
 export function ArrowsExpand() {
-  return <i className="bi bi-arrows-expand"></i>
+  return <i className="bi bi-arrows-expand" />
 }
 
 export function MoonFill() {
@@ -105,13 +109,13 @@ export function SunFill() {
 }
 
 export function ArrowBarUp() {
-  return <i className="bi bi-arrow-bar-up"></i>
+  return <i className="bi bi-arrow-bar-up" />
 }
 
 export function ArrowBarDown() {
-  return <i className="bi bi-arrow-bar-down"></i>
+  return <i className="bi bi-arrow-bar-down" />
 }
 
 export function ChevronDoubleUp() {
-  return <i className="bi bi-chevron-double-up"></i>
+  return <i className="bi bi-chevron-double-up" />
 }

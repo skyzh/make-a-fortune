@@ -6,9 +6,9 @@ import { NavLink } from "react-router-dom"
 
 let renderer = processString([
   {
-    regex: /wkfg:\/\/\d{6}/gim,
+    regex: /(wkfg:\/\/|http:\/\/wukefenggao.cn\/viewThread\/)(\d{6})/gim,
     fn: (key: number, result: string[]) => {
-      const postId = result[0].substring(7)
+      const postId = result[2]
       return (
         <span key={key}>
           <Link color="teal.500" as={NavLink} to={`/posts/${postId}`}>

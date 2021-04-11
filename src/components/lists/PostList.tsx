@@ -254,11 +254,18 @@ export function PostListEnhancedStar() {
   }, [])
 
   return (
-    <ThreadListComponent
-      threadList={threadList}
-      hasMore={false}
-      moreEntries={() => {}}
-    />
+    <>
+      <Box p={3} width="100%">
+        <Text color="gray.500" mb={3}>
+          该页面中帖子的回复数、点赞数不会实时更新。
+        </Text>
+      </Box>
+      <ThreadListComponent
+        threadList={threadList}
+        hasMore={false}
+        moreEntries={() => {}}
+      />
+    </>
   )
 }
 
@@ -376,11 +383,19 @@ export function PostListHistory() {
   return (
     <ScrollableContainer>
       {settings.enhancedMode.enableHistory ? (
-        <ThreadListComponent
-          threadList={threadList}
-          hasMore={false}
-          moreEntries={() => {}}
-        />
+        <>
+          <Box p={3} width="100%">
+            <Text color="gray.500" mb={3}>
+              该页面中帖子的回复数、点赞数不会实时更新。
+            </Text>
+          </Box>
+
+          <ThreadListComponent
+            threadList={threadList}
+            hasMore={false}
+            moreEntries={() => {}}
+          />
+        </>
       ) : (
         <Center>
           <Text>您没有启用历史记录功能。</Text>

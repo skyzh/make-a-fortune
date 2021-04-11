@@ -103,6 +103,22 @@ export function ThreadSkeleton({ showControl }: ThreadSkeletonProps) {
   )
 }
 
+export function ThreadTag({
+  tag,
+  obscureTag,
+}: {
+  tag: Tag
+  obscureTag: boolean
+}) {
+  return (
+    <Text fontSize="sm">
+      <Badge colorScheme="teal">
+        {obscureTag ? tagToObscureString(tag) : tagToDisplayString(tag)}
+      </Badge>
+    </Text>
+  )
+}
+
 export function ThreadComponent({
   thread,
   showPostTime,
@@ -198,13 +214,9 @@ export function ThreadComponent({
             </Text>
 
             {thread.Tag !== Tag.Normal && (
-              <Text fontSize="sm">
-                <Badge ml="2" colorScheme="teal">
-                  {obscureTag
-                    ? tagToObscureString(thread.Tag)
-                    : tagToDisplayString(thread.Tag)}
-                </Badge>
-              </Text>
+              <Box ml={2}>
+                <ThreadTag tag={thread.Tag} obscureTag={obscureTag} />
+              </Box>
             )}
 
             {showControl && (

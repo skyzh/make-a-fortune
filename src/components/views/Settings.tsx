@@ -30,6 +30,7 @@ import {
   useFortuneSettings,
 } from "~/src/settings"
 import { Tag } from "~src/client"
+import { ThreadTag } from "../elements/Thread"
 import { ArrowRightShort } from "../utils/Icons"
 import { tagToDisplayString } from "../utils/tag"
 import KeywordBlock from "./KeywordBlock"
@@ -176,7 +177,7 @@ function NotificationStatus() {
     }
     Notification.requestPermission(done).finally(done)
   }
-  if (!window.Notification) {
+  if (!("Notification" in window)) {
     return <Text color="gray.500">当前浏览器不支持通知功能。</Text>
   }
   if (Notification.permission === "granted") {
@@ -203,6 +204,14 @@ function NotificationStatus() {
   )
 }
 
+function BackgroundFetchStatus({}) {
+  if ("BackgroundFetchManager" in self) {
+    return <Text color="green.500">当前浏览器支持后台通知功能。</Text>
+  } else {
+    return <Text color="gray.500">当前浏览器不支持后台通知功能。</Text>
+  }
+}
+
 function NotificationSettingsComponent({
   value,
   setValue,
@@ -216,14 +225,28 @@ function NotificationSettingsComponent({
   return (
     <Stack spacing={3}>
       <NotificationStatus />
+      <BackgroundFetchStatus />
       <Switch
         onChange={(e) =>
           setValue({ ...value, enabled: e.currentTarget.checked })
         }
         isChecked={value.enabled}
       >
-        发送通知 (暂未实现)
+        在页面开启时发送通知 (暂未实现)
       </Switch>
+      <Switch
+        onChange={(e) =>
+          setValue({ ...value, enabled: e.currentTarget.checked })
+        }
+        isChecked={value.enabled}
+      >
+        在后台发送通知 (暂未实现)
+      </Switch>
+      <Text color="gray.500" fontSize="sm">
+        如果您的浏览器不支持「在后台发送通知」，
+        请使用「固定标签页」功能将「闷声发财」首页固定在浏览器中，
+        并在打开浏览器时主动浏览加载页面。
+      </Text>
       <FormControl>
         <FormLabel>通知检测间隔 (分钟)</FormLabel>
         <Input
@@ -332,12 +355,17 @@ function Settings() {
             <Heading fontSize="lg" mb="5">
               标签风格
             </Heading>
-            <Switch
-              onChange={(e) => setObscureTag(e.currentTarget.checked)}
-              isChecked={obscureTag}
-            >
-              使用隐晦描述
-            </Switch>
+            <SimpleGrid columns={[1, null, 2]} spacing={2}>
+              <Switch
+                onChange={(e) => setObscureTag(e.currentTarget.checked)}
+                isChecked={obscureTag}
+              >
+                使用隐晦描述
+              </Switch>
+              <Box p={5} borderWidth={1} borderRadius="md">
+                <ThreadTag tag={Tag.Sex} obscureTag={obscureTag} />
+              </Box>
+            </SimpleGrid>
           </Box>
           <Box>
             <Heading fontSize="lg" mb="5">

@@ -1,5 +1,14 @@
 {
-  "rewrites": [{ "source": "//((?!api/.*).*)", "destination": "/index.html" }],
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "status": 404,
+      "dest": "/index.html"
+    }
+  ],
   "github": {
     "silent": true
   }

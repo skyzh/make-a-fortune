@@ -41,6 +41,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-intersection-observer": "^8.31.0",
+    "react-process-string": "^1.2.0",
     "react-router-dom": "^5.2.0",
     "use-persisted-state": "^0.3.3",
     "uuid": "^8.3.2"

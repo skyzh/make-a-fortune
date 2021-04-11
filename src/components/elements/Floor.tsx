@@ -238,7 +238,7 @@ export function FloorComponent({
               {moment(floor.RTime).calendar()}
             </Text>
           </Flex>
-          <Content content={floor.Context} />
+          <Content content={floor.Context} showControl={showControl} />
         </Stack>
 
         {/* Small screen controls */}

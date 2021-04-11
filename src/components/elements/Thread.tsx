@@ -232,7 +232,7 @@ export function ThreadComponent({
           </Flex>
           <Heading fontSize="md">{thread.Title}</Heading>
           {showControl ? (
-            <Content content={thread.Summary} />
+            <Content content={thread.Summary} showControl />
           ) : (
             <CollapseContent
               content={thread.Summary}

@@ -8,17 +8,24 @@ import {
   Stack,
   Switch,
   Text,
+  useBoolean,
   useToast,
 } from "@chakra-ui/react"
 import React, { useState } from "react"
 import ScrollableContainer from "~/src/components/scaffolds/Scrollable"
 import {
   EnhancedSettings,
+  FORTUNE_HISTORY_KEY,
+  FORTUNE_LOCAL_SETTINGS_KEY,
+  FORTUNE_RPC_KEY,
+  FORTUNE_STAR_KEY,
+  FORTUNE_TOKEN_KEY,
   getLayoutStyleSettings,
   LayoutStyle,
   useFortuneSettings,
 } from "~/src/settings"
 import { Tag } from "~src/client"
+import { ArrowRightShort } from "../utils/Icons"
 import { tagToDisplayString } from "../utils/tag"
 import KeywordBlock from "./KeywordBlock"
 
@@ -133,6 +140,9 @@ function EnhancedModeSettings({
       >
         启用历史记录
       </Switch>
+      <Text color="gray.500">
+        您可以在“浏览历史”中找到近 100 个浏览的帖子。
+      </Text>
       <Switch
         onChange={(e) =>
           setValue({ ...value, enableStar: e.currentTarget.checked })
@@ -141,6 +151,10 @@ function EnhancedModeSettings({
       >
         增强收藏功能
       </Switch>
+      <Text color="gray.500">
+        您可以在“收藏 <ArrowRightShort />{" "}
+        按收藏时间排序”模式下找到最近收藏的帖子。
+      </Text>
     </Stack>
   )
 }
@@ -171,6 +185,29 @@ function Settings() {
       duration: 5000,
       isClosable: true,
     })
+  }
+
+  const [doResetConfirm, setDoResetConfirm] = useBoolean(false)
+
+  const resetSettings = () => {
+    if (doResetConfirm) {
+      localStorage.removeItem(FORTUNE_LOCAL_SETTINGS_KEY)
+      localStorage.removeItem(FORTUNE_HISTORY_KEY)
+      localStorage.removeItem(FORTUNE_RPC_KEY)
+      localStorage.removeItem(FORTUNE_TOKEN_KEY)
+      localStorage.removeItem(FORTUNE_STAR_KEY)
+      toast({
+        title: "清理成功",
+        description: "即将刷新网页",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      })
+      setTimeout(() => (window.location.href = "/"), 1000)
+      setDoResetConfirm.off()
+    } else {
+      setDoResetConfirm.on()
+    }
   }
 
   return (
@@ -239,6 +276,14 @@ function Settings() {
             </Text>
             <Button colorScheme="blue" isFullWidth onClick={saveSettings}>
               保存
+            </Button>
+          </Box>
+          <Box>
+            <Heading fontSize="lg" mb="5">
+              危险区域
+            </Heading>
+            <Button colorScheme="red" onClick={resetSettings}>
+              {doResetConfirm ? "确定要清除数据吗？" : "恢复默认设置并登出"}
             </Button>
           </Box>
         </Stack>

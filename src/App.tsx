@@ -5,6 +5,7 @@ import PhoneNavbar from "~src/components/elements/PhoneNavbar"
 import Navbar from "./components/elements/Navbar"
 import {
   PostListCategory,
+  PostListHistory,
   PostListMy,
   PostListNotification,
   PostListSearch,
@@ -96,6 +97,9 @@ function App() {
               </Route>
               <Route path="/posts/search">
                 <PostListSearch />
+              </Route>
+              <Route path="/posts/history">
+                <PostListHistory />
               </Route>
               <Route path="/posts/:postId">
                 <ThreadList />

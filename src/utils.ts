@@ -54,7 +54,7 @@ export function parseThreadNotification(thread: Thread) {
   return null
 }
 
-export function useThreadFilter(threads: Thread[]) {
+export function useThreadFilter(threads?: Thread[]) {
   const [settings, _setSettings] = useFortuneSettings()
 
   if (!threads) return threads

@@ -97,6 +97,14 @@ function RpcSettings({
       <FormControl>
         <RadioGroup onChange={doSetRpc} value={rpc}>
           <Stack>
+            <Radio value="https://fortune.lightquantum.me:9108">
+              <HStack spacing={1}>
+                <Text>fortune.lightquantum.me:9108</Text>
+                <Text color="gray.500">
+                  (Powered by Tencent Cloud, 低延迟低带宽)
+                </Text>
+              </HStack>
+            </Radio>
             <Radio value="https://fortune.skyzh.dev/">
               <HStack spacing={1}>
                 <Text>fortune.skyzh.dev</Text>
@@ -115,14 +123,6 @@ function RpcSettings({
                 <Text color="gray.500">(Powered by Fly.io)</Text>
               </HStack>
             </Radio>
-            <Radio value="https://fortune.lightquantum.me:9108">
-              <HStack spacing={1}>
-                <Text>fortune.lightquantum.me:9108</Text>
-                <Text color="gray.500">
-                  (Powered by Tencent Cloud, 低延迟低带宽)
-                </Text>
-              </HStack>
-            </Radio>
             <Radio value="http://localhost:8080">
               <HStack spacing={1}>
                 <Text>本地 RPC 服务器</Text>
@@ -137,15 +137,21 @@ function RpcSettings({
             </Radio>
           </Stack>
         </RadioGroup>
-        <Box my="3">
-          <Text color="gray.500" fontSize="sm">
-            [*1] 若使用本地 RPC 服务器，您需要使用 HTTP 协议打开前端。Vercel
-            默认不支持 HTTP 访问。
-          </Text>
-          <Text color="gray.500" fontSize="sm">
-            [*2] 如果您正在使用 yarn / parcel 进行开发，请选择此选项。
-          </Text>
-        </Box>
+        {rpc === "http://localhost:8080" && (
+          <Box my="3">
+            <Text color="gray.500" fontSize="sm">
+              [*1] 若使用本地 RPC 服务器，您需要使用 HTTP 协议打开前端。Vercel
+              默认不支持 HTTP 访问。
+            </Text>
+          </Box>
+        )}
+        {rpc === "/" && (
+          <Box my="3">
+            <Text color="gray.500" fontSize="sm">
+              [*2] 如果您正在使用 yarn / parcel 进行开发，请选择此选项。
+            </Text>
+          </Box>
+        )}
         <Input
           mt={3}
           value={rpc}
@@ -211,7 +217,9 @@ function RpcSettings({
 function Login() {
   const [email, setEmail] = useState("")
   const [persistToken, setPersistToken] = useTokenState("")
-  const [persistRPC, setPersistRPC] = useRPCState("https://fortune.skyzh.dev/")
+  const [persistRPC, setPersistRPC] = useRPCState(
+    "https://fortune.lightquantum.me:9108"
+  )
   const [token, setToken] = useState(persistToken)
   const [otpToken, setOtpToken] = useState("")
   const [rpc, setRpc] = useState(persistRPC)

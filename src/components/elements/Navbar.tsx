@@ -1,6 +1,7 @@
 import {
   Box,
   Divider,
+  Flex,
   Heading,
   HStack,
   Spacer,
@@ -20,6 +21,7 @@ import { getRpcDisplayName } from "~src/utils"
 import { AsyncCallback, Callback } from "../utils/types"
 import CategoryNavigation from "../widgets/CategoryNavigation"
 import { ColorModeButton } from "../widgets/ColorModeButton"
+import DevBadge from "../widgets/DevBadge"
 import Logo from "../widgets/Logo"
 import NavButton, { NavButtonProps } from "../widgets/NavButton"
 
@@ -66,6 +68,9 @@ function Navbar({ onClose }: { onClose?: AsyncCallback | Callback }) {
         <Spacer />
         <ColorModeButton />
       </HStack>
+      <Flex justifyContent="flex-end" direction="row">
+        <DevBadge />
+      </Flex>
 
       <NB exact to="/">
         最新

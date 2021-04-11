@@ -6253,6 +6253,11 @@ react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-process-string@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-process-string/-/react-process-string-1.2.0.tgz#6043a1dc919b9f887fe3ab6d6ddaffd50c8a0c28"
+  integrity sha512-+ExcVuECeALN6PTqj2XyjqkxzRdUmZv6bb15fjEMwzo9SbXzDzOr8R8RTwzPzQpCxiSGfqf3JPjOHGMiRuQ8Eg==
+
 react-refresh@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.9.0.tgz#71863337adc3e5c2f8a6bfddd12ae3bfe32aafbf"

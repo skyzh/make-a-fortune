@@ -16,15 +16,24 @@ let renderer = processString([
           </Link>
         </span>
       )
-    }
+    },
   },
   {
     regex: /(http|https):\/\/(\S+)\.([a-z]{2,}?)(.*?)( |\,|$|\.)/gim,
-    fn: (key: number, result: string[]) => <span key={key}>
-                                     <Link color="teal.500" isExternal
-                                           href={`${result[1]}://${result[2]}.${result[3]}${result[4]}`}>{result[2]}.{result[3]}{result[4]}</Link>{result[5]}
-                                 </span>
-  }
+    fn: (key: number, result: string[]) => (
+      <span key={key}>
+        <Link
+          color="teal.500"
+          isExternal
+          href={`${result[1]}://${result[2]}.${result[3]}${result[4]}`}
+        >
+          {result[2]}.{result[3]}
+          {result[4]}
+        </Link>
+        {result[5]}
+      </span>
+    ),
+  },
 ])
 
 export function Content({ content }: { content: string }) {
@@ -40,11 +49,11 @@ export function Content({ content }: { content: string }) {
 }
 
 export function CollapseContent({
-                                  content,
-                                  collapsed,
-                                  minLines = "auto",
-                                  maxLines = "auto"
-                                }: {
+  content,
+  collapsed,
+  minLines = "auto",
+  maxLines = "auto",
+}: {
   content: string
   collapsed: boolean
   minLines?: number | "auto"

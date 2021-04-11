@@ -10,9 +10,11 @@
     "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",
     "@babel/preset-react": "^7.13.13",
+    "@parcel/packager-raw-url": "2.0.0-nightly.2260",
     "@parcel/reporter-bundle-analyzer": "^2.0.0-nightly.1694",
     "@parcel/transformer-sass": "2.0.0-nightly.638",
     "@parcel/transformer-typescript-tsc": "^2.0.0-nightly.638",
+    "@parcel/transformer-webmanifest": "2.0.0-nightly.2260",
     "@parcel/validator-typescript": "^2.0.0-nighly.638",
     "@types/lodash": "^4.14.168",
     "@types/node": "^14.14.37",
@@ -25,7 +27,8 @@
     "prettier": "^2.2.1",
     "prettier-plugin-organize-imports": "^1.1.1",
     "sass": "^1.32.8",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "vercel": "^21.3.3"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.4.2",
@@ -52,6 +55,7 @@
     "build": "parcel build ./src/index.html --reporter @parcel/reporter-bundle-analyzer --no-scope-hoist",
     "type-check": "tsc --noEmit --watch",
     "lint": "prettier --check src/",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "vercel-dev": "vercel dev --listen 1234"
   }
 }

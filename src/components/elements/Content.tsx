@@ -53,7 +53,7 @@ export function Content({
   showControl?: boolean
 }) {
   return (
-    <Box>
+    <Box className="maf-text-selectable">
       {content.split("\n").map((line, index) => (
         <Text mt={0} wordBreak="break-word" key={index}>
           {renderer(showControl)(line)}

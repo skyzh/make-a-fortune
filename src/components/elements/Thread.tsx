@@ -210,7 +210,9 @@ export function ThreadComponent({
         <Stack spacing={layoutSettings.cardSpacing}>
           <Flex>
             <Text fontSize="sm">
-              <Badge colorScheme="gray"># {thread.ThreadID}</Badge>
+              <Badge colorScheme="gray" className="maf-text-selectable">
+                # {thread.ThreadID}
+              </Badge>
             </Text>
 
             {thread.Tag !== Tag.Normal && (
@@ -242,7 +244,9 @@ export function ThreadComponent({
               </Text>
             )}
           </Flex>
-          <Heading fontSize="md">{thread.Title}</Heading>
+          <Heading fontSize="md" className="maf-text-selectable">
+            {thread.Title}
+          </Heading>
           {showControl ? (
             <Content content={thread.Summary} showControl />
           ) : (

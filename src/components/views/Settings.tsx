@@ -155,6 +155,10 @@ function EnhancedModeSettings({
         您可以在“收藏 <ArrowRightShort />{" "}
         按收藏时间排序”模式下找到最近收藏的帖子。
       </Text>
+      <Text color="gray.500" mt={1} fontSize="sm">
+        「增强功能」的数据均存储在本地浏览器，仅记录在当前设备通过「闷声发财」浏览、收藏的帖子。
+        切换设备、浏览器时，这些数据都会丢失。
+      </Text>
     </Stack>
   )
 }

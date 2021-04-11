@@ -1,7 +1,11 @@
 import {
   Box,
   Button,
+  FormControl,
+  FormLabel,
   Heading,
+  HStack,
+  Input,
   Radio,
   RadioGroup,
   SimpleGrid,
@@ -22,6 +26,7 @@ import {
   FORTUNE_TOKEN_KEY,
   getLayoutStyleSettings,
   LayoutStyle,
+  NotificationSettings,
   useFortuneSettings,
 } from "~/src/settings"
 import { Tag } from "~src/client"
@@ -163,6 +168,79 @@ function EnhancedModeSettings({
   )
 }
 
+function NotificationStatus() {
+  const [_state, setState] = useState([])
+  const requestPermission = () => {
+    const done = () => {
+      setState([])
+    }
+    Notification.requestPermission(done).finally(done)
+  }
+  if (!window.Notification) {
+    return <Text color="gray.500">当前浏览器不支持通知功能。</Text>
+  }
+  if (Notification.permission === "granted") {
+    return <Text color="green.500">已获得通知权限。</Text>
+  }
+  if (Notification.permission !== "denied") {
+    return (
+      <>
+        <HStack>
+          <Text color="blue.500">
+            要启用通知功能，请允许「闷声发财」发送通知。
+          </Text>
+          <Button size="sm" onClick={requestPermission}>
+            批准通知权限
+          </Button>
+        </HStack>
+      </>
+    )
+  }
+  return (
+    <Text color="yellow.500">
+      通知已禁用。请在浏览器设置中批准「闷声发财」的通知权限。
+    </Text>
+  )
+}
+
+function NotificationSettingsComponent({
+  value,
+  setValue,
+}: {
+  value: NotificationSettings
+  setValue: (value: NotificationSettings) => void
+}) {
+  const testNotification = () => {
+    new Notification("闷声发财", { body: "这是闷声发财的测试通知。" })
+  }
+  return (
+    <Stack spacing={3}>
+      <NotificationStatus />
+      <Switch
+        onChange={(e) =>
+          setValue({ ...value, enabled: e.currentTarget.checked })
+        }
+        isChecked={value.enabled}
+      >
+        发送通知 (暂未实现)
+      </Switch>
+      <FormControl>
+        <FormLabel>通知检测间隔 (分钟)</FormLabel>
+        <Input
+          type="number"
+          onChange={(e) =>
+            setValue({ ...value, intervalMinutes: parseInt(e.target.value) })
+          }
+          value={value.intervalMinutes.toString()}
+        />
+      </FormControl>
+      <Box>
+        <Button onClick={testNotification}>测试通知</Button>
+      </Box>
+    </Stack>
+  )
+}
+
 function Settings() {
   const [persistSetting, setPersistSetting] = useFortuneSettings()
 
@@ -173,6 +251,7 @@ function Settings() {
   const [layout, setLayout] = useState(persistSetting.layout)
   const [obscureTag, setObscureTag] = useState(persistSetting.obscureTag)
   const [enhancedMode, setEnhancedMode] = useState(persistSetting.enhancedMode)
+  const [notification, setNotification] = useState(persistSetting.notification)
   const toast = useToast()
 
   const saveSettings = () => {
@@ -182,6 +261,7 @@ function Settings() {
       layout,
       obscureTag,
       enhancedMode,
+      notification,
     })
     toast({
       title: "设置已保存",
@@ -272,7 +352,10 @@ function Settings() {
             <Heading fontSize="lg" mb="5">
               通知
             </Heading>
-            <Box my="1">敬请期待</Box>
+            <NotificationSettingsComponent
+              value={notification}
+              setValue={setNotification}
+            />
           </Box>
           <Box>
             <Text fontSize="sm" color="gray.500" mb="3">

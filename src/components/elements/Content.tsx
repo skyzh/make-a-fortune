@@ -3,7 +3,7 @@ import React from "react"
 
 export function Content({ content }: { content: string }) {
   return (
-    <Box>
+    <Box className="maf-text-selectable">
       {content.split("\n").map((line, index) => (
         <Text mt={0} wordBreak="break-word" key={index}>
           {line}

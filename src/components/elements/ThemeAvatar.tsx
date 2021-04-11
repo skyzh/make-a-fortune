@@ -22,7 +22,7 @@ export default function ThemeAvatar({
       <Box my={-1} ml={1} mr={-1}>
         <Avatar size="sm" name={name} showBorder={true} />
       </Box>
-      <Stack fontWeight="bold" spacing={-2}>
+      <Stack fontWeight="bold" spacing={-2} className="maf-text-selectable">
         {floorId && (
           <Text color="gray.500" fontSize="xs">
             #{floorId}

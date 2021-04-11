@@ -96,33 +96,31 @@ function RpcSettings({
       </Heading>
       <FormControl>
         <RadioGroup onChange={doSetRpc} value={rpc}>
-          <Stack>
+          <Stack spacing={1}>
             <Radio value="https://fortune.lightquantum.me:9108">
-              <HStack spacing={1}>
-                <Text>fortune.lightquantum.me:9108</Text>
-                <Text color="gray.500">
-                  (Powered by Tencent Cloud, 低延迟低带宽)
-                </Text>
-              </HStack>
+              <Text>fortune.lightquantum.me:9108</Text>
             </Radio>
+            <Text pl={7} fontSize="sm" color="gray.500">
+              Powered by Tencent Cloud, 低延迟低带宽
+            </Text>
             <Radio value="https://fortune.skyzh.dev/">
-              <HStack spacing={1}>
-                <Text>fortune.skyzh.dev</Text>
-                <Text color="gray.500">(Powered by Vultr)</Text>
-              </HStack>
+              <Text>fortune.skyzh.dev</Text>
             </Radio>
+            <Text pl={7} fontSize="sm" color="gray.500">
+              Powered by Vultr
+            </Text>
             <Radio value="https://make-a-fortune.vercel.app">
-              <HStack spacing={1}>
-                <Text>make-a-fortune.vercel.app</Text>
-                <Text color="gray.500">(Powered by Vercel Function)</Text>
-              </HStack>
+              <Text>make-a-fortune.vercel.app</Text>
             </Radio>
+            <Text pl={7} fontSize="sm" color="gray.500">
+              Powered by Vercel Function
+            </Text>
             <Radio value="https://fortune.fly.dev">
-              <HStack spacing={1}>
-                <Text>fortune.fly.dev</Text>
-                <Text color="gray.500">(Powered by Fly.io)</Text>
-              </HStack>
+              <Text>fortune.fly.dev</Text>
             </Radio>
+            <Text pl={7} fontSize="sm" color="gray.500">
+              Powered by Fly.io
+            </Text>
             <Radio value="http://localhost:8080">
               <HStack spacing={1}>
                 <Text>本地 RPC 服务器</Text>

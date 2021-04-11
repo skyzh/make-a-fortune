@@ -21,6 +21,12 @@ export interface FortuneSettings {
   blockedTags: Tag[]
   obscureTag: boolean
   enhancedMode: EnhancedSettings
+  notification: NotificationSettings
+}
+
+export interface NotificationSettings {
+  enabled: boolean
+  intervalMinutes: number
 }
 
 export enum LayoutStyle {
@@ -77,6 +83,10 @@ export function useFortuneSettings() {
       enableHistory: false,
       enableStar: false,
     },
+    notification: {
+      enabled: false,
+      intervalMinutes: 10,
+    },
   })
   const settings = cloneDeep(_settings)
   if (settings.blockedKeywords === undefined) {
@@ -95,6 +105,12 @@ export function useFortuneSettings() {
     settings.enhancedMode = {
       enableHistory: false,
       enableStar: false,
+    }
+  }
+  if (settings.notification === undefined) {
+    settings.notification = {
+      enabled: false,
+      intervalMinutes: 10,
     }
   }
   return [settings, setSettings] as const

@@ -257,7 +257,7 @@ function Settings() {
           </Box>
           <Box>
             <Heading fontSize="lg" mb="5">
-              增强功能 (暂未实现)
+              增强功能
             </Heading>
             <EnhancedModeSettings
               value={enhancedMode}

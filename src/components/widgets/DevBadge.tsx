@@ -1,4 +1,4 @@
-import { Badge, Box } from "@chakra-ui/layout"
+import { Badge, Box } from "@chakra-ui/react"
 import React from "react"
 
 declare var process: {

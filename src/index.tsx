@@ -1,5 +1,4 @@
-import { ColorModeScript } from "@chakra-ui/color-mode"
-import { ChakraProvider } from "@chakra-ui/react"
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react"
 import "bootstrap-icons/font/bootstrap-icons.css"
 import React from "react"
 import ReactDOM from "react-dom"

@@ -44,6 +44,7 @@
     "eject": "expo eject",
     "lint": "eslint src/",
     "format": "eslint --fix src/",
-    "build": "expo build:web"
+    "build": "expo build:web",
+    "build-vercel": "yarn global add expo-cli && expo build:web"
   }
 }

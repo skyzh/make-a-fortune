@@ -10,6 +10,5 @@ function App(): JSX.Element {
       </Box>
     </NativeBaseProvider>
   );
-
 }
 export default registerRootComponent(App);

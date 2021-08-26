@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "fortune",
+    "icon": "./resources/logo1024.png",
+    "version": "1.0.0",
+    "slug": "Make A Fortune!",
+    "ios": {
+      "bundleIdentifier": "dev.skyzh.fortune",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "dev.skyzh.fortune",
+      "versionCode": 1
+    }
+  }
+}

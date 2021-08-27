@@ -6,6 +6,7 @@ import {
   Badge,
   HStack,
   FlatList,
+  Box,
 } from 'native-base';
 import { registerRootComponent } from 'expo';
 import range from 'lodash/range';
@@ -37,39 +38,41 @@ function App(): JSX.Element {
 
   return (
     <NativeBaseProvider>
-      <FlatList
-        safeArea
-        userSelect="none"
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={reloadLines} />
-        }
-        initialNumToRender={5}
-        data={data}
-        renderItem={({ item }) => (
-          <VStack
-            borderColor="gray.300"
-            borderWidth={1}
-            py={4}
-            px={3}
-            my={2}
-            rounded="md"
-            alignSelf="center"
-            width={700}
-            maxWidth="100%"
-            key={item.id}
-            space={1}
-          >
-            <Text fontSize="sm">
-              <Badge>#23333</Badge>
-            </Text>
-            <HStack space={1} alignItems="center">
-              <Text>{item.title}</Text>
-            </HStack>
-            <Text>{item.content}</Text>
-          </VStack>
-        )}
-        keyExtractor={item => item.id}
-      />
+      <Box safeArea>
+        <FlatList
+          removeClippedSubviews
+          userSelect="none"
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={reloadLines} />
+          }
+          initialNumToRender={5}
+          data={data}
+          renderItem={({ item }) => (
+            <VStack
+              borderColor="gray.300"
+              borderWidth={1}
+              py={4}
+              px={3}
+              my={2}
+              rounded="md"
+              alignSelf="center"
+              width={700}
+              maxWidth="100%"
+              key={item.id}
+              space={1}
+            >
+              <Text fontSize="sm">
+                <Badge>#23333</Badge>
+              </Text>
+              <HStack space={1} alignItems="center">
+                <Text>{item.title}</Text>
+              </HStack>
+              <Text>{item.content}</Text>
+            </VStack>
+          )}
+          keyExtractor={item => item.id}
+        />
+      </Box>
     </NativeBaseProvider>
   );
 }

@@ -29,7 +29,13 @@ const Navbar: React.FC<{
           variant="ghost"
           size="sm"
           colorScheme="lightBlue"
-          icon={<Icon as={<MaterialCommunityIcons name="plus" />} size="sm" />}
+          icon={
+            <Icon
+              as={<MaterialCommunityIcons name="plus" />}
+              size="sm"
+              color="lightBlue.500"
+            />
+          }
         >
           {/* 发帖 */}
         </IconButton>

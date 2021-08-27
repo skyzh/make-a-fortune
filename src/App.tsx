@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Footer from './Footer.tsx';
 import ThreadList from './ThreadList.tsx';
 
-import logo = require('../resources/logo1024.png');
+import logo from '../resources/logo1024.png';
 
 function App(): JSX.Element {
   return (

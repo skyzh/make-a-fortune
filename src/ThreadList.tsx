@@ -17,7 +17,9 @@ function wait(timeout) {
   });
 }
 
-export default function ThreadList(): JSX.Element {
+const ThreadList: React.FC<{
+  safeArea?: boolean;
+}> = ({ safeArea }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const reloadLines = React.useCallback(() => {
@@ -31,13 +33,13 @@ export default function ThreadList(): JSX.Element {
   return (
     <FlatList
       removeClippedSubviews
-      // userSelect="none"
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={reloadLines} />
       }
       initialNumToRender={5}
       data={data}
       px={2}
+      my={safeArea ? 20 : undefined}
       renderItem={({ item }) => (
         <VStack
           borderColor="gray.300"
@@ -75,4 +77,6 @@ export default function ThreadList(): JSX.Element {
       // }
     />
   );
-}
+};
+
+export default ThreadList;

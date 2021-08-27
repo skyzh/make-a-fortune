@@ -7,11 +7,15 @@ import {
   HStack,
   FlatList,
   Box,
+  Button,
+  Icon,
+  Fab,
 } from 'native-base';
 import { registerRootComponent } from 'expo';
 import range from 'lodash/range';
 import map from 'lodash/map';
-import { RefreshControl } from 'react-native-web-refresh-control';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { RefreshControl } from 'react-native';
 
 const data = map(range(100), x => ({
   id: x,
@@ -38,7 +42,18 @@ function App(): JSX.Element {
 
   return (
     <NativeBaseProvider>
-      <Box safeArea>
+      <Box flex={1} safeArea>
+        <Fab
+          position="absolute"
+          size="sm"
+          icon={
+            <Icon
+              color="white"
+              as={<MaterialCommunityIcons name="plus" />}
+              size="sm"
+            />
+          }
+        />
         <FlatList
           removeClippedSubviews
           userSelect="none"
@@ -71,6 +86,17 @@ function App(): JSX.Element {
             </VStack>
           )}
           keyExtractor={item => item.id}
+          ListHeaderComponent={
+            <Box alignSelf="center">
+              <Button
+                startIcon={
+                  <Icon as={MaterialCommunityIcons} name="refresh" size={5} />
+                }
+              >
+                有新帖子
+              </Button>
+            </Box>
+          }
         />
       </Box>
     </NativeBaseProvider>

@@ -8,7 +8,9 @@
   "private": true,
   "main": "src/App.tsx",
   "dependencies": {
+    "@types/lodash": "^4.14.172",
     "expo": "~42.0.0",
+    "lodash": "^4.17.21",
     "native-base": "^3.1.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -16,6 +18,7 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-svg": "12.1.1",
     "react-native-web": "~0.13.12",
+    "react-native-web-refresh-control": "^1.1.0",
     "styled-components": "^5.3.1",
     "styled-system": "^5.1.5"
   },
@@ -42,8 +45,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint src/",
-    "format": "eslint --fix src/",
+    "lint": "eslint --cache src/",
+    "format": "eslint --fix --cache src/",
     "build": "expo build:web"
   }
 }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Text, VStack, Badge, HStack, FlatList } from 'native-base';
+import { Text, VStack, Badge, HStack, FlatList, Box, Icon } from 'native-base';
 
 import range from 'lodash/range';
 import map from 'lodash/map';
 import { RefreshControl } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const data = map(range(20), x => ({
   id: x,
@@ -31,51 +32,65 @@ const ThreadList: React.FC<{
   }, []);
 
   return (
-    <FlatList
-      removeClippedSubviews
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={reloadLines} />
-      }
-      initialNumToRender={5}
-      data={data}
-      px={2}
-      my={safeArea ? 20 : undefined}
-      renderItem={({ item }) => (
-        <VStack
-          borderColor="gray.300"
-          borderWidth={1}
-          py={4}
-          px={3}
-          my={2}
-          rounded="md"
-          alignSelf="center"
-          width={700}
-          maxWidth="100%"
-          key={item.id}
-          space={1}
-        >
-          <Text fontSize="sm">
-            <Badge>#23333</Badge>
-          </Text>
-          <HStack space={1} alignItems="center">
-            <Text>{item.title}</Text>
-          </HStack>
-          <Text>{item.content}</Text>
-        </VStack>
-      )}
-      keyExtractor={item => item.id.toString()}
-      // ListHeaderComponent={
-      //   <Box alignSelf="center">
-      //     <Button
-      //       startIcon={
-      //         <Icon as={MaterialCommunityIcons} name="refresh" size={5} />
-      //       }
-      //     >
-      //       有新帖子
-      //     </Button>
-      //   </Box>
-      // }
-    />
+    <>
+      <Box safeAreaTop={safeArea} />
+      <FlatList
+        removeClippedSubviews
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={reloadLines} />
+        }
+        initialNumToRender={5}
+        data={data}
+        my={safeArea ? 12 : undefined}
+        renderItem={({ item }) => (
+          <VStack
+            borderColor="gray.100"
+            borderTopWidth={1}
+            py={4}
+            px={3}
+            alignSelf="center"
+            width={700}
+            maxWidth="100%"
+            key={item.id}
+            space={1}
+            bgColor="white"
+          >
+            <HStack space={2} alignItems="center">
+              <Badge>#23333</Badge>
+              <Badge>校园</Badge>
+              <Box mx="auto" />
+              <HStack space={1}>
+                <Icon
+                  as={<MaterialCommunityIcons name="comment-outline" />}
+                  color="black"
+                  size="xs"
+                />
+                <Text alignSelf="flex-end" fontSize="sm">
+                  1
+                </Text>
+              </HStack>
+            </HStack>
+            <HStack space={1} alignItems="center">
+              <Text>{item.title}</Text>
+            </HStack>
+            <Text>{item.content}</Text>
+          </VStack>
+        )}
+        keyExtractor={item => item.id.toString()}
+        // ListHeaderComponent={
+        //   <Box alignSelf="center">
+        //     <Button
+        //       startIcon={
+        //         <Icon as={MaterialCommunityIcons} name="refresh" size={5} />
+        //       }
+        //     >
+        //       有新帖子
+        //     </Button>
+        //   </Box>
+        // }
+      />
+      <Box safeAreaBottom={safeArea} />
+    </>
   );
 };
 

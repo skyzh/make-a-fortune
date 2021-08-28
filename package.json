@@ -9,6 +9,9 @@
   "main": "src/App.tsx",
   "dependencies": {
     "@expo/vector-icons": "^12.0.5",
+    "@react-navigation/bottom-tabs": "^6.0.5",
+    "@react-navigation/native": "^6.0.2",
+    "@react-navigation/native-stack": "^6.1.0",
     "@types/lodash": "^4.14.172",
     "expo": "~42.0.0",
     "lodash": "^4.17.21",
@@ -17,6 +20,7 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-safe-area-context": "3.2.0",
+    "react-native-screens": "~3.4.0",
     "react-native-svg": "12.1.1",
     "react-native-web": "~0.13.12",
     "react-native-web-refresh-control": "^1.1.0",
